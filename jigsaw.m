@@ -147,9 +147,9 @@ function [varargout] = jigsaw(opts)
 %   A number of other (important!) references are cited in the articles
 %   above. See the full-text for additional information.
 
-%   JIGSAW-0.9.1
+%   JIGSAW-0.9.2
 %   Darren Engwirda
-%   01-Feb-2016
+%   20-Feb-2016
 %   d_engwirda@outlook.com
 
 
@@ -172,15 +172,15 @@ function [varargout] = jigsaw(opts)
     if (strcmp(jexename,''))
     switch (computer)
        %case 'GLNX86'
-       %jexename = [filepath,'/jigsaw/bin/jigsaw32d'];
+       %jexename = [filepath,'/jigsaw/bin/GLX-32/jigsaw32d'];
         case 'GLNXA64'
-        jexename = [filepath,'/jigsaw/bin/jigsaw64d'];
+        jexename = [filepath,'/jigsaw/bin/GLX-64/jigsaw64d'];
        %case 'PCWIN'  
-       %jexename = [filepath,'\jigsaw\bin\jigsaw32d.exe'];
+       %jexename = [filepath,'\jigsaw\bin\WIN-32\jigsaw32d.exe'];
         case 'PCWIN64'
-        jexename = [filepath,'\jigsaw\bin\jigsaw64d.exe'];
+        jexename = [filepath,'\jigsaw\bin\WIN-64\jigsaw64d.exe'];
        %case 'MACI64'
-       %jexename = [filepath,'/jigsaw/bin/jigsaw64d'];
+       %jexename = [filepath,'/jigsaw/bin/MAX-64/jigsaw64d'];
         
         otherwise
         error('JIGSAW: unsupported platform');  
@@ -193,15 +193,15 @@ function [varargout] = jigsaw(opts)
     if (strcmp(jexename,''))
     switch (computer)
        %case 'GLNX86'
-       %jexename = [filepath,'/jigsaw/bin/jigsaw32r'];
+       %jexename = [filepath,'/jigsaw/bin/GLX-32/jigsaw32r'];
         case 'GLNXA64'
-        jexename = [filepath,'/jigsaw/bin/jigsaw64r'];
+        jexename = [filepath,'/jigsaw/bin/GLX-64/jigsaw64r'];
        %case 'PCWIN'  
-       %jexename = [filepath,'\jigsaw\bin\jigsaw32r.exe'];
+       %jexename = [filepath,'\jigsaw\bin\WIN-32\jigsaw32r.exe'];
         case 'PCWIN64'
-        jexename = [filepath,'\jigsaw\bin\jigsaw64r.exe'];
+        jexename = [filepath,'\jigsaw\bin\WIN-64\jigsaw64r.exe'];
        %case 'MACI64'
-       %jexename = [filepath,'/jigsaw/bin/jigsaw64r'];
+       %jexename = [filepath,'/jigsaw/bin/MAC-64/jigsaw64r'];
         
         otherwise
         error('JIGSAW: unsupported platform');
