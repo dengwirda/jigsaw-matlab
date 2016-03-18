@@ -1,10 +1,10 @@
 # JIGSAW
 
 <p align="center">
-  <img src = "../master/jigsaw/img/bunny-TRIA3-1.png" width="200">
-  <img src = "" width="200">
-  <img src = "" width="200">
-  <img src = "" width="200">
+  <img src = "../master/jigsaw/img/bunny-TRIA3-1.png">
+  <img src = "../master/jigsaw/img/bunny-TRIA3-2.png">
+  <img src = "../master/jigsaw/img/bunny-TRIA3-3.png">
+  <img src = "../master/jigsaw/img/bunny-TRIA4-3.png">
 </p>
 
 <b>JIGSAW</b> is a Delaunay-based unstructured mesh generator for two- and three-dimensional geometries. It is designed to generate high-quality triangular and tetrahedral meshes for planar, surface and volumetric problems.
