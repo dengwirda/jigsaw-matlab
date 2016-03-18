@@ -1,7 +1,7 @@
 # JIGSAW
 
 <p align="center">
-  <img src = "" width="200">
+  <img src = "../master/jigsaw/img/bunny-TRIA3-1.png" width="200">
   <img src = "" width="200">
   <img src = "" width="200">
   <img src = "" width="200">
