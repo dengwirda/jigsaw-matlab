@@ -1,9 +1,9 @@
 # JIGSAW
 
 <p align="center">
-  <img src = "../master/jigsaw/img/bunny-TRIA3-1.png">
-  <img src = "../master/jigsaw/img/bunny-TRIA3-2.png">
-  <img src = "../master/jigsaw/img/bunny-TRIA3-3.png">
+  <img src = "../master/jigsaw/img/bunny-TRIA3-1.png"> &nbsp
+  <img src = "../master/jigsaw/img/bunny-TRIA3-2.png"> &nbsp
+  <img src = "../master/jigsaw/img/bunny-TRIA3-3.png"> &nbsp
   <img src = "../master/jigsaw/img/bunny-TRIA4-3.png">
 </p>
 
