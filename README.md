@@ -11,7 +11,6 @@
 
 <b>JIGSAW</b> is a stand-alone mesh generator written in C++. This toolbox provides a <b>MATLAB</b> interface, including file I/O, mesh visualisation and post-processing facilities. <b>JIGSAW</b> is currently available for 64-bit Windows and Linux platforms.
 
-Additional information, documentation, online tutorials and references are available here:
+Additional information, documentation, online tutorials and references are <a href="https://sites.google.com/site/dengwirda/jigsaw">available here</a>.
 
-https://sites.google.com/site/dengwirda/jigsaw
 
