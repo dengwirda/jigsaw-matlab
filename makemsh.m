@@ -1,4 +1,4 @@
-function makemsh(name,geom)
+function makemsh(name,mesh)
 %MAKEMSH make a *.MSH file for JIGSAW.
 %
 %   MAKEMSH(NAME,MESH);
@@ -21,82 +21,96 @@ function makemsh(name,geom)
 %       re INDEX(K,1:4) is the array of "points" associated with the K-TH 
 %       tria, and INDEX(K,5) is an ID tag for the K-TH tria.
 %
-%   See also READMSH
+%   See also MAKEVTK, READMSH
 
+%
 %   Darren Engwirda
-%   02-Feb-2016
+%   github.com/dengwirda/jigsaw-matlab
+%   20-Mar-2016
 %   d_engwirda@outlook.com
+%
 
+    if (~ischar  (name))
+        error('NAME must be a valid file-name!') ;
+    end
+    if (~isstruct(mesh))
+        error('MESH must be a valid structure!') ;
+    end
 
    [path,file,fext] = fileparts(name);
    
     if(~strcmp(lower(fext),'.msh'))
-        error('Invalid file name');
+        name = [name,'.msh'];
     end
  
     try
+%-- try to write data to file
     
     ffid = fopen(name, 'w') ;
     
     nver = +1;
     
-    endl = '\r\n';
+    endl = '\n' ;
     real = '%1.16g;';
     ints = '%i;';
     
     fprintf(ffid,['# %s.msh geometry file',endl],file);
     fprintf(ffid,['mshid=%u',endl],nver);
     
-    if (isfield(geom,'point') && ...
-            isfield(geom.point,'coord'))
+    if (isfield(mesh,'point') && ...
+        isfield(mesh.point,'coord') && ...
+       ~isempty(mesh.point.coord) )
     
-    ndim = size(geom.point.coord,2) - 1 ;
+    ndim = size(mesh.point.coord,2) - 1 ;
     
     fprintf(ffid,['ndims=%u',endl],ndim);
     
 %-- write "POINT" data
         
-    fprintf(ffid,['point=%u',endl],size(geom.point.coord,1));        
+    fprintf(ffid,['point=%u',endl],size(mesh.point.coord,1));        
     fprintf(ffid,[repmat(real,1,ndim),'%i',endl],...
-        geom.point.coord' ) ;
+        mesh.point.coord' ) ;
 
     end
     
-    if (isfield(geom,'edge2') && ...
-            isfield(geom.edge2,'index'))
+    if (isfield(mesh,'edge2') && ...
+        isfield(mesh.edge2,'index') && ...
+       ~isempty(mesh.edge2.index) )
        
 %-- write "EDGE2" data
         
-    index = geom.edge2.index;
+    index = mesh.edge2.index;
     index(:,1:2) = index(:,1:2)-1 ; % file is zero-indexed!
        
-    fprintf(ffid,['edge2=%u',endl],size(geom.edge2.index,1));        
+    fprintf(ffid,['edge2=%u',endl],size(mesh.edge2.index,1));        
     fprintf(ffid,[repmat(ints,1,2),'%i',endl],index');
 
     end
     
-    if (isfield(geom,'tria3') && ...
-            isfield(geom.tria3,'index'))
+    if (isfield(mesh,'tria3') && ...
+        isfield(mesh.tria3,'index') && ...
+       ~isempty(mesh.tria3.index) )
        
 %-- write "TRIA3" data
         
-    index = geom.tria3.index;
+    index = mesh.tria3.index;
     index(:,1:3) = index(:,1:3)-1 ; % file is zero-indexed!
        
-    fprintf(ffid,['tria3=%u',endl],size(geom.tria3.index,1));        
+    fprintf(ffid,['tria3=%u',endl],size(mesh.tria3.index,1));        
     fprintf(ffid,[repmat(ints,1,3),'%i',endl],index');
 
     end
     
-    if (isfield(geom,'tria4') && ...
-            isfield(geom.tria4,'index'))
+    if (isfield(mesh,'tria4') && ...
+        isfield(mesh.tria4,'index') && ...
+       ~isempty(mesh.tria4.index) )
 
 %-- write "TRIA4" data
         
-    index = geom.tria4.index;
+    index = mesh.tria4.index;
     index(:,1:4) = index(:,1:4)-1 ; % file is zero-indexed!
        
-    fprintf(ffid,['tria4=%u',endl],size(geom.tria4.index,1));        
+    fprintf(ffid,['tria4=%u',endl],size(mesh.tria4.index,1));        
     fprintf(ffid,[repmat(ints,1,4),'%i',endl],index');
 
     end
@@ -114,4 +128,5 @@ function makemsh(name,geom)
     end
     
 end
+
 
