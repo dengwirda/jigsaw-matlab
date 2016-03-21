@@ -17,9 +17,25 @@ function makevtk(name,mesh)
 %       re INDEX(K,1:3) is the array of "points" associated with the K-TH 
 %       tria, and INDEX(K,4) is an ID tag for the K-TH tria.
 %
-%   MESH.TRIA4.INDEX - [N4x 5] array of indexing for tria-4 elements, whe-
+%   MESH.QUAD4.INDEX - [N4x 5] array of indexing for quad-4 elements, whe-
+%       re INDEX(K,1:4) is the array of "points" associated with the K-TH 
+%       quad, and INDEX(K,5) is an ID tag for the K-TH quad.
+%
+%   MESH.TRIA4.INDEX - [M4x 5] array of indexing for tria-4 elements, whe-
 %       re INDEX(K,1:4) is the array of "points" associated with the K-TH 
 %       tria, and INDEX(K,5) is an ID tag for the K-TH tria.
+%
+%   MESH.HEXA8.INDEX - [M8x 9] array of indexing for hexa-8 elements, whe-
+%       re INDEX(K,1:8) is the array of "points" associated with the K-TH 
+%       hexa, and INDEX(K,9) is an ID tag for the K-TH hexa.
+%
+%   MESH.WEDG6.INDEX - [M6x 7] array of indexing for wedg-6 elements, whe-
+%       re INDEX(K,1:6) is the array of "points" associated with the K-TH 
+%       wedg, and INDEX(K,7) is an ID tag for the K-TH wedg.
+%
+%   MESH.PYRA5.INDEX - [M5x 6] array of indexing for pyra-5 elements, whe-
+%       re INDEX(K,1:5) is the array of "points" associated with the K-TH 
+%       pyra, and INDEX(K,6) is an ID tag for the K-TH pyra.
 %
 %   See also MAKEMSH, READMSH
 
@@ -49,6 +65,7 @@ function makevtk(name,mesh)
     ffid = fopen(name, 'w') ;
     
     npoint = 0; nedge2 = 0; ntria3 = 0; ntria4 = 0;
+    nquad4 = 0; nhexa8 = 0; nwedg6 = 0; npyra5 = 0;
     
     if (isfield(mesh,'point') && ...
         isfield(mesh.point,'coord') && ...
@@ -65,10 +82,30 @@ function makevtk(name,mesh)
        ~isempty(mesh.tria3.index) )
         ntria3 = size(mesh.tria3.index,1);
     end
+    if (isfield(mesh,'quad4') && ...
+        isfield(mesh.quad4,'index') && ...
+       ~isempty(mesh.quad4.index) )
+        nquad4 = size(mesh.quad4.index,1);
+    end
     if (isfield(mesh,'tria4') && ...
         isfield(mesh.tria4,'index') && ...
        ~isempty(mesh.tria4.index) )
         ntria4 = size(mesh.tria4.index,1);
+    end
+    if (isfield(mesh,'hexa8') && ...
+        isfield(mesh.hexa8,'index') && ...
+       ~isempty(mesh.hexa8.index) )
+        nhexa8 = size(mesh.hexa8.index,1);
+    end
+    if (isfield(mesh,'wedg6') && ...
+        isfield(mesh.wedg6,'index') && ...
+       ~isempty(mesh.wedg6.index) )
+        nwedg6 = size(mesh.wedg6.index,1);
+    end
+    if (isfield(mesh,'pyra5') && ...
+        isfield(mesh.pyra5,'index') && ...
+       ~isempty(mesh.pyra5.index) )
+        npyra5 = size(mesh.pyra5.index,1);
     end
     
     fprintf(ffid,['# vtk DataFile Version 3.0','\n']);
@@ -96,12 +133,14 @@ function makevtk(name,mesh)
         end
     end
     
-    nline = nedge2 * 1 ...
-          + ntria3 * 1 ...
-          + ntria4 * 1 ;
-    nints = nedge2 * 3 ...
-          + ntria3 * 4 ... 
-          + ntria4 * 5 ;
+    nline = nedge2 * 1 + ntria3 * 1 ...
+          + ntria4 * 1 + nquad4 * 1 ...
+          + nhexa8 * 1 + nwedg6 * 1 ...
+          + npyra5 * 1 ;
+    nints = nedge2 * 3 + ntria3 * 4 ... 
+          + ntria4 * 5 + nquad4 * 5 ...
+          + nhexa8 * 9 + nwedg6 * 7 ...
+          + npyra5 * 6 ;
     
     fprintf(ffid,['CELLS %u %u','\n'],[nline,nints]);
     
@@ -119,6 +158,13 @@ function makevtk(name,mesh)
     fprintf(ffid,['3 ',repmat('%u ',1,3),'\n'], ...
         mesh.tria3.index(:,1:3)'-1);
     end
+    if (isfield(mesh,'quad4') && ...
+        isfield(mesh.quad4,'index') && ...
+       ~isempty(mesh.quad4.index) )
+%-- write "QUAD4" data
+    fprintf(ffid,['4 ',repmat('%u ',1,4),'\n'], ...
+        mesh.quad4.index(:,1:3)'-1);
+    end
     if (isfield(mesh,'tria4') && ...
         isfield(mesh.tria4,'index') && ...
        ~isempty(mesh.tria4.index) )
@@ -126,12 +172,38 @@ function makevtk(name,mesh)
     fprintf(ffid,['4 ',repmat('%u ',1,4),'\n'], ...
         mesh.tria4.index(:,1:4)'-1);
     end
+    if (isfield(mesh,'hexa8') && ...
+        isfield(mesh.hexa8,'index') && ...
+       ~isempty(mesh.hexa8.index) )
+%-- write "HEXA8" data
+    fprintf(ffid,['8 ',repmat('%u ',1,8),'\n'], ...
+        mesh.hexa8.index(:,1:8)'-1);
+    end
+    if (isfield(mesh,'wedg6') && ...
+        isfield(mesh.wedg6,'index') && ...
+       ~isempty(mesh.wedg6.index) )
+%-- write "WEDG6" data
+    fprintf(ffid,['6 ',repmat('%u ',1,6),'\n'], ...
+        mesh.wedg6.index(:,1:6)'-1);
+    end
+    if (isfield(mesh,'pyra5') && ...
+        isfield(mesh.pyra5,'index') && ...
+       ~isempty(mesh.pyra5.index) )
+%-- write "PYRA5" data
+    fprintf(ffid,['5 ',repmat('%u ',1,5),'\n'], ...
+        mesh.pyra5.index(:,1:5)'-1);
+    end
+    
     
     fprintf(ffid,['CELL_TYPES %u','\n'],nline);
     
     vtk_edge2 = + 3 ;
     vtk_tria3 = + 5 ;
+    vtk_quad4 = + 9 ;
     vtk_tria4 = +10 ;
+    vtk_hexa8 = +12 ;
+    vtk_wedg6 = +13 ;
+    vtk_pyra5 = +14 ;
     
     if (isfield(mesh,'edge2') && ...
         isfield(mesh.edge2,'index') && ...
@@ -145,11 +217,35 @@ function makevtk(name,mesh)
 %-- write "TRIA3" type
     fprintf(ffid,['%u','\n'],repmat(vtk_tria3,1,ntria3));
     end
+    if (isfield(mesh,'quad4') && ...
+        isfield(mesh.quad4,'index') && ...
+       ~isempty(mesh.quad4.index) )
+%-- write "QUAD4" type
+    fprintf(ffid,['%u','\n'],repmat(vtk_quad4,1,nquad4));
+    end
     if (isfield(mesh,'tria4') && ...
         isfield(mesh.tria4,'index') && ...
        ~isempty(mesh.tria4.index) )
 %-- write "TRIA4" type
     fprintf(ffid,['%u','\n'],repmat(vtk_tria4,1,ntria4));
+    end
+    if (isfield(mesh,'hexa8') && ...
+        isfield(mesh.hexa8,'index') && ...
+       ~isempty(mesh.hexa8.index) )
+%-- write "HEXA8" type
+    fprintf(ffid,['%u','\n'],repmat(vtk_hexa8,1,nhexa8));
+    end
+    if (isfield(mesh,'wedg6') && ...
+        isfield(mesh.wedg6,'index') && ...
+       ~isempty(mesh.wedg6.index) )
+%-- write "WEDG6" type
+    fprintf(ffid,['%u','\n'],repmat(vtk_wedg6,1,nwedg6));
+    end
+    if (isfield(mesh,'pyra5') && ...
+        isfield(mesh.pyra5,'index') && ...
+       ~isempty(mesh.pyra5.index) )
+%-- write "PYRA5" type
+    fprintf(ffid,['%u','\n'],repmat(vtk_pyra5,1,npyra5));
     end
     
     fclose(ffid);
