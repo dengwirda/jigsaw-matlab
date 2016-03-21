@@ -17,27 +17,46 @@ function [mesh] = readmsh(name)
 %       re INDEX(K,1:3) is the array of "points" associated with the K-TH 
 %       tria, and INDEX(K,4) is an ID tag for the K-TH tria.
 %
-%   MESH.TRIA4.INDEX - [N4x 5] array of indexing for tria-4 elements, whe-
+%   MESH.QUAD4.INDEX - [N4x 5] array of indexing for quad-4 elements, whe-
+%       re INDEX(K,1:4) is the array of "points" associated with the K-TH 
+%       quad, and INDEX(K,5) is an ID tag for the K-TH quad.
+%
+%   MESH.TRIA4.INDEX - [M4x 5] array of indexing for tria-4 elements, whe-
 %       re INDEX(K,1:4) is the array of "points" associated with the K-TH 
 %       tria, and INDEX(K,5) is an ID tag for the K-TH tria.
+%
+%   MESH.HEXA8.INDEX - [M8x 9] array of indexing for hexa-8 elements, whe-
+%       re INDEX(K,1:8) is the array of "points" associated with the K-TH 
+%       hexa, and INDEX(K,9) is an ID tag for the K-TH hexa.
+%
+%   MESH.WEDG6.INDEX - [M6x 7] array of indexing for wedg-6 elements, whe-
+%       re INDEX(K,1:6) is the array of "points" associated with the K-TH 
+%       wedg, and INDEX(K,7) is an ID tag for the K-TH wedg.
+%
+%   MESH.PYRA5.INDEX - [M5x 6] array of indexing for pyra-5 elements, whe-
+%       re INDEX(K,1:5) is the array of "points" associated with the K-TH 
+%       pyra, and INDEX(K,6) is an ID tag for the K-TH pyra.
 %
 %   An additional set of "values" may also be optionally loaded, such that:
 %
 %   MESH.(BASE).(NAME).VALUE - [NFxNV] array of "values".
 %   MESH.(BASE).(NAME).INDEX - [NFx 1] array of indexing.
 %
-%   Here BASE is one of "POINT", "EDGE2", "TRIA3", "TRIA4" and NAME is the
-%   name assigned to the data field. This mechanism can be used to associ-
-%   ate arbitrary "named" data fields with the primary mesh entities, such 
-%   that the data contained in MESH.(BASE).(NAME).VALUE(K,:) is associated 
-%   with the MESH.(BASE).(NAME).INDEX(K)-TH element of MESH.(BASE).
+%   Here BASE is a mesh entity "POINT", "EDGE2", "TRIA3", "QUAD4", "TRIA4", 
+%   "HEXA8", "WEDG6" or "PYRA5" and NAME is the name assigned to the data 
+%   field. This mechanism can be used to associate arbitrary "named" data 
+%   fields with the primary mesh entities, such that the data contained in 
+%   MESH.(BASE).(NAME).VALUE(K,:) is associated with the 
+%   MESH.(BASE).(NAME).INDEX(K)-TH element of MESH.(BASE).
 %
-%   See also MAKEMSH
+%   See also MAKEMSH, MAKEVTK
 
+%
 %   Darren Engwirda
-%   14-Jan-2016
+%   github.com/dengwirda/jigsaw-matlab
+%   20-Mar-2016
 %   d_engwirda@outlook.com
-
+%
 
     try
 
@@ -137,6 +156,27 @@ function [mesh] = readmsh(name)
             
                 mesh.tria3.index(:,1:3) = ...
                 mesh.tria3.index(:,1:3) + 1;
+            
+            case 'quad4'
+
+        %-- read "QUAD4" data
+
+                nnum = str2double(tstr{2}) ;
+
+                numr = nnum * 5;
+                
+                data = ...
+            fscanf(ffid,[repmat(ints,1,4),'%i'],numr);
+                
+                mesh.quad4.index = [ ...
+                data(1:5:end), ...
+                data(2:5:end), ...
+                data(3:5:end), ...
+                data(4:5:end), ...
+                data(5:5:end)] ;
+            
+                mesh.quad4.index(:,1:4) = ...
+                mesh.quad4.index(:,1:4) + 1;
         
             case 'tria4'
 
@@ -158,7 +198,77 @@ function [mesh] = readmsh(name)
             
                 mesh.tria4.index(:,1:4) = ...
                 mesh.tria4.index(:,1:4) + 1;
+            
+            case 'hexa8'
+
+        %-- read "HEXA8" data
+
+                nnum = str2double(tstr{2}) ;
+
+                numr = nnum * 9;
                 
+                data = ...
+            fscanf(ffid,[repmat(ints,1,8),'%i'],numr);
+                
+                mesh.hexa8.index = [ ...
+                data(1:9:end), ...
+                data(2:9:end), ...
+                data(3:9:end), ...
+                data(4:9:end), ...
+                data(5:9:end), ...
+                data(6:9:end), ...
+                data(7:9:end), ...
+                data(8:9:end), ...
+                data(9:9:end)] ;
+            
+                mesh.hexa8.index(:,1:8) = ...
+                mesh.hexa8.index(:,1:8) + 1;
+            
+            case 'wedg6'
+
+        %-- read "WEDG6" data
+
+                nnum = str2double(tstr{2}) ;
+
+                numr = nnum * 7;
+                
+                data = ...
+            fscanf(ffid,[repmat(ints,1,6),'%i'],numr);
+                
+                mesh.wedg6.index = [ ...
+                data(1:7:end), ...
+                data(2:7:end), ...
+                data(3:7:end), ...
+                data(4:7:end), ...
+                data(5:7:end), ...
+                data(6:7:end), ...
+                data(7:7:end)] ;
+            
+                mesh.wedg6.index(:,1:6) = ...
+                mesh.wedg6.index(:,1:6) + 1;
+     
+            case 'pyra5'
+
+        %-- read "PYRA5" data
+
+                nnum = str2double(tstr{2}) ;
+
+                numr = nnum * 6;
+                
+                data = ...
+            fscanf(ffid,[repmat(ints,1,5),'%i'],numr);
+                
+                mesh.pyra5.index = [ ...
+                data(1:6:end), ...
+                data(2:6:end), ...
+                data(3:6:end), ...
+                data(4:6:end), ...
+                data(5:6:end), ...
+                data(6:6:end)] ;
+            
+                mesh.pyra5.index(:,1:5) = ...
+                mesh.pyra5.index(:,1:5) + 1;
+            
             case 'value'
 
         %-- read "VALUE" data
