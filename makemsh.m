@@ -17,9 +17,25 @@ function makemsh(name,mesh)
 %       re INDEX(K,1:3) is the array of "points" associated with the K-TH 
 %       tria, and INDEX(K,4) is an ID tag for the K-TH tria.
 %
-%   MESH.TRIA4.INDEX - [N4x 5] array of indexing for tria-4 elements, whe-
+%   MESH.QUAD4.INDEX - [N4x 5] array of indexing for quad-4 elements, whe-
+%       re INDEX(K,1:4) is the array of "points" associated with the K-TH 
+%       quad, and INDEX(K,5) is an ID tag for the K-TH quad.
+%
+%   MESH.TRIA4.INDEX - [M4x 5] array of indexing for tria-4 elements, whe-
 %       re INDEX(K,1:4) is the array of "points" associated with the K-TH 
 %       tria, and INDEX(K,5) is an ID tag for the K-TH tria.
+%
+%   MESH.HEXA8.INDEX - [M8x 9] array of indexing for hexa-8 elements, whe-
+%       re INDEX(K,1:8) is the array of "points" associated with the K-TH 
+%       hexa, and INDEX(K,9) is an ID tag for the K-TH hexa.
+%
+%   MESH.WEDG6.INDEX - [M6x 7] array of indexing for wedg-6 elements, whe-
+%       re INDEX(K,1:6) is the array of "points" associated with the K-TH 
+%       wedg, and INDEX(K,7) is an ID tag for the K-TH wedg.
+%
+%   MESH.PYRA5.INDEX - [M5x 6] array of indexing for pyra-5 elements, whe-
+%       re INDEX(K,1:5) is the array of "points" associated with the K-TH 
+%       pyra, and INDEX(K,6) is an ID tag for the K-TH pyra.
 %
 %   See also MAKEVTK, READMSH
 
@@ -101,6 +117,20 @@ function makemsh(name,mesh)
 
     end
     
+    if (isfield(mesh,'quad4') && ...
+        isfield(mesh.quad4,'index') && ...
+       ~isempty(mesh.quad4.index) )
+       
+%-- write "QUAD4" data
+        
+    index = mesh.quad4.index;
+    index(:,1:4) = index(:,1:4)-1 ; % file is zero-indexed!
+       
+    fprintf(ffid,['quad4=%u',endl],size(mesh.quad4.index,1));        
+    fprintf(ffid,[repmat(ints,1,4),'%i',endl],index');
+
+    end
+    
     if (isfield(mesh,'tria4') && ...
         isfield(mesh.tria4,'index') && ...
        ~isempty(mesh.tria4.index) )
@@ -112,6 +142,48 @@ function makemsh(name,mesh)
        
     fprintf(ffid,['tria4=%u',endl],size(mesh.tria4.index,1));        
     fprintf(ffid,[repmat(ints,1,4),'%i',endl],index');
+
+    end
+    
+    if (isfield(mesh,'hexa8') && ...
+        isfield(mesh.hexa8,'index') && ...
+       ~isempty(mesh.hexa8.index) )
+    
+%-- write "HEXA8" data
+        
+    index = mesh.hexa8.index;
+    index(:,1:8) = index(:,1:8)-1 ; % file is zero-indexed!
+       
+    fprintf(ffid,['hexa8=%u',endl],size(mesh.hexa8.index,1));        
+    fprintf(ffid,[repmat(ints,1,8),'%i',endl],index');
+
+    end
+    
+    if (isfield(mesh,'wedg6') && ...
+        isfield(mesh.wedg6,'index') && ...
+       ~isempty(mesh.wedg6.index) )
+    
+%-- write "WEDG6" data
+        
+    index = mesh.wedg6.index;
+    index(:,1:6) = index(:,1:6)-1 ; % file is zero-indexed!
+       
+    fprintf(ffid,['wedg6=%u',endl],size(mesh.wedg6.index,1));        
+    fprintf(ffid,[repmat(ints,1,6),'%i',endl],index');
+
+    end
+    
+    if (isfield(mesh,'pyra5') && ...
+        isfield(mesh.pyra5,'index') && ...
+       ~isempty(mesh.ptra5.index) )
+    
+%-- write "PYRA5" data
+        
+    index = mesh.pyra5.index;
+    index(:,1:5) = index(:,1:5)-1 ; % file is zero-indexed!
+       
+    fprintf(ffid,['pyra5=%u',endl],size(mesh.pyra5.index,1));        
+    fprintf(ffid,[repmat(ints,1,6),'%i',endl],index');
 
     end
         
