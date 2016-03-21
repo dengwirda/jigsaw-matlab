@@ -37,7 +37,8 @@ function makemsh(name,mesh)
 %       re INDEX(K,1:5) is the array of "points" associated with the K-TH 
 %       pyra, and INDEX(K,6) is an ID tag for the K-TH pyra.
 %
-%   See also MAKEVTK, READMSH
+%   See also READMSH, MAKEVTK, READVTK, MAKEMESH, READMESH, READOFF, 
+%            MAKEOFF
 
 %
 %   Darren Engwirda
@@ -70,7 +71,7 @@ function makemsh(name,mesh)
     real = '%1.16g;';
     ints = '%i;';
     
-    fprintf(ffid,['# %s.msh geometry file',endl],file);
+    fprintf(ffid,['# %s.msh file, created by JIGSAW',endl],file);
     fprintf(ffid,['mshid=%u',endl],nver);
     
     if (isfield(mesh,'point') && ...
