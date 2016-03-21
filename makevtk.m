@@ -37,7 +37,8 @@ function makevtk(name,mesh)
 %       re INDEX(K,1:5) is the array of "points" associated with the K-TH 
 %       pyra, and INDEX(K,6) is an ID tag for the K-TH pyra.
 %
-%   See also MAKEMSH, READMSH
+%   See also READVTK, MAKEMSH, READMSH, MAKEMESH, READMESH, MAKEOFF, 
+%            READOFF
 
 %
 %   Darren Engwirda
