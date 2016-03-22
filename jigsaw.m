@@ -147,11 +147,14 @@ function [varargout] = jigsaw(opts)
 %   A number of other (important!) references are cited in the articles
 %   above. See the full-text for additional information.
 
-%   JIGSAW-0.9.2
+%---------------------------------------------------------------------
+%   JIGSAW-0.9.2.x
 %   Darren Engwirda
-%   20-Feb-2016
+%   github.com/dengwirda/jigsaw-matlab
+%   22-Mar-2016
 %   d_engwirda@outlook.com
-
+%---------------------------------------------------------------------
+%
 
     jexename = '';
 
@@ -171,9 +174,9 @@ function [varargout] = jigsaw(opts)
 %-- default to _debug binary
     if (strcmp(jexename,''))
     switch (computer)
-       %case 'GLNX86'
+       %case {'GLNX86',i586-pc-linux-gnu}
        %jexename = [filepath,'/jigsaw/bin/GLX-32/jigsaw32d'];
-        case 'GLNXA64'
+        case {'GLNXA64','x86_64-pc-linux-gnu'}
         jexename = [filepath,'/jigsaw/bin/GLX-64/jigsaw64d'];
        %case 'PCWIN'  
        %jexename = [filepath,'\jigsaw\bin\WIN-32\jigsaw32d.exe'];
@@ -192,9 +195,9 @@ function [varargout] = jigsaw(opts)
 %-- switch to release binary
     if (strcmp(jexename,''))
     switch (computer)
-       %case 'GLNX86'
+       %case {'GLNX86',i586-pc-linux-gnu}
        %jexename = [filepath,'/jigsaw/bin/GLX-32/jigsaw32r'];
-        case 'GLNXA64'
+        case {'GLNXA64','x86_64-pc-linux-gnu'}
         jexename = [filepath,'/jigsaw/bin/GLX-64/jigsaw64r'];
        %case 'PCWIN'  
        %jexename = [filepath,'\jigsaw\bin\WIN-32\jigsaw32r.exe'];
