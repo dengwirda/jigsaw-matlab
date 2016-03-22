@@ -1,15 +1,17 @@
 function [cost] = meshcost(mesh)
 %MESHCOST calculate cost metrics for a given mesh.
 
+%---------------------------------------------------------------------
 %   Darren Engwirda
-%   14-Jan-2016
+%   github.com/dengwirda/jigsaw-matlab
+%   22-Mar-2016
 %   d_engwirda@outlook.com
-
+%---------------------------------------------------------------------
+%
 
     cost = [];
     
-    if (isfield(mesh,'tria3') && ...
-            ~isempty(mesh.tria3.index))
+    if (meshhas(mesh,'tria3'))
     
         cost.tria3.score = ...
             score2(mesh.point.coord(:,1:end-1), ...
@@ -20,8 +22,7 @@ function [cost] = meshcost(mesh)
 
     end
     
-    if (isfield(mesh,'tria4') && ...
-            ~isempty(mesh.tria4.index))
+    if (meshhas(mesh,'tria4'))
     
         cost.tria4.score = ...
             score3(mesh.point.coord(:,1:end-1), ...
@@ -32,11 +33,9 @@ function [cost] = meshcost(mesh)
     
     end
 
-    if (isfield(mesh,'point') && ...
-            isfield(mesh.point,'sizfn'))
+    if (meshhas(mesh,'point','sizfn'))
         
-    if (isfield(mesh,'edge2') && ...
-            ~isempty(mesh.edge2.index))
+    if (meshhas(mesh,'edge2'))
   
         hvec = zeros(size(mesh.point.coord,1),1) ;
         hvec(mesh.point.sizfn.index) = ...
@@ -48,8 +47,7 @@ function [cost] = meshcost(mesh)
                    hvec) ;
                          
     end
-    if (isfield(mesh,'tria3') && ...
-            ~isempty(mesh.tria3.index))
+    if (meshhas(mesh,'tria3'))
   
         hvec = zeros(size(mesh.point.coord,1),1) ;
         hvec(mesh.point.sizfn.index) = ...
@@ -61,8 +59,7 @@ function [cost] = meshcost(mesh)
                    hvec) ;
         
     end
-    if (isfield(mesh,'tria4') && ...
-            ~isempty(mesh.tria4.index))
+    if (meshhas(mesh,'tria4'))
   
         hvec = zeros(size(mesh.point.coord,1),1) ;
         hvec(mesh.point.sizfn.index) = ...
