@@ -3,28 +3,30 @@ function makeoff(name,mesh)
 %
 %   MAKEOFF(NAME,MESH);
 %
-%   The following entities are optionally written to "NAME.OFF". Entities 
-%   are written if they are present in the sructure MESH:
+%   The following entities are optionally written to "NAME.OFF". Ent-
+%   ities are written if they are present in the sructure MESH:
 %
-%   MESH.POINT.COORD - [NPxND] array of point coordinates, where ND is the
-%       number of spatial dimenions.
+%   MESH.POINT.COORD - [NPxND] array of point coordinates, where ND 
+%       is the number of spatial dimenions.
 %
-%   MESH.TRIA3.INDEX - [N3x 4] array of indexing for tria-3 elements, whe-
-%       re INDEX(K,1:3) is the array of "points" associated with the K-TH 
-%       tria.
+%   MESH.TRIA3.INDEX - [N3x 4] array of indexing for tria-3 elements, 
+%       where INDEX(K,1:3) is an array of "points" associated with 
+%       the K-TH tria, and INDEX(K,4) is an ID tag for the K-TH tria.
 %
-%   MESH.QUAD4.INDEX - [N4x 5] array of indexing for quad-4 elements, whe-
-%       re INDEX(K,1:4) is the array of "points" associated with the K-TH 
-%       quad.
+%   MESH.QUAD4.INDEX - [N4x 5] array of indexing for quad-4 elements, 
+%       where INDEX(K,1:4) is an array of "points" associated with 
+%       the K-TH quad, and INDEX(K,5) is an ID tag for the K-TH quad.
 %
 %   See also READOFF, MAKEMSH, READMSH, MAKEMESH, READMESH, MAKEVTK, 
 %            READVTK
-
 %
+
+%---------------------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   21-Mar-2016
+%   22-Mar-2016
 %   d_engwirda@outlook.com
+%---------------------------------------------------------------------
 %
 
     if (~ischar  (name))
@@ -52,44 +54,28 @@ function makeoff(name,mesh)
     fprintf(ffid,['OFF','\n']);
     fprintf(ffid,['# %s.off file, created by JIGSAW','\n'],file);
     
-    if (isfield(mesh,'point') && ...
-        isfield(mesh.point,'coord') && ...
-       ~isempty(mesh.point.coord) )
+    if (meshhas(mesh,'point'))
         npoint = size(mesh.point.coord,1);
     end
-    if (isfield(mesh,'edge2') && ...
-        isfield(mesh.edge2,'index') && ...
-       ~isempty(mesh.edge2.index) )
+    if (meshhas(mesh,'edge2'))
         nedge2 = size(mesh.edge2.index,1);
     end
-    if (isfield(mesh,'tria3') && ...
-        isfield(mesh.tria3,'index') && ...
-       ~isempty(mesh.tria3.index) )
+    if (meshhas(mesh,'tria3'))
         ntria3 = size(mesh.tria3.index,1);
     end
-    if (isfield(mesh,'quad4') && ...
-        isfield(mesh.quad4,'index') && ...
-       ~isempty(mesh.quad4.index) )
+    if (meshhas(mesh,'quad4'))
         nquad4 = size(mesh.quad4.index,1);
     end
-    if (isfield(mesh,'tria4') && ...
-        isfield(mesh.tria4,'index') && ...
-       ~isempty(mesh.tria4.index) )
+    if (meshhas(mesh,'tria4'))
         ntria4 = size(mesh.tria4.index,1);
     end
-    if (isfield(mesh,'hexa8') && ...
-        isfield(mesh.hexa8,'index') && ...
-       ~isempty(mesh.hexa8.index) )
+    if (meshhas(mesh,'hexa8'))
         nhexa8 = size(mesh.hexa8.index,1);
     end
-    if (isfield(mesh,'wedg6') && ...
-        isfield(mesh.wedg6,'index') && ...
-       ~isempty(mesh.wedg6.index) )
+    if (meshhas(mesh,'wedg6'))
         nwedg6 = size(mesh.wedg6.index,1);
     end
-    if (isfield(mesh,'pyra5') && ...
-        isfield(mesh.pyra5,'index') && ...
-       ~isempty(mesh.pyra5.index) )
+    if (meshhas(mesh,'pyra5'))
         npyra5 = size(mesh.pyra5.index,1);
     end
 
@@ -97,9 +83,7 @@ function makeoff(name,mesh)
     
     fprintf(ffid,'%u %u %u \n',[npoint,nfaces,nedges]) ;
     
-    if (isfield(mesh,'point') && ...
-        isfield(mesh.point,'coord') && ...
-       ~isempty(mesh.point.coord) )
+    if (meshhas(mesh,'point'))
 %-- write "POINT" data
     switch (size(mesh.point.coord,2))
         case +2
@@ -119,50 +103,39 @@ function makeoff(name,mesh)
     fprintf(ffid,['%1.16g %1.16g %1.16g','\n'],coord') ;
     end
     
-    if (isfield(mesh,'edge2') && ...
-        isfield(mesh.edge2,'index') && ...
-       ~isempty(mesh.edge2.index) )
+    if (meshhas(mesh,'edge2'))
 %-- write "EDGE2" data
     warning('EDGE2 elements not supported!') ;   
     end
     
-    if (isfield(mesh,'tria3') && ...
-        isfield(mesh.tria3,'index') && ...
-       ~isempty(mesh.tria3.index) )
+    if (meshhas(mesh,'tria3'))
 %-- write "TRIA3" data
     fprintf(ffid,['3',repmat(' %u',1,3),'\n'], ...
         mesh.tria3.index(:,1:3)'-1) ;
     end
     
-    if (isfield(mesh,'quad4') && ...
-        isfield(mesh.quad4,'index') && ...
-       ~isempty(mesh.quad4.index) )
+    if (meshhas(mesh,'quad4'))
 %-- write "QUAD4" data
     fprintf(ffid,['4',repmat(' %u',1,4),'\n'], ...
         mesh.quad4.index(:,1:4)'-1) ;
     end
     
-    if (isfield(mesh,'tria4') && ...
-        isfield(mesh.tria4,'index') && ...
-       ~isempty(mesh.tria4.index) )
+    if (meshhas(mesh,'tria4'))
 %-- write "TRIA4" data
     warning('TRIA4 elements not supported!') ;
     end
-    if (isfield(mesh,'hexa8') && ...
-        isfield(mesh.hexa8,'index') && ...
-       ~isempty(mesh.hexa8.index) )
+    
+    if (meshhas(mesh,'hexa8'))
 %-- write "HEXA8" data
     warning('HEXA8 elements not supported!') ;
     end
-    if (isfield(mesh,'wedg6') && ...
-        isfield(mesh.wedg6,'index') && ...
-       ~isempty(mesh.wedg6.index) )
+    
+    if (meshhas(mesh,'wedg6'))
 %-- write "WEDG6" data
     warning('WEDG6 elements not supported!') ;
     end
-    if (isfield(mesh,'pyra5') && ...
-        isfield(mesh.pyra5,'index') && ...
-       ~isempty(mesh.pyra5.index) )
+    
+    if (meshhas(mesh,'pyra5'))
 %-- write "PYRA5" data
     warning('PYRA5 elements not supported!') ;
     end
