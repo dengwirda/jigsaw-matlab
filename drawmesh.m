@@ -1,10 +1,12 @@
 function drawmesh(varargin)
 %DRAWMESH draw mesh data for JIGSAW.
 
+%
 %   Darren Engwirda
-%   14-Jan-2016
+%   github.com/dengwirda/jigsaw-matlab
+%   21-Mar-2016
 %   d_engwirda@outlook.com
-
+%
 
     mesh = []; opts = [];
 
@@ -22,13 +24,20 @@ function drawmesh(varargin)
             mesh.point.coord(:,opts.flips) ;
     end
     
+    fig1 = []; fig2 = []; fig3 = [];
+    
     switch (ndim)
         case +2
     %-- draw mesh obj. in R^2
     
         if (isfield(mesh,'edge2') && ~isempty(mesh.edge2))
-            figure;
-            drawtria3(mesh.point.coord(:,1:2), ...
+            
+            if (isempty(fig1))
+                fig1 = figure; 
+            else
+                figure (fig1);
+            end
+            drawedge2(mesh.point.coord(:,1:2), ...
                       mesh.edge2.index(:,1:2)) ;
             axis image off ;
             if (~isempty(opts) && ...
@@ -37,10 +46,16 @@ function drawmesh(varargin)
             end
             set(gcf,'color','w');
             set(gca,'units','normalized','position',[.05,.05,.90,.90]);
+        
         end
             
         if (isfield(mesh,'tria3') && ~isempty(mesh.tria3))
-            figure;
+            
+            if (isempty(fig2))
+                fig2 = figure; 
+            else
+                figure (fig2);
+            end
             drawtria3(mesh.point.coord(:,1:2), ...
                       mesh.tria3.index(:,1:3)) ;
             axis image off ;
@@ -50,13 +65,19 @@ function drawmesh(varargin)
             end
             set(gcf,'color','w');
             set(gca,'units','normalized','position',[.05,.05,.90,.90]);
+        
         end
             
         case +3
     %-- draw mesh obj. in R^3
     
         if (isfield(mesh,'edge2') && ~isempty(mesh.edge2))
-            figure;
+            
+            if (isempty(fig1))
+                fig1 = figure; 
+            else
+                figure (fig1);
+            end
             drawedge2(mesh.point.coord(:,1:3), ...
                       mesh.edge2.index(:,1:2)) ;
             axis image off ;
@@ -77,11 +98,16 @@ function drawmesh(varargin)
             end
             set(gcf,'color','w');
             set(gca,'units','normalized','position',[.05,.05,.90,.90]);
+        
         end
             
         if (isfield(mesh,'tria3') && ~isempty(mesh.tria3))
             
-            figure;
+            if (isempty(fig2))
+                fig2 = figure; 
+            else
+                figure (fig2);
+            end
             drawtria3(mesh.point.coord(:,1:3), ...
                       mesh.tria3.index(:,1:3)) ;
             axis image off ;
@@ -102,10 +128,46 @@ function drawmesh(varargin)
             end
             set(gcf,'color','w');
             set(gca,'units','normalized','position',[.05,.05,.90,.90]);
+        
+        end
+        
+        if (isfield(mesh,'quad4') && ~isempty(mesh.quad4))
+            
+            if (isempty(fig2))
+                fig2 = figure; 
+            else
+                figure (fig2);
+            end
+            drawquad4(mesh.point.coord(:,1:3), ...
+                      mesh.quad4.index(:,1:4)) ;
+            axis image off ;
+            if (~isempty(opts) && ...
+                    isfield(opts,'views'))
+                view(opts.views) ;
+            end
+            if (~isempty(opts) && ...
+                    isfield(opts,'title'))
+                title([opts.title,' (QUAD-4)']);
+            end
+            if (~isempty(opts) && ...
+                    isfield(opts,'light'))
+                if (opts.light)
+                    camlight headlight ; 
+                    cameramenu;
+                end
+            end
+            set(gcf,'color','w');
+            set(gca,'units','normalized','position',[.05,.05,.90,.90]);
+        
         end
         
         if (isfield(mesh,'tria4') && ~isempty(mesh.tria4))
-            figure;
+        
+            if (isempty(fig3))
+                fig3 = figure; 
+            else
+                figure (fig3);
+            end
             drawtria4(mesh.point.coord(:,1:3), ...
                       mesh.tria4.index(:,1:4)) ;
             axis image off ;
@@ -126,6 +188,7 @@ function drawmesh(varargin)
             end
             set(gcf,'color','w');
             set(gca,'units','normalized','position',[.05,.05,.90,.90]);
+        
         end
         
         otherwise
@@ -164,6 +227,27 @@ function drawtria3(pp,t3,varargin)
     if isempty(fc), fc = [.95,.95,.50]; end
     
     patch('faces',t3,'vertices',pp, ...
+        'facecolor',fc,...
+        'edgecolor',ec,...
+        'facealpha',1.,...
+        'edgelighting','none',...
+        'facelighting','flat',...
+        'linewidth',.40);
+    
+end
+
+function drawquad4(pp,q4,varargin)
+%DRAWQUAD4 draw QUAD4 elements.
+
+    fc = []; ec = [] ;
+    
+    if (nargin >= +3),fc = varargin{1}; end
+    if (nargin >= +4),ec = varargin{2}; end
+
+    if isempty(ec), ec = [.20,.20,.20]; end
+    if isempty(fc), fc = [.95,.95,.50]; end
+    
+    patch('faces',q4,'vertices',pp, ...
         'facecolor',fc,...
         'edgecolor',ec,...
         'facealpha',1.,...
