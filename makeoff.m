@@ -131,7 +131,7 @@ function makeoff(name,mesh)
        ~isempty(mesh.tria3.index) )
 %-- write "TRIA3" data
     fprintf(ffid,['3',repmat(' %u',1,3),'\n'], ...
-        mesh.tria3.index(:,1:3)') ;
+        mesh.tria3.index(:,1:3)'-1) ;
     end
     
     if (isfield(mesh,'quad4') && ...
@@ -139,7 +139,7 @@ function makeoff(name,mesh)
        ~isempty(mesh.quad4.index) )
 %-- write "QUAD4" data
     fprintf(ffid,['4',repmat(' %u',1,4),'\n'], ...
-        mesh.quad4.index(:,1:4)') ;
+        mesh.quad4.index(:,1:4)'-1) ;
     end
     
     if (isfield(mesh,'tria4') && ...
