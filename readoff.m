@@ -3,28 +3,30 @@ function [mesh] = readoff(name)
 %
 %   MESH = READOFF(NAME);
 %
-%   The following entities are optionally loaded from "NAME.OFF". Entities 
-%   are loaded if they are present in the file:
+%   The following entities are optionally read from "NAME.OFF". Ent-
+%   ities are loaded if they are present in the file:
 %
-%   MESH.POINT.COORD - [NPxND] array of point coordinates, where ND is the
-%       number of spatial dimenions.
+%   MESH.POINT.COORD - [NPxND] array of point coordinates, where ND 
+%       is the number of spatial dimenions.
 %
-%   MESH.TRIA3.INDEX - [N3x 4] array of indexing for tria-3 elements, whe-
-%       re INDEX(K,1:3) is the array of "points" associated with the K-TH 
-%       tria, and INDEX(K,4) is an ID tag for the K-TH tria.
+%   MESH.TRIA3.INDEX - [N3x 4] array of indexing for tria-3 elements, 
+%       where INDEX(K,1:3) is an array of "points" associated with 
+%       the K-TH tria, and INDEX(K,4) is an ID tag for the K-TH tria.
 %
-%   MESH.QUAD4.INDEX - [N4x 5] array of indexing for quad-4 elements, whe-
-%       re INDEX(K,1:4) is the array of "points" associated with the K-TH 
-%       quad, and INDEX(K,5) is an ID tag for the K-TH quad.
+%   MESH.QUAD4.INDEX - [N4x 5] array of indexing for quad-4 elements, 
+%       where INDEX(K,1:4) is an array of "points" associated with 
+%       the K-TH quad, and INDEX(K,5) is an ID tag for the K-TH quad.
 %
 %   See also MAKEMSH, READMSH, MAKEVTK, READVTK, MAKEMESH, READMESH, 
 %            MAKEOFF
-
 %
+
+%---------------------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   21-Mar-2016
+%   22-Mar-2016
 %   d_engwirda@outlook.com
+%---------------------------------------------------------------------
 %
 
     try
