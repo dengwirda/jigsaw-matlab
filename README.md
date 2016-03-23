@@ -7,15 +7,19 @@
   <img src = "../master/jigsaw/img/bunny-TRIA4-3.png">
 </p>
 
-<b>JIGSAW</b> is a Delaunay-based unstructured mesh generator for two- and three-dimensional geometries. It is designed to generate high-quality triangular and tetrahedral meshes for planar, surface and volumetric problems. <b>JIGSAW</b> is based on a recently developed 'Frontal-Delaunay' algorithm -- a hybrid technique combining the best features of 'Advancing-Front' and 'Delaunay-Refinement' type approaches.
+**`JIGSAW`** is a Delaunay-based unstructured mesh generator for two- and three-dimensional geometries. It is designed to generate high-quality triangular and tetrahedral meshes for planar, surface and volumetric problems. **`JIGSAW`** is based on a recently developed "restricted" Frontal-Delaunay algorithm -- a hybrid technique combining many of the best features of advancing-front and Delaunay-refinement type approaches.
 
-<b>JIGSAW</b> is a stand-alone mesh generator written in C++. This toolbox provides a <b>MATLAB</b> // <b>OCTAVE</b> interface, including file I/O, mesh visualisation and post-processing facilities. In addition to mesh generation, a set of file conversion utilities are also provided, allowing <b>JIGSAW</b> to read and write meshes using a number of popular geometry formats, including the <b>VTK</b>, <b>OFF</b>, <b>STL</b> and <b>MESH</b> formats.
+**`JIGSAW`** is a stand-alone mesh generator written in C++. This toolbox provides a `MATLAB` // `OCTAVE` based scripting interface, including file I/O, mesh visualisation and post-processing facilities. In addition to mesh generation, a set of file conversion utilities are also provided, allowing **`JIGSAW`** to read and write meshes using a number of popular geometry dialects, including the `VTK`, `OFF`, `STL` and `MESH` formats.
 
-<b>JIGSAW</b> is currently available for 64-bit Windows and Linux platforms.
+**`JIGSAW`** is currently available for 64-bit `Windows` and `Linux` platforms.
+
+# Installation
+
+**`JIGSAW`** itself is a fully self-contained executable, without dependencies on third-party libraries or run-time packages. To make use of **`JIGSAW`**'s  scripting interface, users are required to have access to a working <a href="http://www.mathworks.com">`MATLAB`</a> and/or <a href="https://www.gnu.org/software/octave">`OCTAVE`</a> installation.
 
 # Getting Started
 
-After downloading the current <b>JIGSAW</b> <a href="https://github.com/dengwirda/jigsaw-matlab/archive/master.zip">repository</a>, see `meshdemo.m` for a list of example problems:
+After downloading and unzipping the current **`JIGSAW`** <a href="https://github.com/dengwirda/jigsaw-matlab/archive/master.zip">repository</a>, navigate to the installation directory within `MATLAB` (`OCTAVE`) and see `meshdemo.m` for a list of example problems:
 ````
 meshdemo(1); % build surface-meshes
 meshdemo(2); % build volume-meshes
