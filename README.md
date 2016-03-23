@@ -19,7 +19,7 @@
 
 # `Starting Out`
 
-After downloading and unzipping the current <a href="https://github.com/dengwirda/jigsaw-matlab/archive/master.zip">repository</a>, navigate to the installation directory within <a href="http://www.mathworks.com">`MATLAB`</a> // <a href="https://www.gnu.org/software/octave">`OCTAVE`</a> and see `meshdemo.m` for a list of example problems:
+After downloading and unzipping the current <a href="https://github.com/dengwirda/jigsaw-matlab/archive/master.zip">repository</a>, navigate to the installation directory within <a href="http://www.mathworks.com">`MATLAB`</a> // <a href="https://www.gnu.org/software/octave">`OCTAVE`</a> and run `meshdemo.m` for a set of example problems:
 ````
 meshdemo(1); % build surface-meshes
 meshdemo(2); % build volume-meshes
