@@ -4,7 +4,7 @@ function drawmesh(mesh,varargin)
 %---------------------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   22-Mar-2016
+%   23-Mar-2016
 %   d_engwirda@outlook.com
 %---------------------------------------------------------------------
 %
@@ -14,7 +14,7 @@ function drawmesh(mesh,varargin)
     if (nargin >= +2), opts = varargin{1}; end
     
     if (nargin <= +0 || nargin >= +3)
-        error('Incorrect number of arguments!') ;
+        error('Incorrect number of arguments!');
     end
     
     if (~meshhas(mesh,'point')) , return ; end
@@ -42,7 +42,7 @@ function drawmesh(mesh,varargin)
             axis image off ;
             if (~isempty(opts) && ...
                     isfield(opts,'title'))
-                title([opts.title,' (TOPO-1)']);
+                title([opts.title,' (TOPO.-1)']);
             end
             set(gcf,'color','w');
             set(gca,'units', ...
@@ -61,7 +61,7 @@ function drawmesh(mesh,varargin)
             axis image off ;
             if (~isempty(opts) && ...
                     isfield(opts,'title'))
-                title([opts.title,' (TOPO-2)']);
+                title([opts.title,' (TOPO.-2)']);
             end
             set(gcf,'color','w');
             set(gca,'units', ...
@@ -80,7 +80,7 @@ function drawmesh(mesh,varargin)
             axis image off ;
             if (~isempty(opts) && ...
                     isfield(opts,'title'))
-                title([opts.title,' (TOPO-2)']);
+                title([opts.title,' (TOPO.-2)']);
             end
             set(gcf,'color','w');
             set(gca,'units', ...
@@ -107,13 +107,15 @@ function drawmesh(mesh,varargin)
             end
             if (~isempty(opts) && ...
                     isfield(opts,'title'))
-                title([opts.title,' (TOPO-1)']);
+                title([opts.title,' (TOPO.-1)']);
             end
             if (~isempty(opts) && ...
                     isfield(opts,'light'))
-                if (opts.light)
+                if (opts.light && ...
+                        exist('camlight') ~= 0) % octave!
                     camlight headlight ;
-                    cameramenu;
+                    lighting flat ;
+                    cameramenu ;
                 end
             end
             set(gcf,'color','w');
@@ -137,13 +139,15 @@ function drawmesh(mesh,varargin)
             end
             if (~isempty(opts) && ...
                     isfield(opts,'title'))
-                title([opts.title,' (TOPO-2)']);
+                title([opts.title,' (TOPO.-2)']);
             end
             if (~isempty(opts) && ...
                     isfield(opts,'light'))
-                if (opts.light)
-                    camlight headlight ; 
-                    cameramenu;
+                if (opts.light && ...
+                        exist('camlight') ~= 0) % octave!
+                    camlight headlight ;
+                    lighting flat ;
+                    cameramenu ;
                 end
             end
             set(gcf,'color','w');
@@ -167,13 +171,15 @@ function drawmesh(mesh,varargin)
             end
             if (~isempty(opts) && ...
                     isfield(opts,'title'))
-                title([opts.title,' (TOPO-2)']);
+                title([opts.title,' (TOPO.-2)']);
             end
             if (~isempty(opts) && ...
                     isfield(opts,'light'))
-                if (opts.light)
-                    camlight headlight ; 
-                    cameramenu;
+                if (opts.light && ...
+                        exist('camlight') ~= 0) % octave!
+                    camlight headlight ;
+                    lighting flat ;
+                    cameramenu ;
                 end
             end
             set(gcf,'color','w');
@@ -197,13 +203,15 @@ function drawmesh(mesh,varargin)
             end
             if (~isempty(opts) && ...
                     isfield(opts,'title'))
-                title([opts.title,' (TOPO-3)']);
+                title([opts.title,' (TOPO.-3)']);
             end
             if (~isempty(opts) && ...
                     isfield(opts,'light'))
-                if (opts.light)
-                    camlight headlight ; 
-                    cameramenu;
+                if (opts.light && ...
+                        exist('camlight') ~= 0) % octave!
+                    camlight headlight ;
+                    lighting flat ;
+                    cameramenu ;
                 end
             end
             set(gcf,'color','w');
@@ -226,12 +234,45 @@ function drawedge2(pp,e2,varargin)
     if (nargin >= +3),ec = varargin{1}; end
 
     if isempty(ec), ec = [.20,.20,.20]; end
+
+    switch (size(pp,2))
+    %-- draw this way for OCTAVE - it doesn't
+    %   enjoy alternate LINE() syntax, and/or
+    %   degenerate polygons via PATCH()...
+        
+        case +2
+    %-- draw lines in R^2
+        xx = [pp(e2(:,1),1), ...
+              pp(e2(:,2),1), ...
+        NaN*ones(size(e2,1),1)]';
+        yy = [pp(e2(:,1),2), ...
+              pp(e2(:,2),2), ...
+        NaN*ones(size(e2,1),1)]';
+        
+        line('xdata',xx(:), ...
+             'ydata',yy(:), ...
+             'color',ec, ...
+             'linewidth',1.0);
     
-    patch('faces',e2,'vertices',pp, ...
-        'facecolor','none',...
-        'edgecolor',ec,...
-        'facealpha',1.,...
-        'linewidth',.40) ;
+        case +3
+    %-- draw lines in R^3
+        xx = [pp(e2(:,1),1), ...
+              pp(e2(:,2),1), ...
+        NaN*ones(size(e2,1),1)]';
+        yy = [pp(e2(:,1),2), ...
+              pp(e2(:,2),2), ...
+        NaN*ones(size(e2,1),1)]';
+        zz = [pp(e2(:,1),3), ...
+              pp(e2(:,2),3), ...
+        NaN*ones(size(e2,1),1)]';
+        
+        line('xdata',xx(:), ...
+             'ydata',yy(:), ...
+             'zdata',zz(:), ...
+             'color',ec, ...
+             'linewidth',1.0);
+        
+    end
     
 end
 
@@ -250,9 +291,7 @@ function drawtria3(pp,t3,varargin)
         'facecolor',fc,...
         'edgecolor',ec,...
         'facealpha',1.,...
-        'edgelighting','none',...
-        'facelighting','flat',...
-        'linewidth',.40);
+        'linewidth',1.0);
     
 end
 
@@ -271,9 +310,7 @@ function drawquad4(pp,q4,varargin)
         'facecolor',fc,...
         'edgecolor',ec,...
         'facealpha',1.,...
-        'edgelighting','none',...
-        'facelighting','flat',...
-        'linewidth',.40);
+        'linewidth',1.0);
     
 end
 
@@ -356,26 +393,21 @@ function drawtria4(pp,t4,varargin)
     patch('faces',f1(~c1,:),'vertices',pp,...
         'facecolor',fe,...
         'edgecolor',ec,...
-        'linewidth',.40,...
-        'edgelighting','none',...
-        'facelighting','flat');
+        'linewidth',1.0,...
+        'facealpha',1.0);
 %-- draw internal surface
     patch('faces',f1( c1,:),'vertices',pp,...
         'facecolor',fi,...
         'edgecolor',ei,...
-        'linewidth',.40,...
-        'edgelighting','none',...
-        'facelighting','flat');
+        'linewidth',1.0,...
+        'facealpha',1.0);
 %-- draw transparent part
     patch('faces',f2(~c2,:),'vertices',pp,...
         'facecolor',fe,...
         'edgecolor','none',...
-        'linewidth',.40,...
-        'edgelighting','none',...
-        'facelighting','flat',...
-        'facealpha',.20);
+        'linewidth',1.0,...
+        'facealpha',0.0);
 
 end
 
 
-     
