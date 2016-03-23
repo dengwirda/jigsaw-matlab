@@ -1,4 +1,4 @@
-# JIGSAW: An unstrutured mesh generator
+# `JIGSAW: An unstrutured mesh generator`
 
 <p align="center">
   <img src = "../master/jigsaw/img/bunny-TRIA3-1.png"> &nbsp
@@ -13,13 +13,13 @@
 
 `JIGSAW` is currently available for 64-bit `Windows` and `Linux` platforms.
 
-# Installation
+# `Installation`
 
 `JIGSAW` itself is a fully self-contained executable, without dependencies on third-party libraries or run-time packages. To make use of `JIGSAW`'s  scripting interface, users are required to have access to a working <a href="http://www.mathworks.com">`MATLAB`</a> and / or <a href="https://www.gnu.org/software/octave">`OCTAVE`</a> installation.
 
-# Starting Out
+# `Starting Out`
 
-After downloading and unzipping the current `JIGSAW` <a href="https://github.com/dengwirda/jigsaw-matlab/archive/master.zip">repository</a>, navigate to the installation directory within <a href="http://www.mathworks.com">`MATLAB`</a> // <a href="https://www.gnu.org/software/octave">`OCTAVE`</a> and see `meshdemo.m` for a list of example problems:
+After downloading and unzipping the current <a href="https://github.com/dengwirda/jigsaw-matlab/archive/master.zip">repository</a>, navigate to the installation directory within <a href="http://www.mathworks.com">`MATLAB`</a> // <a href="https://www.gnu.org/software/octave">`OCTAVE`</a> and see `meshdemo.m` for a list of example problems:
 ````
 meshdemo(1); % build surface-meshes
 meshdemo(2); % build volume-meshes
