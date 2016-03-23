@@ -1,4 +1,4 @@
-# JIGSAW: an unstrutured mesh generator
+# JIGSAW: An unstrutured mesh generator
 
 <p align="center">
   <img src = "../master/jigsaw/img/bunny-TRIA3-1.png"> &nbsp
