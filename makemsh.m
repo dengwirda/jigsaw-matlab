@@ -37,8 +37,8 @@ function makemsh(name,mesh)
 %       where INDEX(K,1:5) is an array of "points" associated with 
 %       the K-TH pyra, and INDEX(K,6) is an ID tag for the K-TH pyra.
 %
-%   See also READMSH, MAKEVTK, READVTK, MAKEMESH, READMESH, READOFF, 
-%            MAKEOFF
+%   See also READMSH, MAKEVTK, READVTK, MAKEMESH, READMESH, MAKEOFF, 
+%            READOFF, MAKESTL, READSTL
 %
 
 %---------------------------------------------------------------------
