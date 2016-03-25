@@ -41,7 +41,7 @@ function makemesh(name,mesh)
 %   elements are decomposed into TRIA-4 elements.
 %
 %   See also MAKEMSH, READMSH, MAKEVTK, READVTK, READMESH, MAKEOFF, 
-%            READOFF
+%            READOFF, MAKESTL, READSTL
 %
 
 %---------------------------------------------------------------------
