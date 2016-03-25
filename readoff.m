@@ -1,5 +1,5 @@
 function [mesh] = readoff(name)
-%READMSH read a *.OFF file for JIGSAW.
+%READOFF read an *.OFF file for JIGSAW.
 %
 %   MESH = READOFF(NAME);
 %
@@ -17,8 +17,8 @@ function [mesh] = readoff(name)
 %       where INDEX(K,1:4) is an array of "points" associated with 
 %       the K-TH quad, and INDEX(K,5) is an ID tag for the K-TH quad.
 %
-%   See also MAKEMSH, READMSH, MAKEVTK, READVTK, MAKEMESH, READMESH, 
-%            MAKEOFF
+%   See also MAKEOFF, MAKEMSH, READMSH, MAKEMESH, READMESH, MAKEVTK, 
+%            READVTK, MAKESTL, READSTL
 %
 
 %---------------------------------------------------------------------
@@ -168,6 +168,7 @@ function [mesh] = readoff(name)
     if (ffid>-1)
     fclose(ffid) ;
     end
+    
     rethrow(err) ;
     
     end
