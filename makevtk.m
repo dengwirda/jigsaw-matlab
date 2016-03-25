@@ -38,7 +38,7 @@ function makevtk(name,mesh)
 %       the K-TH pyra, and INDEX(K,6) is an ID tag for the K-TH pyra.
 %
 %   See also READVTK, MAKEMSH, READMSH, MAKEMESH, READMESH, MAKEOFF, 
-%            READOFF
+%            READOFF, MAKESTL, READSTL
 %
 
 %---------------------------------------------------------------------
