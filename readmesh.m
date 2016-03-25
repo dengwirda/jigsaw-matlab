@@ -30,7 +30,7 @@ function [mesh] = readmesh(name)
 %       the K-TH hexa, and INDEX(K,9) is an ID tag for the K-TH hexa.
 %
 %   See also MAKEMSH, READMSH, MAKEVTK, READVTK, MAKEMESH, MAKEOFF, 
-%            READOFF
+%            READOFF, MAKESTL, READSTL
 %
 
 %---------------------------------------------------------------------
@@ -194,6 +194,7 @@ function [mesh] = readmesh(name)
     if (ffid>-1)
     fclose(ffid) ;
     end
+    
     rethrow(err) ;
     
     end
