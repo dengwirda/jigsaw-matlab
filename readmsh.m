@@ -3,7 +3,7 @@ function [mesh] = readmsh(name)
 %
 %   MESH = READMSH(NAME);
 %
-%   The following entities are optionally read from "NAME.OFF". Ent-
+%   The following entities are optionally read from "NAME.MSH". Ent-
 %   ities are loaded if they are present in the file:
 %
 %   MESH.POINT.COORD - [NPxND] array of point coordinates, where ND 
@@ -51,7 +51,7 @@ function [mesh] = readmsh(name)
 %   with the MESH.(BASE).(NAME).INDEX(K)-TH element of MESH.(BASE).
 %
 %   See also MAKEMSH, MAKEVTK, READVTK, MAKEMESH, READMESH, MAKEOFF,
-%            READOFF
+%            READOFF, MAKESTL, READSTL
 %
 
 %---------------------------------------------------------------------
@@ -322,6 +322,7 @@ function [mesh] = readmsh(name)
     if (ffid>-1)
     fclose(ffid) ;
     end
+    
     rethrow(err) ;
     
     end
