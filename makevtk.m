@@ -212,6 +212,7 @@ function makevtk(name,mesh)
     if (ffid>-1)
     fclose(ffid) ;
     end
+    
     rethrow(err) ;
         
     end
