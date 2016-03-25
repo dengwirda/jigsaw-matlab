@@ -1,5 +1,5 @@
 function makeoff(name,mesh)
-%MAKEOFF make a *.OFF file for JIGSAW.
+%MAKEOFF make an *.OFF file for JIGSAW.
 %
 %   MAKEOFF(NAME,MESH);
 %
@@ -18,7 +18,7 @@ function makeoff(name,mesh)
 %       the K-TH quad, and INDEX(K,5) is an ID tag for the K-TH quad.
 %
 %   See also READOFF, MAKEMSH, READMSH, MAKEMESH, READMESH, MAKEVTK, 
-%            READVTK
+%            READVTK, MAKESTL, READSTL
 %
 
 %---------------------------------------------------------------------
