@@ -25,6 +25,18 @@ meshdemo(1); % build surface-meshes
 meshdemo(2); % build volume-meshes
 meshdemo(3); % preserve "sharp-features" in piecewise smooth domains
 meshdemo(4); % build planar-meshes -- impose topological constraints
-meshdemo(5); % build planar meshes -- explore mesh-size controls
+meshdemo(5); % build planar-meshes -- explore mesh-size controls
 ````
 Additional information, documentation, online tutorials and references are available <a href="https://sites.google.com/site/dengwirda/jigsaw">here</a>.
+
+# `Attribution!`
+
+If you make use of `JIGSAW` please reference appropriately. The algorithmic developments behind `JIGSAW` have been the subject of a number of publications, beginning with my PhD research at the University of Sydney:
+
+`[1]` - Darren Engwirda, Locally-optimal Delaunay-refinement and optimisation-based mesh generation, Ph.D. Thesis, School of Mathematics and Statistics, The University of Sydney, September 2014, http://hdl.handle.net/2123/13148.
+
+`[2]` - Darren Engwirda, David Ivers, Off-centre Steiner points for Delaunay-refinement on curved surfaces, Computer-Aided Design, Volume 72, March 2016, Pages 157-171, ISSN 0010-4485, http://dx.doi.org/10.1016/j.cad.2015.10.007.
+
+`[3]` - Darren Engwirda, Voronoi-based Point-placement for Three-dimensional Delaunay-refinement, Procedia Engineering, Volume 124, 2015, Pages 330-342, ISSN 1877-7058, http://dx.doi.org/10.1016/j.proeng.2015.10.143. 
+
+
