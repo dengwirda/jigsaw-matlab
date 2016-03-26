@@ -122,7 +122,7 @@ function [varargout] = jigsaw(opts)
 %       by JIGSAW. Set VERBOSITY>=1 to display additional output.
 %
 %   See also READMSH, MAKEMSH, DRAWMESH
-
+%
 
 %   JIGSAW is a "restricted" Delaunay-refinement algorithm for 2- and 3-
 %   dimensional mesh generation, based (primarily) on ideas described in 
@@ -146,6 +146,7 @@ function [varargout] = jigsaw(opts)
 %
 %   A number of other (important!) references are cited in the articles
 %   above. See the full-text for additional information.
+%
 
 %---------------------------------------------------------------------
 %   JIGSAW-0.9.2.x
