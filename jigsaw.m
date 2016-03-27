@@ -122,36 +122,37 @@ function [varargout] = jigsaw(opts)
 %       by JIGSAW. Set VERBOSITY>=1 to display additional output.
 %
 %   See also READMSH, MAKEMSH, DRAWMESH
-
+%
 
 %   JIGSAW is a "restricted" Delaunay-refinement algorithm for 2- and 3-
 %   dimensional mesh generation, based (primarily) on ideas described in 
 %   the following references:
 %
-%   (1) Darren Engwirda and David Ivers, Off-centre Steiner-points for
+%   [1] Darren Engwirda and David Ivers, Off-centre Steiner-points for
 %       Delaunay-refinement on curved surfaces. Computer Aided Design,
 %       Volume 72, March 2016, Pages 157-171, ISSN 0010-4485, 
 %       http://dx.doi.org/10.1016/j.cad.2015.10.007
 %
-%   (2) Darren Engwirda, Voronoi-based Point-placement for Three-dimens-
+%   [2] Darren Engwirda, Voronoi-based Point-placement for Three-dimens-
 %       ional Delaunay-refinement, Proceedngs of the 24th International
 %       Meshing Roundtable, Procedia Engineering, Volume 124, 2015, Page 
 %       330-342, ISSN 1877-7058, 
 %       http://dx.doi.org/10.1016/j.proeng.2015.10.143
 %
-%   (3) Darren Engwirda, Locally-optimal Delaunay-refinement and optimi-
+%   [3] Darren Engwirda, Locally-optimal Delaunay-refinement and optimi-
 %       sation-based mesh generation. Ph.D. Thesis, School of Mathemati-
 %       cs and Statistics, University of Sydney, 2015.
 %       http://hdl.handle.net/2123/13148
 %
 %   A number of other (important!) references are cited in the articles
 %   above. See the full-text for additional information.
+%
 
 %---------------------------------------------------------------------
 %   JIGSAW-0.9.2.x
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   22-Mar-2016
+%   26-Mar-2016
 %   d_engwirda@outlook.com
 %---------------------------------------------------------------------
 %
@@ -175,15 +176,15 @@ function [varargout] = jigsaw(opts)
     if (strcmp(jexename,''))
     switch (computer)
        %case {'GLNX86',i586-pc-linux-gnu}
-       %jexename = [filepath,'/jigsaw/bin/GLX-32/jigsaw32d'];
+       %jexename = [filepath,'/jigsaw/bin/LNX-32/jigsaw32d'];
         case {'GLNXA64','x86_64-pc-linux-gnu'}
-        jexename = [filepath,'/jigsaw/bin/GLX-64/jigsaw64d'];
+        jexename = [filepath,'/jigsaw/bin/LNX-64/jigsaw64d'];
        %case 'PCWIN'  
        %jexename = [filepath,'\jigsaw\bin\WIN-32\jigsaw32d.exe'];
         case 'PCWIN64'
         jexename = [filepath,'\jigsaw\bin\WIN-64\jigsaw64d.exe'];
        %case 'MACI64'
-       %jexename = [filepath,'/jigsaw/bin/MAX-64/jigsaw64d'];
+       %jexename = [filepath,'/jigsaw/bin/MAC-64/jigsaw64d'];
         
         otherwise
         error('JIGSAW: unsupported platform');  
@@ -196,9 +197,9 @@ function [varargout] = jigsaw(opts)
     if (strcmp(jexename,''))
     switch (computer)
        %case {'GLNX86',i586-pc-linux-gnu}
-       %jexename = [filepath,'/jigsaw/bin/GLX-32/jigsaw32r'];
+       %jexename = [filepath,'/jigsaw/bin/LNX-32/jigsaw32r'];
         case {'GLNXA64','x86_64-pc-linux-gnu'}
-        jexename = [filepath,'/jigsaw/bin/GLX-64/jigsaw64r'];
+        jexename = [filepath,'/jigsaw/bin/LNX-64/jigsaw64r'];
        %case 'PCWIN'  
        %jexename = [filepath,'\jigsaw\bin\WIN-32\jigsaw32r.exe'];
         case 'PCWIN64'
