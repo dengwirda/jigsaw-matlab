@@ -26,6 +26,8 @@ meshdemo(2); % build volume-meshes
 meshdemo(3); % preserve "sharp-features" in piecewise smooth domains
 meshdemo(4); % build planar-meshes -- impose topological constraints
 meshdemo(5); % build planar-meshes -- explore mesh-size controls
+meshdemo(6); % mesh iso-surface geometry -- case 1
+meshdemo(7); % mesh iso-surface geometry -- case 2
 ````
 Additional information, documentation, online tutorials and references are available <a href="https://sites.google.com/site/dengwirda/jigsaw">here</a>.
 
@@ -38,5 +40,7 @@ If you make use of `JIGSAW` please reference appropriately. The algorithmic deve
 `[2]` - Darren Engwirda, David Ivers, Off-centre Steiner points for Delaunay-refinement on curved surfaces, Computer-Aided Design, Volume 72, March 2016, Pages 157-171, ISSN 0010-4485, http://dx.doi.org/10.1016/j.cad.2015.10.007.
 
 `[3]` - Darren Engwirda, Voronoi-based Point-placement for Three-dimensional Delaunay-refinement, Procedia Engineering, Volume 124, 2015, Pages 330-342, ISSN 1877-7058, http://dx.doi.org/10.1016/j.proeng.2015.10.143. 
+
+`[4]` - Darren Engwirda, Conforming restricted Delaunay mesh generation for piecewise smooth complexes, Submitted to the 25th International Meshing Roundtable, (https://arxiv.org/abs/1606.01289), 2016. Keywords: Three-dimensional mesh generation, restricted Delaunay, Delaunay-refinement, Advancing-front, Frontal-Delaunay, Off-centres, Sharp-features.
 
 
