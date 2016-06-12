@@ -26,6 +26,8 @@ meshdemo(2); % build volume-meshes
 meshdemo(3); % preserve "sharp-features" in piecewise smooth domains
 meshdemo(4); % build planar-meshes -- impose topological constraints
 meshdemo(5); % build planar-meshes -- explore mesh-size controls
+meshdemo(6); % mesh iso-surface geometry -- case 1
+meshdemo(7); % mesh iso-surface geometry -- case 2
 ````
 Additional information, documentation, online tutorials and references are available <a href="https://sites.google.com/site/dengwirda/jigsaw">here</a>. A repository of 3D surface models generated using `JIGSAW` can be found <a href="https://github.com/dengwirda/jigsaw-models">here</a>.
 
