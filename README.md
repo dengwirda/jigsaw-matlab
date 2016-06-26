@@ -13,6 +13,8 @@
 
 `JIGSAW` is currently available for `64-bit` `Windows` and `Linux` platforms.
 
+[![DOI](https://zenodo.org/badge/doi/10.5281/zenodo.56400.svg)](http://dx.doi.org/10.5281/zenodo.56400)
+
 # `Installation`
 
 `JIGSAW` itself is a fully self-contained executable, without dependencies on third-party libraries or run-time packages. To make use of `JIGSAW`'s  scripting interface, users are required to have access to a working <a href="http://www.mathworks.com">`MATLAB`</a> and/or <a href="https://www.gnu.org/software/octave">`OCTAVE`</a> installation.
