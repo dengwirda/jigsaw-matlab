@@ -36,17 +36,19 @@ function [mesh] = readmesh(name)
 %---------------------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   22-Mar-2016
+%   02-Jul-2016
 %   d_engwirda@outlook.com
 %---------------------------------------------------------------------
 %
+
+    mesh = [] ;
 
     try
 
     ffid = fopen(name,'r');
     
-    nver = +1;
-    ndim = +3;
+    nver = +1 ;
+    ndim = +3 ;
     
     while (true)
   
@@ -103,9 +105,6 @@ function [mesh] = readmesh(name)
                     data(2:3:end), ...
                     data(3:3:end)] ;
                 
-                mesh.edge2.index(:,1:2) = ...
-                mesh.edge2.index(:,1:2) + 1;
-                
             case 'triangles'
 
         %-- read "TRIA3" data
@@ -124,9 +123,6 @@ function [mesh] = readmesh(name)
                     data(3:4:end), ...
                     data(4:4:end)] ;
                 
-                mesh.tria3.index(:,1:3) = ...
-                mesh.tria3.index(:,1:3) + 1;
-    
             case 'tetrahedra'
 
         %-- read "TRIA4" data
@@ -146,9 +142,6 @@ function [mesh] = readmesh(name)
                     data(4:5:end), ...
                     data(5:5:end)] ;
     
-                mesh.tria4.index(:,1:4) = ...
-                mesh.tria4.index(:,1:4) + 1;
-            
             case 'hexahedra'
 
         %-- read "HEXA8" data
@@ -172,9 +165,6 @@ function [mesh] = readmesh(name)
                     data(8:9:end), ...
                     data(9:9:end)] ;
     
-                mesh.hexa8.index(:,1:8) = ...
-                mesh.hexa8.index(:,1:8) + 1;
-                
             end
             
         end
@@ -190,7 +180,7 @@ function [mesh] = readmesh(name)
     
     catch err
 
-%-- ensure that we close the file regardless!
+%-- ensure that we close the file regardless
     if (ffid>-1)
     fclose(ffid) ;
     end
