@@ -20,53 +20,53 @@ function [mesh] = readstl(name)
 %---------------------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   24-Mar-2016
+%   08-Jul-2016
 %   d_engwirda@outlook.com
 %---------------------------------------------------------------------
 %
 
+    mesh = [] ;
+
     try
 
-    ffid = fopen(name, 'r') ;
-    
-%-- read 1-st line from file
-    
-    chars = fread(ffid, + 5,'char=>char') ;
-    title = chars' ;
-    
-    if (strcmpi(title,'solid'))
+    ffid  = fopen(name, 'r');
+        
+    if (~isbinary(ffid,name))
     
     %-- read an 'ASCII' STL file    
         
-        chars = fgetl(ffid) ;
-        title = [title,chars] ;
+        title = fgetl(ffid) ;
         
-        facet = fscanf(ffid,[
-            'facet normal ' , ...
-                '%f %f %f\n', ...
-             'outer loop\n' , ...
-              'vertex %f %f %f\n', ...
-              'vertex %f %f %f\n', ...
-              'vertex %f %f %f\n', ...
-             'endloop\n', ...
-            'endfacet\n'] ) ;
-            
-        facet = reshape(facet, 12, []) ;
+        facet = textscan(ffid,'%s');
+       
+        n = floor(length(facet{1})/21);
+        
+        fmaps = 0 : 21 : 21*(n-1);
+        fmaps = repmat(fmaps,[9,1]);
+        
+        index = [ 9;10;11; ...
+                 13;14;15; ...
+                 17;18;19; ...
+                ] ;
+        index = repmat(index,[1,n]);
+        
+        index = index(:)+fmaps(:);
+        
+        facet = facet{1}(index);
+        facet = reshape(...
+    sscanf(sprintf('%s#',facet{:}),'%g#'),size(facet));
         
         if (~isempty(facet) )
 
         %-- push 'POINT' data arrays
  
-            nvert = size(facet, 2) ;
-            nvert = nvert * +3 ;
+            nvert = size(facet, 1) ;
+            nvert = nvert / +3 ;
  
-            coord = facet (4:12,:) ;
-            coord = coord (:)  ;
-            
             mesh.point.coord = [ ...
-                coord(1:3:end) , ... 
-                coord(2:3:end) , ...
-                coord(3:3:end) ] ;
+                facet(1:3:end) , ... 
+                facet(2:3:end) , ...
+                facet(3:3:end) ] ;
             
         %-- push 'TRIA3' data arrays
             
@@ -82,23 +82,24 @@ function [mesh] = readstl(name)
     else
         
     %-- read a 'BINARY' STL file
+    
+        title = fread(ffid, +80) ;
         
-        chars = fread(ffid, +75,'char=>char') ;
-        title = [title, chars'] ;
-        
-        nface = ...
-            fread(ffid, + 1,'uint32=>uint32') ;
+        nface = fread(...
+            ffid, + 1,'uint32=>uint32') ;
         nvert = nface * 3 ;
 
-        facet = ...
-            fread(ffid,+inf,'uint16=>uint16') ;
+        facet = fread(...
+            ffid,+inf,'uint16=>uint16') ;
         
         facet = reshape(facet,[25,nface]) ;
         norms = facet(1: 6,:) ; % norms.
         coord = facet(7:24,:) ; % coord.
         
-        norms = typecast(norms(:),'single') ;
-        coord = typecast(coord(:),'single') ;
+        norms = ...
+            typecast(norms(:),'single') ;
+        coord = ...
+            typecast(coord(:),'single') ;
       
         if (~isempty(coord) )
         
@@ -119,7 +120,7 @@ function [mesh] = readstl(name)
                 index(3:3:end) ] ;
                 
         end
-        
+    
     end
     
     fclose(ffid) ;
@@ -137,6 +138,8 @@ function [mesh] = readstl(name)
 
 %-- STL creates many duplicate vertices: zip!
     
+    if (~isempty(mesh))
+
     bbox = max(mesh.point.coord,[],1) ...
          - min(mesh.point.coord,[],1) ;
     bsiz = mean(bbox);
@@ -160,6 +163,23 @@ function [mesh] = readstl(name)
     mesh.tria3.index = [
     mesh.tria3.index, ...
         zeros(size(mesh.tria3.index,1),1)] ;
+    
+    end
+    
+end
+
+function [fbin] = isbinary(ffid,name)
+%ISBINARY returns TRUE if file is binary STL
+
+    head = fread(ffid,+80);
+    nfac = fread(...
+        ffid,+ 1, 'uint32=>uint32') ;
+    
+    file = dir(name) ;
+    
+    fbin = file.bytes == nfac*50+84 ;
+    
+    fseek(ffid,0,-1) ;
     
 end
 
