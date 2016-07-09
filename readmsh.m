@@ -62,15 +62,17 @@ function [mesh] = readmsh(name)
 %---------------------------------------------------------------------
 %
 
+    mesh = [] ;
+
     try
 
     ffid = fopen(name,'r');
     
-    real = '%f;';
-    ints = '%i;';
+    real = '%f;' ;
+    ints = '%i;' ;
     
-    nver = +0;
-    ndim = +0;
+    nver = +0 ;
+    ndim = +0 ;
     
     while (true)
   
