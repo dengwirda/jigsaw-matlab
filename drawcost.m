@@ -4,7 +4,7 @@ function drawcost(cost)
 %---------------------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   06-Jul-2016
+%   09-Jul-2016
 %   d_engwirda@outlook.com
 %---------------------------------------------------------------------
 %
@@ -94,9 +94,6 @@ end
 function angle_hist(ad,ty)
 %ANGLE_HIST draw histogram for "angle" data.
 
-    isoctave = ...
-        exist('OCTAVE_VERSION','builtin') == 5 ;
-
     be = linspace(0.,180.,91);
     bm =(be(1:end-1)+be(2:end))/2.;
     hc = histc(ad,be);
@@ -120,10 +117,8 @@ function angle_hist(ad,ty)
     
     end
     
-    r = [.85,.00,.00];
-    y = [1.0,.95,.00];
-    g = [.00,.90,.00];
-    k = [.60,.60,.60];
+    r = [.85,.00,.00] ; y = [1.0,.95,.00] ;
+    g = [.00,.90,.00] ; k = [.60,.60,.60] ;
     
     bar(bm(poor),hc(poor),1.05,...
         'facecolor',r,'edgecolor',r) ;
@@ -148,70 +143,36 @@ function angle_hist(ad,ty)
     line([ maxa, maxa],...
         [0,max(hc)],'color','r','linewidth',1.5);
     
-    if ( mina > 15.0)
-        if (~isoctave)
+    if ( mina > 25.0)
         text(mina-1.8,.9*max(hc),num2str(min(ad),'%16.1f'),...
-            'horizontalalignment','right',...
-            'fontsize',22,'layer','front') ;
-        else
-        text(mina-1.8,.9*max(hc),num2str(min(ad),'%16.1f'),...
-            'horizontalalignment','right','fontsize',22) ;
-        end
+            'horizontalalignment',...
+                'right','fontsize',22) ;
     else
-        if (~isoctave)
         text(mina+1.8,.9*max(hc),num2str(min(ad),'%16.1f'),...
-            'horizontalalignment', 'left',...
-            'fontsize',22,'layer','front') ;
-        else
-        text(mina+1.8,.9*max(hc),num2str(min(ad),'%16.1f'),...
-            'horizontalalignment', 'left','fontsize',22) ;
-        end
+            'horizontalalignment',...
+                'left' ,'fontsize',22) ;
     end
     
     if ( maxa < 140.)
-        if (~isoctave)
         text(maxa+1.8,.9*max(hc),num2str(max(ad),'%16.1f'),...
-            'horizontalalignment', 'left',...
-            'fontsize',22,'layer','front') ;
-        else
-        text(maxa+1.8,.9*max(hc),num2str(max(ad),'%16.1f'),...
-            'horizontalalignment', 'left','fontsize',22) ;
-        end
+            'horizontalalignment',...
+                'left' ,'fontsize',22) ;    
     else
-        if (~isoctave)
         text(maxa-1.8,.9*max(hc),num2str(max(ad),'%16.1f'),...
-            'horizontalalignment','right',...
-            'fontsize',22,'layer','front') ;
-        else
-        text(maxa-1.8,.9*max(hc),num2str(max(ad),'%16.1f'),...
-            'horizontalalignment','right','fontsize',22) ;
-        end
+            'horizontalalignment',...
+                'right','fontsize',22) ;     
     end
    
     switch (ty)
     case 'tria4'
-        if (~isoctave)
-        text(-9.0,0.0,'$\theta_{\tau}$',...
-            'horizontalalignment','right',...
-                'fontsize',28,'interpreter','latex',...
-                    'layer','front') ;
-        else
         text(-9.0,0.0,'$\theta_{\tau}$',...
             'horizontalalignment','right',...
                 'fontsize',28,'interpreter','latex') ;
-        end
-
+        
     case 'tria3'
-        if (~isoctave)
-        text(-9.0,0.0,'$\theta_{f}$',...
-            'horizontalalignment','right',...
-                'fontsize',28,'interpreter','latex',...
-                    'layer','front') ;
-        else
         text(-9.0,0.0,'$\theta_{f}$',...
             'horizontalalignment','right',...
                 'fontsize',28,'interpreter','latex') ;
-        end
         
     end
     
@@ -219,9 +180,6 @@ end
 
 function score_hist(sc,ty)
 %SCORE_HIST draw histogram for "score" data.
-
-    isoctave = ...
-        exist('OCTAVE_VERSION','builtin') == 5 ;
 
     be = linspace(0.,1.,101);
     bm = (be(1:end-1)+be(2:end)) / 2.;
@@ -242,10 +200,8 @@ function score_hist(sc,ty)
         
     end
  
-    r = [.85,.00,.00];
-    y = [1.0,.95,.00];
-    g = [.00,.90,.00];
-    k = [.60,.60,.60];
+    r = [.85,.00,.00] ; y = [1.0,.95,.00] ;
+    g = [.00,.90,.00] ; k = [.60,.60,.60] ;
     
     bar(bm(poor),hc(poor),1.05,...
         'facecolor',r,'edgecolor',r) ;
@@ -271,58 +227,28 @@ function score_hist(sc,ty)
         [0,max(hc)],'color','r','linewidth',1.5);
     
     if ( mins > .4)
-        if (~isoctave)
         text(mins-.01,.9*max(hc),num2str(min(sc),'%16.3f'),...
-            'horizontalalignment','right',...
-            'fontsize',22,'layer','front') ;
-        else
-        text(mins-.01,.9*max(hc),num2str(min(sc),'%16.3f'),...
-            'horizontalalignment','right','fontsize',22) ;
-        end
+            'horizontalalignment',...
+                'right','fontsize',22) ;
     else
-        if (~isoctave)
         text(mins+.01,.9*max(hc),num2str(min(sc),'%16.3f'),...
-            'horizontalalignment', 'left',...
-            'fontsize',22,'layer','front') ;
-        else
-        text(mins+.01,.9*max(hc),num2str(min(sc),'%16.3f'),...
-            'horizontalalignment', 'left','fontsize',22) ;
-        end
+            'horizontalalignment',...
+                'left' ,'fontsize',22) ;
     end
     
-    if (~isoctave)
-    text(mean(sc)-.01,.9*max(hc),num2str(mean(sc),'%16.3f'),...
-        'horizontalalignment','right',...
-        'fontsize',22,'layer','front') ;
-    else
     text(mean(sc)-.01,.9*max(hc),num2str(mean(sc),'%16.3f'),...
         'horizontalalignment','right','fontsize',22) ;
-    end
     
     switch (ty)
     case 'tria4'
-        if (~isoctave)
-        text(-.05,0.0,'$v_{\tau}$',...
-            'horizontalalignment','right',...
-                'fontsize',28,'interpreter','latex',...
-                    'layer','front') ;
-        else
         text(-.05,0.0,'$v_{\tau}$',...
             'horizontalalignment','right',...
                 'fontsize',28,'interpreter','latex') ;
-        end
-
+        
     case 'tria3'
-        if (~isoctave)
-        text(-.05,0.0,'$a_{f}$',...
-            'horizontalalignment','right',...
-                'fontsize',28,'interpreter','latex',...
-                    'layer','front') ;
-        else
         text(-.05,0.0,'$a_{f}$',...
             'horizontalalignment','right',...
                 'fontsize',28,'interpreter','latex') ;
-        end
         
     end
     
@@ -330,9 +256,6 @@ end
 
 function hfunc_hist(hf,ty)
 %HFUNC_HIST draw histogram for "hfunc" data.
-
-    isoctave = ...
-        exist('OCTAVE_VERSION','builtin') == 5 ;
 
     be = linspace(0.,2.,101);
     bm = (be(1:end-1)+be(2:end)) / 2.;
@@ -345,10 +268,8 @@ function hfunc_hist(hf,ty)
           (bm >= 1.2 & bm <  1.4 );
     best = bm >= .80 & bm <  1.2 ;
  
-    r = [.85,.00,.00];
-    y = [1.0,.95,.00];
-    g = [.00,.90,.00];
-    k = [.60,.60,.60];
+    r = [.85,.00,.00] ; y = [1.0,.95,.00] ;
+    g = [.00,.90,.00] ; k = [.60,.60,.60] ;
     
     bar(bm(poor),hc(poor),1.05,...
         'facecolor',r,'edgecolor',r) ;
@@ -368,23 +289,11 @@ function hfunc_hist(hf,ty)
     line([mean(hf),mean(hf)],...
         [0,max(hc)],'color','r','linewidth',1.5);
     
-    if (~isoctave)
-    text(mean(hf)+.02,.9*max(hc),num2str(mean(hf),'%16.2f'),...
-        'horizontalalignment', 'left',...
-        'fontsize',22,'layer','front') ;
-    else
     text(mean(hf)+.02,.9*max(hc),num2str(mean(hf),'%16.2f'),...
         'horizontalalignment','left','fontsize',22);
-    end
     
-    if (~isoctave)
-    text(-0.100,0.0,'$h_{r}$','horizontalalignment','right',...
-        'fontsize',28,'interpreter','latex',...
-            'layer','front') ;
-    else
     text(-0.100,0.0,'$h_{r}$','horizontalalignment','right',...
         'fontsize',28,'interpreter','latex');
-    end
     
 end
 
