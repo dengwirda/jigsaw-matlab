@@ -41,13 +41,13 @@ function makemesh(name,mesh)
 %   elements are decomposed into TRIA-4 elements.
 %
 %   See also MAKEMSH, READMSH, MAKEVTK, READVTK, READMESH, MAKEOFF, 
-%            READOFF, MAKESTL, READSTL
+%            READOFF
 %
 
 %---------------------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   22-Mar-2016
+%   09-Jul-2016
 %   d_engwirda@outlook.com
 %---------------------------------------------------------------------
 %
@@ -83,12 +83,12 @@ function makemesh(name,mesh)
         case +2
         coord = mesh.point.coord;
         coord = [coord(:,1:1), ...
-            zeros(size(coord,1),2), coord(:,2)];
+            zeros(size(coord,1),2), coord(:,2)] ;
         
         case +3
         coord = mesh.point.coord;
         coord = [coord(:,1:2), ...
-            zeros(size(coord,1),1), coord(:,3)];
+            zeros(size(coord,1),1), coord(:,3)] ;
             
         case +4
         coord = mesh.point.coord;
@@ -98,8 +98,9 @@ function makemesh(name,mesh)
     end
 
     fprintf(ffid,[' Vertices' ,'\n']);
-    fprintf(ffid,[' %u','\n'],size(coord,1));
-    fprintf(ffid,[' %1.16g %1.16g %1.16g %i','\n'],coord');
+    fprintf(ffid,[' %u','\n'],size(coord,1)) ;
+    fprintf(ffid,...
+        ' %1.16g %1.16g %1.16g %i\n',coord') ;
     
     end
     
@@ -107,12 +108,12 @@ function makemesh(name,mesh)
        
 %-- write "EDGE2" data
     
-    index = mesh.edge2.index;
-    index(:,1:2) = index(:,1:2)-1 ; % file is zero-indexed!
+    index = mesh.edge2.index ;
     
     fprintf(ffid,[' Edges','\n']);
-    fprintf(ffid,[' %u','\n'],size(index,1));
-    fprintf(ffid,[repmat(' %u',1,2),' %i','\n'],index');
+    fprintf(ffid,[' %u','\n'],size(index,1) * 1) ;
+    fprintf(ffid,[repmat(' %u',1,2),' %i','\n'], ...
+        index(:,1:3)') ;
     
     end
     
@@ -120,12 +121,12 @@ function makemesh(name,mesh)
        
 %-- write "TRIA3" data
     
-    index = mesh.tria3.index;
-    index(:,1:3) = index(:,1:3)-1 ; % file is zero-indexed!
+    index = mesh.tria3.index ;
     
     fprintf(ffid,[' Triangles','\n']);
-    fprintf(ffid,[' %u','\n'],size(index,1));
-    fprintf(ffid,[repmat(' %u',1,3),' %i','\n'],index');
+    fprintf(ffid,[' %u','\n'],size(index,1) * 1) ;
+    fprintf(ffid,[repmat(' %u',1,3),' %i','\n'], ...
+        index(:,1:4)') ;
     
     end
     
@@ -133,12 +134,12 @@ function makemesh(name,mesh)
        
 %-- write "QUAD4" data
     
-    index = mesh.quad4.index;
-    index(:,1:4) = index(:,1:4)-1 ; % file is zero-indexed!
+    index = mesh.quad4.index ;
     
     fprintf(ffid,[' Quadrilaterals','\n']);
-    fprintf(ffid,[' %u','\n'],size(index,1));
-    fprintf(ffid,[repmat(' %u',1,4),' %i','\n'],index');
+    fprintf(ffid,[' %u','\n'],size(index,1) * 1) ;
+    fprintf(ffid,[repmat(' %u',1,4),' %i','\n'], ...
+        index(:,1:5)') ;
     
     end
     
@@ -146,12 +147,12 @@ function makemesh(name,mesh)
        
 %-- write "TRIA4" data
     
-    index = mesh.tria4.index;
-    index(:,1:4) = index(:,1:4)-1 ; % file is zero-indexed!
+    index = mesh.tria4.index ; 
     
     fprintf(ffid,[' Tetrahedra','\n']);
-    fprintf(ffid,[' %u','\n'],size(index,1));
-    fprintf(ffid,[repmat(' %u',1,4),' %i','\n'],index');
+    fprintf(ffid,[' %u','\n'],size(index,1) * 1) ;
+    fprintf(ffid,[repmat(' %u',1,4),' %i','\n'], ...
+        index(:,1:5)') ;
    
     end
     
@@ -159,12 +160,12 @@ function makemesh(name,mesh)
        
 %-- write "HEXA8" data
     
-    index = mesh.hexa8.index;
-    index(:,1:8) = index(:,1:8)-1 ; % file is zero-indexed!
+    index = mesh.hexa8.index ; 
     
     fprintf(ffid,[' Hexahedra','\n']);
-    fprintf(ffid,[' %u','\n'],size(index,1));
-    fprintf(ffid,[repmat(' %u',1,8),' %i','\n'],index');
+    fprintf(ffid,[' %u','\n'],size(index,1) * 1) ;
+    fprintf(ffid,[repmat(' %u',1,8),' %i','\n'], ...
+        index(:,1:9)') ;
    
     end
     
@@ -174,17 +175,16 @@ function makemesh(name,mesh)
     
 %   warning('WEDG6 elements written as TRIA4 elements');
 % 
-%   index = mesh.wedg6.index;
-%   index(:,1:6) = index(:,1:6)-1 ; % file is zero-indexed!
+%   index = mesh.wedg6.index ;
 %     
 %   fprintf(ffid,[' Tetrahedra','\n']);
 %   fprintf(ffid,[' %u','\n'],size(index,1) * 3) ;
 %   fprintf(ffid,[repmat(' %u',1,4),' %i','\n'], ...
-%       index(:,[1,2,3,4])') ;
+%       index(:,[1,2,3,4,7])') ;
 %   fprintf(ffid,[repmat(' %u',1,4),' %i','\n'], ...
-%       index(:,[1,2,3,4])') ;
+%       index(:,[1,2,3,4,7])') ;
 %   fprintf(ffid,[repmat(' %u',1,4),' %i','\n'], ...
-%       index(:,[1,2,3,4])') ;
+%       index(:,[1,2,3,4,7])') ;
    
     end
     
@@ -194,15 +194,14 @@ function makemesh(name,mesh)
     
     warning('PYRA5 elements written as TRIA4 elements');
 
-    index = mesh.pyra5.index;
-    index(:,1:5) = index(:,1:5)-1 ; % file is zero-indexed!
+    index = mesh.pyra5.index ;
     
     fprintf(ffid,[' Tetrahedra','\n']);
     fprintf(ffid,[' %u','\n'],size(index,1) * 2) ;
     fprintf(ffid,[repmat(' %u',1,4),' %i','\n'], ...
-        index(:,[1,2,3,5])') ;
+        index(:,[1,2,3,5,6])') ;
     fprintf(ffid,[repmat(' %u',1,4),' %i','\n'], ...
-        index(:,[1,3,4,5])') ;
+        index(:,[1,3,4,5,6])') ;
    
     end
     
@@ -214,7 +213,6 @@ function makemesh(name,mesh)
     if (ffid>-1)
     fclose(ffid) ;
     end
-    
     rethrow(err) ;
         
     end
