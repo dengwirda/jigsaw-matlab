@@ -1,10 +1,10 @@
 ## `JIGSAW: An unstrutured mesh generator`
 
 <p align="center">
-  <img src = "../master/img/bunny-TRIA3-1.png"> &nbsp
-  <img src = "../master/img/bunny-TRIA3-2.png"> &nbsp
-  <img src = "../master/img/bunny-TRIA3-3.png"> &nbsp
-  <img src = "../master/img/bunny-TRIA4-3.png">
+  <img src = "../master/jigsaw/img/bunny-TRIA3-1.png"> &nbsp
+  <img src = "../master/jigsaw/img/bunny-TRIA3-2.png"> &nbsp
+  <img src = "../master/jigsaw/img/bunny-TRIA3-3.png"> &nbsp
+  <img src = "../master/jigsaw/img/bunny-TRIA4-3.png">
 </p>
 
 `JIGSAW` is a computational library for unstructured mesh generation; designed to generate high-quality triangulations and polyhedral decompositions of general planar, surface and volumetric domains. `JIGSAW` includes both `refinement`-based algorithms for the construction of new meshes, as well as `optimisation`-driven techniques for the improvement of existing grids.
@@ -20,13 +20,13 @@ This package provides a <a href="http://www.mathworks.com">`MATLAB`</a> / <a hre
       JIGSAW::
       ├── MATLAB/OCTAVE utilities
       └── jigsaw
-        ├── src -- JIGSAW src code
-        ├── inc -- JIGSAW header files (for libjigsaw)
-        ├── bin -- put JIGSAW exe binaries here
-        ├── lib -- put JIGSAW lib binaries here
-        ├── geo -- geometry definitions and input data
-        ├── out -- default folder for JIGSAW output
-        └── uni -- unit tests and libjigsaw example programs
+          ├── src -- JIGSAW src code
+          ├── inc -- JIGSAW header files (for libjigsaw)
+          ├── bin -- put JIGSAW exe binaries here
+          ├── lib -- put JIGSAW lib binaries here
+          ├── geo -- geometry definitions and input data
+          ├── out -- default folder for JIGSAW output
+          └── uni -- unit tests and libjigsaw example programs
 
 ## `Getting Started`
 
