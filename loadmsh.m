@@ -1,75 +1,101 @@
-function [mesh] = readmsh(name)
-%READMSH read a *.MSH file for JIGSAW.
+function [mesh] = loadmsh(name)
+%LOADMSH load a *.MSH file for JIGSAW.
 %
-%   MESH = READMSH(NAME);
+%   MESH = LOADMSH(NAME);
 %
-%   The following entities are optionally read from "NAME.MSH". Ent-
-%   ities are loaded if they are present in the file:
+%   The following are optionally read from "NAME.MSH". Enti-
+%   ties are loaded if they are present in the file:
 %
-%   MESH.POINT.COORD - [NPxND] array of point coordinates, where ND 
-%       is the number of spatial dimenions.
+%   .IF. MESH.MSHID == 'EUCLIDEAN-MESH':
+%   -----------------------------------
 %
-%   MESH.EDGE2.INDEX - [N2x 3] array of indexing for edge-2 elements, 
-%       where INDEX(K,1:2) is an array of "points" associated with 
-%       the K-TH edge, and INDEX(K,3) is an ID tag for the K-TH edge.
+%   MESH.POINT.COORD - [NPxND+1] array of point coordinates, 
+%       where ND is the number of spatial dimenions. 
+%       COORD(K,ND+1) is an ID tag for the K-TH point.
 %
-%   MESH.TRIA3.INDEX - [N3x 4] array of indexing for tria-3 elements, 
-%       where INDEX(K,1:3) is an array of "points" associated with 
-%       the K-TH tria, and INDEX(K,4) is an ID tag for the K-TH tria.
+%   MESH.POINT.POWER - [NPx 1] array of vertex "weights", 
+%       associated with the dual "power" tessellation.
 %
-%   MESH.QUAD4.INDEX - [N4x 5] array of indexing for quad-4 elements, 
-%       where INDEX(K,1:4) is an array of "points" associated with 
-%       the K-TH quad, and INDEX(K,5) is an ID tag for the K-TH quad.
+%   MESH.EDGE2.INDEX - [N2x 3] array of indexing for EDGE-2 
+%       elements, where INDEX(K,1:2) is an array of 
+%       "point-indices" associated with the K-TH edge, and 
+%       INDEX(K,3) is an ID tag for the K-TH edge.
 %
-%   MESH.TRIA4.INDEX - [M4x 5] array of indexing for tria-4 elements, 
-%       where INDEX(K,1:4) is an array of "points" associated with 
-%       the K-TH tria, and INDEX(K,5) is an ID tag for the K-TH tria.
+%   MESH.TRIA3.INDEX - [N3x 4] array of indexing for TRIA-3 
+%       elements, where INDEX(K,1:3) is an array of 
+%       "point-indices" associated with the K-TH tria, and 
+%       INDEX(K,4) is an ID tag for the K-TH tria.
 %
-%   MESH.HEXA8.INDEX - [M8x 9] array of indexing for hexa-8 elements, 
-%       where INDEX(K,1:8) is an array of "points" associated with 
-%       the K-TH hexa, and INDEX(K,9) is an ID tag for the K-TH hexa.
+%   MESH.QUAD4.INDEX - [N4x 5] array of indexing for QUAD-4 
+%       elements, where INDEX(K,1:4) is an array of 
+%       "point-indices" associated with the K-TH quad, and 
+%       INDEX(K,5) is an ID tag for the K-TH quad.
 %
-%   MESH.WEDG6.INDEX - [M6x 7] array of indexing for wedg-6 elements, 
-%       where INDEX(K,1:6) is an array of "points" associated with 
-%       the K-TH  wedg, and INDEX(K,7) is an ID tag for the K-TH wedg.
+%   MESH.TRIA4.INDEX - [M4x 5] array of indexing for TRIA-4 
+%       elements, where INDEX(K,1:4) is an array of 
+%       "point-indices" associated with the K-TH tria, and 
+%       INDEX(K,5) is an ID tag for the K-TH tria.
 %
-%   MESH.PYRA5.INDEX - [M5x 6] array of indexing for pyra-5 elements, 
-%       where INDEX(K,1:5) is an array of "points" associated with 
-%       the K-TH pyra, and INDEX(K,6) is an ID tag for the K-TH pyra.
+%   MESH.HEXA8.INDEX - [M8x 9] array of indexing for HEXA-8 
+%       elements, where INDEX(K,1:8) is an array of 
+%       "point-indices" associated with the K-TH hexa, and 
+%       INDEX(K,9) is an ID tag for the K-TH hexa.
 %
-%   An additional set of "values" may also be optionally loaded, such 
-%   that:
+%   MESH.WEDG6.INDEX - [M6x 7] array of indexing for WEDG-6 
+%       elements, where INDEX(K,1:6) is an array of 
+%       "point-indices" associated with the K-TH wedg, and 
+%       INDEX(K,7) is an ID tag for the K-TH wedg.
 %
-%       MESH.(BASE).(NAME).VALUE - [NFxNV] array of "values".
-%       MESH.(BASE).(NAME).INDEX - [NFx 1] array of indexing.
+%   MESH.PYRA5.INDEX - [M5x 6] array of indexing for PYRA-5 
+%       elements, where INDEX(K,1:5) is an array of 
+%       "point-indices" associated with the K-TH pyra, and 
+%       INDEX(K,6) is an ID tag for the K-TH pyra.
 %
-%   Here BASE is a mesh entity: "POINT", "EDGE2", "TRIA3", "QUAD4", 
-%   "TRIA4", "HEXA8", "WEDG6", "PYRA5", and NAME is the name assigned 
-%   to the data field. This mechanism can be used to associate arbit-
-%   rary "named" data fields with the primary mesh elements, where 
-%   the data contained in MESH.(BASE).(NAME).VALUE(K,:) is associated 
-%   with the MESH.(BASE).(NAME).INDEX(K)-TH element of MESH.(BASE).
+%   MESH.VALUE - [NPxNV] array of "values" associated with
+%       the vertices of the mesh.
 %
-%   See also MAKEMSH, MAKEVTK, READVTK, MAKEMESH, READMESH, MAKEOFF,
-%            READOFF, MAKESTL, READSTL
+%
+%   .IF. MESH.MSHID == 'ELLIPSOID-MESH':
+%   -----------------------------------
+%
+%   MESH.RADII - [ 3x 1] array of principle ellipsoid radii.
+%
+%
+%   .IF. MESH.MSHID == 'EUCLIDEAN-GRID':
+%   .OR. MESH.MSHID == 'ELLIPSOID-GRID':
+%   -----------------------------------
+%
+%   MESH.POINT.COORD - [NDx1] cell array of grid coordinates 
+%       where ND is the number of spatial dimenions. Each
+%       array COORD{ID} should be a vector of grid coord.'s,
+%       increasing or decreasing monotonically.
+%
+%   MESH.VALUE - [NMxNV] array of "values" associated with 
+%       the vertices of the grid, where NM is the product of
+%       the dimensions of the grid. NV values are associated 
+%       with each vertex.
+%
+%   See also JIGSAW, SAVEMSH
 %
 
-%---------------------------------------------------------------------
+%-----------------------------------------------------------
 %   Darren Engwirda
-%   github.com/dengwirda/jigsaw-matlab
-%   22-Mar-2016
-%   d_engwirda@outlook.com
-%---------------------------------------------------------------------
+%   github.com/dengwirda/jigsaw-geo-matlab
+%   11-Nov-2017
+%   darren.engwirda@columbia.edu
+%-----------------------------------------------------------
 %
 
     mesh = [] ;
 
     try
 
-    ffid = fopen(name,'r');
+    ffid = fopen(name,'r') ;
     
     real = '%f;' ;
     ints = '%i;' ;
+    
+    kind = 'EUCLIDEAN-MESH';
     
     nver = +0 ;
     ndim = +0 ;
@@ -91,7 +117,14 @@ function [mesh] = readmsh(name)
 
         %-- read "MSHID" data
         
-                nver = str2double(tstr{2}) ;
+                stag = regexp(tstr{2},';','split');
+        
+                nver = str2double(stag{1}) ;
+                
+                if (length(stag) >= +2)
+                    kind = ...
+                    strtrim(upper(stag{2}));
+                end
 
             case 'ndims'
 
@@ -123,7 +156,20 @@ function [mesh] = readmsh(name)
                     data(3:4:end), ...
                     data(4:4:end)] ;
                 end
+                
+            case 'coord'
 
+        %-- read "coord" data
+              
+                stag = regexp(tstr{2},';','split');
+        
+                idim = str2double(stag{1}) ;
+                cnum = str2double(stag{2}) ;
+
+                data = fscanf(ffid,'%f',cnum) ;
+        
+                mesh.point.coord{idim}= data  ;
+                
             case 'edge2'
 
         %-- read "EDGE2" data
@@ -283,25 +329,46 @@ function [mesh] = readmsh(name)
                 
                 nnum = str2double(stag{1}) ;
                 vnum = str2double(stag{2}) ;
-                
-                base = strtrim(stag{3}); 
-                name = strtrim(stag{4});
-                
+               
                 numr = nnum * (vnum+1) ;
                 
-                data = ...
-            fscanf(ffid,[repmat(real,1,vnum),'%i'],numr);
+                fstr = repmat(real,1,vnum) ;
                 
-                mesh.(base).(name).index = ...
-                    data(vnum+1:vnum+1:end)+1;
+                data = fscanf( ...
+                  ffid,fstr(1:end-1),numr) ;
                 
-                mesh.(base).(name).value = ...
-                    zeros(nnum, vnum);
+                mesh.value = zeros(nnum, vnum);
                 
                 for vpos = +1 : vnum
                 
-                mesh.(base).(name).value(:,vpos) = ...
-                    data(vpos+0:vnum+1:end) ;
+                mesh.value(:,vpos) = ...
+                    data(vpos:vnum:end) ;
+
+                end
+               
+            case 'power'
+
+        %-- read "POWER" data
+
+                stag = regexp(tstr{2},';','split');
+                
+                nnum = str2double(stag{1}) ;
+                pnum = str2double(stag{2}) ;
+               
+                numr = nnum * (pnum+0) ;
+                
+                fstr = repmat(real,1,pnum) ;
+                
+                data = fscanf( ...
+                  ffid,fstr(1:end-1),numr) ;
+                
+                mesh.point.power = ...
+                    zeros(nnum, pnum) ;
+                
+                for ppos = +1 : pnum
+                
+                mesh.point.power(:,ppos) = ...
+                    data(ppos:pnum:end) ;
 
                 end
                 
@@ -315,6 +382,9 @@ function [mesh] = readmsh(name)
         end
         
     end
+    
+    mesh.mshID = kind ;
+    mesh.fileV = nver ;
     
     fclose(ffid) ;
     
