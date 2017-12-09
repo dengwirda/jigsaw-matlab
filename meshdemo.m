@@ -1,44 +1,48 @@
 function meshdemo(varargin)
-%MESHDEMO run demo problems for JIGSAW.
+%MESHDEMO build example meshes for JIGSAW.
 %
-%   MESHDEMO(N) runs the N-TH demo problem. Seven demo problems are av-
-%   ailable:
+%   MESHDEMO(N) calls the N-TH demo problem. The following 
+%   demo problems are currently available:
 %
-%   - DEMO-1: Build surface meshes for the "stanford-bunny" geometry. 
-%     Compare the performance of the "delaunay" and "delfront" meshing 
-%     kernals. Generate mesh quality metrics.
+%   - DEMO-1: Build surface meshes for the "stanford-bunny" 
+%     geometry. Compare the performance of the "delaunay" & 
+%     "delfront" meshing kernals. Show mesh quality metrics.
 %
-%   - DEMO-2: Build _volume meshes for the "stanford-bunny" geometry. 
-%     Compare the performance of the "delaunay" and "delfront" meshing 
-%     kernals. Generate mesh quality metrics.
+%   - DEMO-2: Build _volume meshes for the "stanford-bunny" 
+%     geometry. Compare the performance of the "delaunay" & 
+%     "delfront" meshing kernals. Show mesh quality metrics.
 %
-%   - DEMO-3: Build surface meshes for the "fandisk" geometry. Investi-
-%     gate the automatic detection and preservation of "sharp" features 
-%     in the input geometry.
+%   - DEMO-3: Build surface meshes for the "fandisk" domain. 
+%     Investigate options designed to detect and preserve 
+%     "sharp-features" in the input geometry.
 %
-%   - DEMO-4: Build planar meshes for the "lake" geometry. Explore the 
-%     effect of "topological" constraints.
+%   - DEMO-4: Build planar meshes for the "lake" test-case. 
+%     Investigate options designed to preserve "topological" 
+%     consistency.
 %
-%   - DEMO-5: Build planar meshes for the "airfoil" geometry. Explore 
-%     the use of non-uniform mesh-size functions.
+%   - DEMO-5: Build planar meshes for the "airfoil" problem. 
+%     Investigate the use of user-defined mesh-spacing defi-
+%     nitions.
 %
-%   - DEMO-6: Build surface- and volume-meshes for an analytic geometry 
-%     using iso-surface extraction (case 1).
+%   - DEMO-6: Build surface- and volume-meshes based on an 
+%     analytic geometry definition. [iso-surface extraction 
+%     (case 1)].
 %
-%   - DEMO-7: Build surface- and volume-meshes for an analytic geometry 
-%     using iso-surface extraction (case 2).
+%   - DEMO-7: Build surface- and volume-meshes based on an 
+%     analytic geometry definition. [iso-surface extraction 
+%     (case 2)].
 %
 %   See also JIGSAW
 
-%---------------------------------------------------------------------
+%-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   11-Jun-2016
-%   d_engwirda@outlook.com
-%---------------------------------------------------------------------
+%   08-Dec-2017
+%   de2363@columbia.edu
+%-----------------------------------------------------------
 %
 
-    close all;
+    close all ;
 
     n = 1;
 
@@ -60,14 +64,14 @@ function meshdemo(varargin)
 end
 
 function demo1
-% DEMO-1: Build surface meshes for the "stanford-bunny" geometry. Co-
-% mpare the performance of the "delaunay" and "delfront" meshing ker-
-% nals. Generate mesh quality metrics.
+% DEMO-1 --- Build surface meshes for the "stanford-bunny" 
+%   geometry. Compare the performance of the "delaunay" & 
+%   "delfront" meshing kernals. Show mesh quality metrics.
 
     name = 'bunny' ;
 
 %-- setup files for JIGSAW
-    opts.geom_file = ...            % geom file
+    opts.geom_file = ...            % domain file
         ['jigsaw/geo/',name,'.msh'];
     
     opts.jcfg_file = ...            % config file
@@ -77,7 +81,7 @@ function demo1
         ['jigsaw/out/',name,'.msh'];
   
 %-- read GEOM file for display
-    geom = readmsh (opts.geom_file);
+    geom = loadmsh (opts.geom_file);
 
 %-- draw the output
     drawmesh(geom,...
@@ -95,7 +99,7 @@ function demo1
  
 %-- draw the output
     drawmesh(mesh,...
-        struct('title','JIGSAW output (delaunay)',...
+        struct('title','JIGSAW output (delaunay)', ...
             'flips',[3,1,2],'views',[50,10]));
         
     drawcost(meshcost(mesh)) ;
@@ -111,37 +115,37 @@ function demo1
  
 %-- draw the output
     drawmesh(mesh,...
-        struct('title','JIGSAW output (delfront)',...
+        struct('title','JIGSAW output (delfront)', ...
             'flips',[3,1,2],'views',[50,10]));
 
     drawcost(meshcost(mesh)) ;
     
-    drawnow;
+    drawnow ;
     
-    set(figure(1),'units','normalized',...
+    set(figure(1),'units','normalized', ...
         'position',[.65,.50,.30,.35]) ;
     
-    set(figure(2),'units','normalized',...
+    set(figure(2),'units','normalized', ...
         'position',[.05,.50,.30,.35]) ;
-    set(figure(4),'units','normalized',...
+    set(figure(4),'units','normalized', ...
         'position',[.35,.50,.30,.35]) ;
     
-    set(figure(3),'units','normalized',...
-        'position',[.05,.05,.30,.35]) ;
-    set(figure(5),'units','normalized',...
-        'position',[.35,.05,.30,.35]) ;
+    set(figure(3),'units','normalized', ...
+        'position',[.05,.15,.30,.25]) ;
+    set(figure(5),'units','normalized', ...
+        'position',[.35,.15,.30,.25]) ;
     
 end
 
 function demo2
-% DEMO-2: Build _volume meshes for the "stanford-bunny" geometry. Co-
-% mpare the performance of the "delaunay" and "delfront" meshing ker-
-% nals. Generate mesh quality metrics.
+% DEMO-2 --- Build _volume meshes for the "stanford-bunny" 
+%   geometry. Compare the performance of the "delaunay" & 
+%   "delfront" meshing kernals. Show mesh quality metrics.
 
     name = 'bunny' ;
 
 %-- setup files for JIGSAW
-    opts.geom_file = ...            % geom file
+    opts.geom_file = ...            % domain file
         ['jigsaw/geo/',name,'.msh'];
     
     opts.jcfg_file = ...            % config file
@@ -151,7 +155,7 @@ function demo2
         ['jigsaw/out/',name,'.msh'];
   
 %-- read GEOM file for display
-    geom = readmsh (opts.geom_file);
+    geom = loadmsh (opts.geom_file);
 
 %-- draw the output
     drawmesh(geom,...
@@ -192,7 +196,7 @@ function demo2
 
     drawcost(meshcost(mesh)) ;
     
-    drawnow;
+    drawnow ;
     
     set(figure(1),'units','normalized',...
         'position',[.65,.50,.30,.35]) ;
@@ -207,25 +211,25 @@ function demo2
         'position',[.35,.50,.30,.35]) ;
     
     set(figure(4),'units','normalized',...
-        'position',[.05,.05,.30,.35]) ;
+        'position',[.05,.15,.30,.25]) ;
     set(figure(5),'units','normalized',...
-        'position',[.05,.05,.30,.35]) ;
+        'position',[.05,.15,.30,.25]) ;
     set(figure(8),'units','normalized',...
-        'position',[.35,.05,.30,.35]) ;
+        'position',[.35,.15,.30,.25]) ;
     set(figure(9),'units','normalized',...
-        'position',[.35,.05,.30,.35]) ;
+        'position',[.35,.15,.30,.25]) ;
 
 end
 
 function demo3
-% DEMO-3: Build surface meshes for the "fandisk" geometry. Investiga-
-% te the automatic detection and preservation of "sharp" features in 
-% the input geometry.
+% DEMO-3 --- Build surface meshes for the "fandisk" domain. 
+%   Investigate options designed to detect and preserve 
+%   "sharp-features" in the input geometry.
 
     name = 'fandisk' ;
 
 %-- setup files for JIGSAW
-    opts.geom_file = ...            % geom file
+    opts.geom_file = ...            % domain file
         ['jigsaw/geo/',name,'.msh'];
     
     opts.jcfg_file = ...            % config file
@@ -235,7 +239,7 @@ function demo3
         ['jigsaw/out/',name,'.msh'];
   
 %-- read GEOM file for display
-    geom = readmsh (opts.geom_file);
+    geom = loadmsh (opts.geom_file);
 
 %-- draw the output
     drawmesh(geom,...
@@ -274,7 +278,7 @@ function demo3
         struct('title','JIGSAW output (FEAT.=true)',...
             'flips',[3,2,1],'views',[-40,20]));
     
-    drawnow;
+    drawnow ;
     
     set(figure(1),'units','normalized',...
         'position',[.65,.50,.30,.35]) ;
@@ -290,13 +294,14 @@ function demo3
 end
 
 function demo4
-% DEMO-4: Build planar meshes for the "lake" geometry. Explore the e-
-% ffect of "topological" constraints.
+% DEMO-4 --- Build planar meshes for the "lake" test-case. 
+%   Investigate options designed to preserve "topological" 
+%   consistency.
 
     name = 'lake' ;
 
 %-- setup files for JIGSAW
-    opts.geom_file = ...            % geom file
+    opts.geom_file = ...            % domain file
         ['jigsaw/geo/',name,'.msh'];
     
     opts.jcfg_file = ...            % config file
@@ -306,16 +311,18 @@ function demo4
         ['jigsaw/out/',name,'.msh'];
   
 %-- read GEOM file for display
-    geom = readmsh (opts.geom_file);
+    geom = loadmsh (opts.geom_file);
 
 %-- draw the output
     drawmesh(geom,...
         struct('title','Input geometry'));
     
 %-- meshing options for JIGSAW
-    opts.mesh_kern = 'delaunay';
+    opts.mesh_kern = 'delfront';
     opts.mesh_dims = 2 ;
     opts.mesh_top1 =false ;
+    
+    opts.optm_iter = 0 ;
     
     opts.geom_feat = true ;
     
@@ -329,9 +336,11 @@ function demo4
         struct('title','JIGSAW output (TOPO.=false)'));
     
 %-- meshing options for JIGSAW
-    opts.mesh_kern = 'delaunay';
+    opts.mesh_kern = 'delfront';
     opts.mesh_dims = 2 ;
     opts.mesh_top1 = true ;
+    
+    opts.optm_iter = 0 ;
     
     opts.geom_feat = true ;
     
@@ -342,9 +351,9 @@ function demo4
  
 %-- draw the output
     drawmesh(mesh,...
-        struct('title','JIGSAW output (TOPO.=true)'));
+        struct('title','JIGSAW output (TOPO.=true)') );
     
-    drawnow;
+    drawnow ;
     
     set(figure(1),'units','normalized',...
         'position',[.65,.50,.30,.35]) ;
@@ -362,23 +371,24 @@ function demo4
 end
 
 function demo5
-% DEMO-5: Build planar meshes for the "airfoil" geometry. Explore the
-% use of non-uniform mesh-size functions.
+% DEMO-5 --- Build planar meshes for the "airfoil" problem. 
+%   Investigate the use of user-defined mesh-spacing defi-
+%   nitions.
 
     name = 'airfoil' ;
 
 %-- setup files for JIGSAW
-    opts.geom_file = ...            % geom file
+    opts.geom_file = ...            % domain file
         ['jigsaw/geo/',name,'.msh'];
     
     opts.jcfg_file = ...            % config file
-        ['jigsaw/out/',name,'.jig'];
+    ['jigsaw/out/',name,'-BACK.jig'] ;
     
     opts.mesh_file = ...            % output file
-        ['jigsaw/out/',name,'.msh'];
+    ['jigsaw/out/',name,'-BACK.msh'] ;
   
 %-- read GEOM file for display
-    geom = readmsh (opts.geom_file);
+    geom = loadmsh (opts.geom_file);
 
 %-- draw the output
     drawmesh(geom,...
@@ -389,28 +399,62 @@ function demo5
     opts.mesh_dims = 2 ;
     opts.mesh_top1 = true ;
     
+    opts.optm_iter = 0 ;
+    
     opts.geom_feat = true ;
     
     opts.hfun_hmax = 0.04 ;
     
 %-- build the mesh!
-    mesh = jigsaw  (opts) ;
+    back = jigsaw  (opts) ;
  
 %-- draw the output
-    drawmesh(mesh,...
+    drawmesh(back,...
         struct('title','JIGSAW output'));
+    
+    
+    fun1 = ...
+   +.1 * (back.point.coord(:,1)-.40).^2 + ...
+   +2. * (back.point.coord(:,2)-.55).^2 ;
+   
+    fun2 = ...
+   +.7 * (back.point.coord(:,1)-.75).^2 + ...
+   +.7 * (back.point.coord(:,2)-.45).^2 ;
+    
+    hmin = 0.01;
+    hmax = 0.10;
+    
+    back.value = 0.4 * ...
+    max(min(min(fun1,fun2),hmax),hmin) ;
+    
+    
+%-- setup files for JIGSAW
+    opts.geom_file = ...            % domain file
+        ['jigsaw/geo/',name,'.msh'];
+    
+    opts.jcfg_file = ...            % config file
+    ['jigsaw/out/',name,'-MESH.jig'] ;
+    
+    opts.mesh_file = ...            % output file
+    ['jigsaw/out/',name,'-MESH.msh'] ;
+    
+    opts.hfun_file = ...            % sizing file
+    ['jigsaw/out/',name,'-HFUN.msh'] ;
+ 
+    savemsh(opts.hfun_file,back) ;
     
 %-- meshing options for JIGSAW
     opts.mesh_kern = 'delfront';
     opts.mesh_dims = 2 ;
     opts.mesh_top1 = true ;
     
+    opts.optm_iter = 8 ;
+    
     opts.geom_feat = true ;
     
-    opts.hfun_kern = 'delaunay';
-    opts.hfun_hmax = 0.04 ;
-    opts.hfun_hmin = 0.002;
-    opts.hfun_grad = 0.15 ;
+    opts.hfun_scal = 'absolute';
+    opts.hfun_hmax = +inf ;
+    opts.hfun_hmin = +0.0 ;
     
 %-- build the mesh!
     mesh = jigsaw  (opts) ;
@@ -419,26 +463,38 @@ function demo5
     drawmesh(mesh,...
         struct('title','JIGSAW output'));
     
-    drawnow;
+    figure  ;
+    patch ('faces',back.tria3.index(:,1:3), ...
+        'vertices',back.point.coord(:,1:2), ...
+        'facevertexcdata',back.value, ...
+        'facecolor','flat', ...
+        'edgecolor','k' ) ;
+    axis image off ;
     
-    set(figure(1),'units','normalized',...
+    drawnow ;
+    
+    set(figure(1),'units','normalized', ...
         'position',[.65,.50,.30,.35]) ;
     
-    set(figure(2),'units','normalized',...
+    set(figure(2),'units','normalized', ...
         'position',[.05,.50,.30,.35]) ;
-    set(figure(3),'units','normalized',...
+    set(figure(3),'units','normalized', ...
         'position',[.05,.50,.30,.35]) ;
     
-    set(figure(4),'units','normalized',...
+    set(figure(4),'units','normalized', ...
         'position',[.35,.50,.30,.35]) ;
-    set(figure(5),'units','normalized',...
+    set(figure(5),'units','normalized', ...
         'position',[.35,.50,.30,.35]) ;
-
+        
+    set(figure(6),'units','normalized', ...
+        'position',[.05,.05,.30,.35]) ;
+        
 end
 
 function demo6
-% DEMO-6: Build surface- and volume-meshes for an analytic geometry using
-% iso-surface extraction (case 1).
+% DEMO-6 --- Build surface- and volume-meshes based on an 
+%   analytic geometry definition. [iso-surface extraction 
+%   (case 1)].
 
     name = 'eight';
 
@@ -454,17 +510,17 @@ function demo6
     geom.tria3.index = [f,zeros(size(f,1),1)];
    
 %-- setup files for JIGSAW
-    opts.geom_file = ...            % geom file
-        ['jigsaw/geo/',name,'.msh'];
+    opts.geom_file = ...            % domain file
+    ['jigsaw/geo/',name,'.msh'];
     
     opts.jcfg_file = ...            % config file
-        ['jigsaw/out/',name,'.jig'];
+    ['jigsaw/out/',name,'.jig'];
     
     opts.mesh_file = ...            % output file
-        ['jigsaw/out/',name,'.msh'];
+    ['jigsaw/out/',name,'.msh'];
  
     
-    makemsh(opts.geom_file,geom) ;
+    savemsh(opts.geom_file,geom) ;
     
 %-- draw the output
     drawmesh(geom,...
@@ -473,8 +529,6 @@ function demo6
 %-- meshing options for JIGSAW
     opts.mesh_kern = 'delfront';
     opts.mesh_dims = 3 ;
-    
-    opts.mesh_top2 = true ;
     
     opts.hfun_hmax = 0.04 ;
     
@@ -485,7 +539,7 @@ function demo6
     drawmesh(mesh,...
         struct('title','JIGSAW output','views',[-30,+30]));
     
-    drawnow;
+    drawnow ;
     
     set(figure(1),'units','normalized',...
         'position',[.05,.50,.30,.35]) ;
@@ -497,8 +551,9 @@ function demo6
 end
 
 function demo7
-% DEMO-7: Build surface- and volume-meshes for an analytic geometry using
-% iso-surface extraction (case 2).
+% DEMO-7 --- Build surface- and volume-meshes based on an 
+%   analytic geometry definition. [iso-surface extraction 
+%   (case 2)].
 
     name = 'orbis';
 
@@ -521,17 +576,17 @@ function demo7
     geom.tria3.index = [f,zeros(size(f,1),1)];
    
 %-- setup files for JIGSAW
-    opts.geom_file = ...            % geom file
-        ['jigsaw/geo/',name,'.msh'];
+    opts.geom_file = ...            % domain file
+    ['jigsaw/geo/',name,'.msh'];
     
     opts.jcfg_file = ...            % config file
-        ['jigsaw/out/',name,'.jig'];
+    ['jigsaw/out/',name,'.jig'];
     
     opts.mesh_file = ...            % output file
-        ['jigsaw/out/',name,'.msh'];
+    ['jigsaw/out/',name,'.msh'];
  
-    
-    makemsh(opts.geom_file,geom) ;
+  
+    savemsh(opts.geom_file,geom) ;
     
 %-- draw the output
     drawmesh(geom,...
@@ -552,7 +607,7 @@ function demo7
     drawmesh(mesh,...
         struct('title','JIGSAW output'));
     
-    drawnow;
+    drawnow ;
     
     set(figure(1),'units','normalized',...
         'position',[.05,.50,.30,.35]) ;
@@ -562,5 +617,6 @@ function demo7
         'position',[.65,.50,.30,.35]) ;
     
 end
+
 
 

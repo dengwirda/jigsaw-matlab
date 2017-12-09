@@ -1,12 +1,12 @@
 function drawmesh(mesh,varargin)
 %DRAWMESH draw mesh data for JIGSAW.
 
-%---------------------------------------------------------------------
+%-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   06-Jul-2016
-%   d_engwirda@outlook.com
-%---------------------------------------------------------------------
+%   08-Dec-2017
+%   de2363@columbia.edu
+%-----------------------------------------------------------
 %
 
     opts = [] ;
@@ -44,11 +44,10 @@ function drawmesh(mesh,varargin)
             axis image off ;
             if (~isempty(opts) && ...
                     isfield(opts,'title'))
-                title([opts.title,' (TOPO.-1)']);
+                title([opts.title,' (1-DIM.)']);
             end
             set(gcf,'color','w');
-            set(gca,'units', ...
-                'normalized','position',[.05,.05,.90,.90]);
+            set(gca,'clipping','off');
         end
             
         if (meshhas(mesh,'tria3'))
@@ -63,11 +62,10 @@ function drawmesh(mesh,varargin)
             axis image off ;
             if (~isempty(opts) && ...
                     isfield(opts,'title'))
-                title([opts.title,' (TOPO.-2)']);
+                title([opts.title,' (2-DIM.)']);
             end
             set(gcf,'color','w');
-            set(gca,'units', ...
-                'normalized','position',[.05,.05,.90,.90]);
+            set(gca,'clipping','off');
         end
         
         if (meshhas(mesh,'quad4'))
@@ -82,12 +80,10 @@ function drawmesh(mesh,varargin)
             axis image off ;
             if (~isempty(opts) && ...
                     isfield(opts,'title'))
-                title([opts.title,' (TOPO.-2)']);
+                title([opts.title,' (2-DIM.)']);
             end
             set(gcf,'color','w');
-            set(gca,'units', ...
-                'normalized','position',[.05,.05,.90,.90]);
-        
+            set(gca,'clipping','off');
         end
             
         case +3
@@ -102,27 +98,17 @@ function drawmesh(mesh,varargin)
             end
             drawedge2(mesh.point.coord(:,1:3), ...
                       mesh.edge2.index(:,1:2)) ;
-            axis image off ;
+            axis image off ; hold on;
             if (~isempty(opts) && ...
                     isfield(opts,'views'))
                 view(opts.views) ;
             end
             if (~isempty(opts) && ...
                     isfield(opts,'title'))
-                title([opts.title,' (TOPO.-1)']);
-            end
-            if (~isempty(opts) && ...
-                    isfield(opts,'light'))
-                if (opts.light && ...
-                        exist('camlight') ~= 0) % octave!
-                    camlight headlight ;
-                    lighting flat ;
-                    cameramenu ;
-                end
+                title([opts.title,' (1-DIM.)']);
             end
             set(gcf,'color','w');
-            set(gca,'units', ...
-                'normalized','position',[.05,.05,.90,.90]);
+            set(gca,'clipping','off');
         end
             
         if (meshhas(mesh,'tria3'))
@@ -141,20 +127,10 @@ function drawmesh(mesh,varargin)
             end
             if (~isempty(opts) && ...
                     isfield(opts,'title'))
-                title([opts.title,' (TOPO.-2)']);
-            end
-            if (~isempty(opts) && ...
-                    isfield(opts,'light'))
-                if (opts.light && ...
-                        exist('camlight') ~= 0) % octave!
-                    camlight headlight ;
-                    lighting flat ;
-                    cameramenu ;
-                end
+                title([opts.title,' (2-DIM.)']);
             end
             set(gcf,'color','w');
-            set(gca,'units', ...
-                'normalized','position',[.05,.05,.90,.90]);      
+            set(gca,'clipping','off');      
         end
         
         if (meshhas(mesh,'quad4'))
@@ -173,20 +149,10 @@ function drawmesh(mesh,varargin)
             end
             if (~isempty(opts) && ...
                     isfield(opts,'title'))
-                title([opts.title,' (TOPO.-2)']);
-            end
-            if (~isempty(opts) && ...
-                    isfield(opts,'light'))
-                if (opts.light && ...
-                        exist('camlight') ~= 0) % octave!
-                    camlight headlight ;
-                    lighting flat ;
-                    cameramenu ;
-                end
+                title([opts.title,' (2-DIM.)']);
             end
             set(gcf,'color','w');
-            set(gca,'units', ...
-                'normalized','position',[.05,.05,.90,.90]);
+            set(gca,'clipping','off');
         end
         
         if (meshhas(mesh,'tria4'))
@@ -205,31 +171,22 @@ function drawmesh(mesh,varargin)
             end
             if (~isempty(opts) && ...
                     isfield(opts,'title'))
-                title([opts.title,' (TOPO.-3)']);
-            end
-            if (~isempty(opts) && ...
-                    isfield(opts,'light'))
-                if (opts.light && ...
-                        exist('camlight') ~= 0) % octave!
-                    camlight headlight ;
-                    lighting flat ;
-                    cameramenu ;
-                end
+                title([opts.title,' (3-DIM.)']);
             end
             set(gcf,'color','w');
-            set(gca,'units', ...
-                'normalized','position',[.05,.05,.90,.90]);
+            set(gca,'clipping','off');
         end
         
         otherwise
         error('DRAWMESH: unsupported inputs.');
         
     end
-    
+  
 end
 
 function drawedge2(pp,e2,varargin)
-%DRAWEDGE2 draw EDGE2 elements.
+%DRAWEDGE2 draw EDGE2 elements defined by [PP,E2]. Here, PP
+%is an array of positions & E2 is an array of edge-indexing.
 
     ec = [] ;
     
@@ -279,7 +236,8 @@ function drawedge2(pp,e2,varargin)
 end
 
 function drawtria3(pp,t3,varargin)
-%DRAWTRIA3 draw TRIA3 elements.
+%DRAWTRIA3 draw TRIA3 elements defined by [PP,T3]. Here, PP
+%is an array of positions & T3 is an array of tria-indexing.
 
     fc = []; ec = [] ;
     
@@ -298,7 +256,8 @@ function drawtria3(pp,t3,varargin)
 end
 
 function drawquad4(pp,q4,varargin)
-%DRAWQUAD4 draw QUAD4 elements.
+%DRAWQUAD4 draw QUAD4 elements defined by [PP,Q4]. Here, PP
+%is an array of positions & Q4 is an array of quad-indexing.
 
     fc = []; ec = [] ;
     
@@ -359,7 +318,8 @@ function [fe] = surfhexa8(q8)
 end
 
 function drawtria4(pp,t4,varargin)
-%DRAWTRIA4 draw TRIA4 elements.
+%DRAWTRIA4 draw TRIA4 elements defined by [PP,T4]. Here, PP
+%is an array of positions & T4 is an array of tria-indexing.
 
     if (nargin >= 3)
         ti = varargin{+1} ; 
@@ -369,20 +329,22 @@ function drawtria4(pp,t4,varargin)
         
         dc = max(pp(ip,:),[],1) - ...
              min(pp(ip,:),[],1) ;
-       [dd,id] = min( dc) ;
+       [dd,id] = max( dc) ;
          
         ok = false(size(pp,1),1);
         ok(ip) = pp(ip,id) < ...
-            mean(pp(ip,id)) + .20*dd;
+            mean(pp(ip,id)) + .200*dd ;
+       
+        ti = all(ok(t4),2); 
         
-        ti = all(ok(t4),2);     
     end
 
     ec = [.20,.20,.20];
     ei = [.25,.25,.25];
     fe = [.95,.95,.50];
     fi = [.95,.95,.90];
-
+   %fi = [.70,.80,.90];
+    
     f1 = surftria4(t4( ti,:));
     f2 = surftria4(t4(~ti,:));
     
@@ -395,21 +357,21 @@ function drawtria4(pp,t4,varargin)
     patch('faces',f1(~c1,:),'vertices',pp,...
         'facecolor',fe,...
         'edgecolor',ec,...
-        'linewidth',0.67,...
-        'facealpha',1.0);
+        'linewidth',0.40,...
+        'facealpha',1.00) ;
 %-- draw internal surface
     patch('faces',f1( c1,:),'vertices',pp,...
         'facecolor',fi,...
         'edgecolor',ei,...
-        'linewidth',0.67,...
-        'facealpha',1.0);
+        'linewidth',0.40,...
+        'facealpha',1.00) ;
 %-- draw transparent part
     patch('faces',f2(~c2,:),'vertices',pp,...
         'facecolor',fe,...
         'edgecolor','none',...
-        'linewidth',0.67,...
-        'facealpha',0.2);
-
+        'linewidth',0.40,...
+        'facealpha',0.20) ;
+  
 end
 
 

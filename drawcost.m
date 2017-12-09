@@ -1,15 +1,15 @@
 function drawcost(cost)
 %DRAWCOST draw mesh cost metrics for a given mesh.
 
-%---------------------------------------------------------------------
+%-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   09-Jul-2016
-%   d_engwirda@outlook.com
-%---------------------------------------------------------------------
+%   08-Dec-2017
+%   de2363@columbia.edu
+%-----------------------------------------------------------
 %
 
-    dolabel = true ;
+    dolabel = false ;
 
 %-- draw sub-axes directly -- sub-plot gives
 %-- silly inconsistent spacing...!
@@ -30,27 +30,27 @@ function drawcost(cost)
         end
         
         figure;
-        set(gcf,'color','w','position',[128,128,640,300]);
+        set(gcf,'color','w','position',[128,128,640,380]);
         if (isfield(cost.tria3,'hfunc') )
     %-- have size-func data
         axes('position',axpos31); hold on;
-        score_hist(cost.tria3.score(:),'tria3');
+        scrhist(cost.tria3.score(:),'tria3') ;
         if (dolabel)
         title('Quality metrics (TRIA-3)');
         end
         axes('position',axpos32); hold on;
-        angle_hist(cost.tria3.angle(:),'tria3');
+        anghist(cost.tria3.angle(:),'tria3') ;
         axes('position',axpos33); hold on;
-        hfunc_hist(cost.tria3.hfunc(:),'tria3');
+        hfnhist(cost.tria3.hfunc(:),'tria3') ;
         else
     %-- null size-func data
         axes('position',axpos21); hold on;
-        score_hist(cost.tria3.score(:),'tria3');
+        scrhist(cost.tria3.score(:),'tria3') ;
         if (dolabel)
         title('Quality metrics (TRIA-3)');
         end
         axes('position',axpos22); hold on;
-        angle_hist(cost.tria3.angle(:),'tria3');
+        anghist(cost.tria3.angle(:),'tria3') ;
         end
         
     end
@@ -64,36 +64,37 @@ function drawcost(cost)
         end
         
         figure;
-        set(gcf,'color','w','position',[128,128,640,300]);
+        set(gcf,'color','w','position',[128,128,640,380]);
         if (isfield(cost.tria4,'hfunc') )
     %-- have size-func data
         axes('position',axpos31); hold on;
-        score_hist(cost.tria4.score(:),'tria4');
+        scrhist(cost.tria4.score(:),'tria4') ;
         if (dolabel)
         title('Quality metrics (TRIA-4)');
         end
         axes('position',axpos32); hold on;
-        angle_hist(cost.tria4.angle(:),'tria4'); 
+        anghist(cost.tria4.angle(:),'tria4') ; 
         axes('position',axpos33); hold on;
-        hfunc_hist(cost.tria4.hfunc(:),'tria4');
+        hfnhist(cost.tria4.hfunc(:),'tria4') ;
         else
     %-- null size-func data
         axes('position',axpos21); hold on;
-        score_hist(cost.tria4.score(:),'tria4');
+        scrhist(cost.tria4.score(:),'tria4') ;
         if (dolabel)
         title('Quality metrics (TRIA-4)');
         end
         axes('position',axpos22); hold on;
-        angle_hist(cost.tria4.angle(:),'tria4');
+        anghist(cost.tria4.angle(:),'tria4') ;
         end
         
     end
 
 end
 
-function angle_hist(ad,ty)
-%ANGLE_HIST draw histogram for "angle" data.
+function anghist(ad,ty)
+%ANGHIST draw the histogram for the "angle" quality-metric.
 
+    ad = ad(:);
     be = linspace(0.,180.,91);
     bm =(be(1:end-1)+be(2:end))/2.;
     hc = histc(ad,be);
@@ -132,7 +133,7 @@ function angle_hist(ad,ty)
     axis tight;
     set(gca,'ycolor', get(gca,'color'),'ytick',[],...
         'xtick',0:30:180,'layer','top','fontsize',...
-            18,'linewidth',2.,'ticklength',[.025,.025],...
+            14,'linewidth',2.,'ticklength',[.025,.025],...
                 'box','off','xlim',[0.,180.]) ;
     
     mina = max(1.000,min(ad)); %%!! so that axes don't obscure!
@@ -146,41 +147,42 @@ function angle_hist(ad,ty)
     if ( mina > 25.0)
         text(mina-1.8,.9*max(hc),num2str(min(ad),'%16.1f'),...
             'horizontalalignment',...
-                'right','fontsize',22) ;
+                'right','fontsize',16) ;
     else
         text(mina+1.8,.9*max(hc),num2str(min(ad),'%16.1f'),...
             'horizontalalignment',...
-                'left' ,'fontsize',22) ;
+                'left' ,'fontsize',16) ;
     end
     
     if ( maxa < 140.)
         text(maxa+1.8,.9*max(hc),num2str(max(ad),'%16.1f'),...
             'horizontalalignment',...
-                'left' ,'fontsize',22) ;    
+                'left' ,'fontsize',16) ;    
     else
         text(maxa-1.8,.9*max(hc),num2str(max(ad),'%16.1f'),...
             'horizontalalignment',...
-                'right','fontsize',22) ;     
+                'right','fontsize',16) ;     
     end
    
     switch (ty)
     case 'tria4'
         text(-9.0,0.0,'$\theta_{\tau}$',...
             'horizontalalignment','right',...
-                'fontsize',28,'interpreter','latex') ;
+                'fontsize',22,'interpreter','latex') ;
         
     case 'tria3'
         text(-9.0,0.0,'$\theta_{f}$',...
             'horizontalalignment','right',...
-                'fontsize',28,'interpreter','latex') ;
+                'fontsize',22,'interpreter','latex') ;
         
     end
     
 end
 
-function score_hist(sc,ty)
-%SCORE_HIST draw histogram for "score" data.
+function scrhist(sc,ty)
+%SCRHIST draw the histogram for the "score" quality-metric.
 
+    sc = sc(:);
     be = linspace(0.,1.,101);
     bm = (be(1:end-1)+be(2:end)) / 2.;
     hc = histc(sc,be);
@@ -215,7 +217,7 @@ function score_hist(sc,ty)
     axis tight;    
     set(gca,'ycolor', get(gca,'color'),'ytick',[],...
         'xtick',.0:.2:1.,'layer','top','fontsize',...
-            18,'linewidth',2.,'ticklength',[.025,.025],...
+            14,'linewidth',2.,'ticklength',[.025,.025],...
                 'box','off','xlim',[0.,1.]) ;
     
     mins = max(0.010,min(sc)); %%!! so that axes don't obscure!
@@ -229,33 +231,33 @@ function score_hist(sc,ty)
     if ( mins > .4)
         text(mins-.01,.9*max(hc),num2str(min(sc),'%16.3f'),...
             'horizontalalignment',...
-                'right','fontsize',22) ;
+                'right','fontsize',16) ;
     else
         text(mins+.01,.9*max(hc),num2str(min(sc),'%16.3f'),...
             'horizontalalignment',...
-                'left' ,'fontsize',22) ;
+                'left' ,'fontsize',16) ;
     end
     
     text(mean(sc)-.01,.9*max(hc),num2str(mean(sc),'%16.3f'),...
-        'horizontalalignment','right','fontsize',22) ;
+        'horizontalalignment','right','fontsize',16) ;
     
     switch (ty)
     case 'tria4'
         text(-.05,0.0,'$v_{\tau}$',...
             'horizontalalignment','right',...
-                'fontsize',28,'interpreter','latex') ;
+                'fontsize',22,'interpreter','latex') ;
         
     case 'tria3'
         text(-.05,0.0,'$a_{f}$',...
             'horizontalalignment','right',...
-                'fontsize',28,'interpreter','latex') ;
+                'fontsize',22,'interpreter','latex') ;
         
     end
     
 end
 
-function hfunc_hist(hf,ty)
-%HFUNC_HIST draw histogram for "hfunc" data.
+function hfnhist(hf,ty)
+%HFNHIST draw the histogram for the "hfunc" quality-metric.
 
     be = linspace(0.,2.,101);
     bm = (be(1:end-1)+be(2:end)) / 2.;
@@ -281,20 +283,21 @@ function hfunc_hist(hf,ty)
         'facecolor',k,'edgecolor',k) ;
     
     axis tight; 
-    set(gca,'ycolor',get(gca,'color'),'ytick',[],...
-        'xtick',[.0,.5,1.,1.5,2.0],'layer','top',...
-            'fontsize',18,'linewidth',2.,'ticklength',[.025,.025],...
+    set(gca,'ycolor', get(gca,'color'),'ytick',[],...
+        'xtick',.0:.5:2.,'layer','top','fontsize',...
+            14,'linewidth',2.,'ticklength',[.025,.025],...
                 'box','off','xlim',[0.,2.]);
     
     line([mean(hf),mean(hf)],...
         [0,max(hc)],'color','r','linewidth',1.5);
     
     text(mean(hf)+.02,.9*max(hc),num2str(mean(hf),'%16.2f'),...
-        'horizontalalignment','left','fontsize',22);
+        'horizontalalignment','left','fontsize',16);
     
     text(-0.100,0.0,'$h_{r}$','horizontalalignment','right',...
-        'fontsize',28,'interpreter','latex');
+        'fontsize',22,'interpreter','latex');
     
 end
+
 
 

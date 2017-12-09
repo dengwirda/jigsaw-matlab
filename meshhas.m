@@ -1,12 +1,12 @@
 function [okay] = meshhas(mesh,varargin)
 %MESHHAS helper routine to safely query a MESH structure.
 
-%---------------------------------------------------------------------
+%-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
 %   22-Mar-2016
-%   d_engwirda@outlook.com
-%---------------------------------------------------------------------
+%   de2363@columbia.edu
+%-----------------------------------------------------------
 %
 
     okay = false; base = ''; item = '';
@@ -48,5 +48,6 @@ function [okay] = meshhas(mesh,varargin)
             ~isempty(mesh.(base).(item)) ;
     
 end
+
 
 
