@@ -171,21 +171,21 @@ function [varargout] = jigsaw(opts)
 %       is terminated if adjacent element cost-functions are
 %       improved by less than QTOL.
 %
-%   OPTS.OPTM_QLIM - {default=0.9250} threshold on mesh cost
+%   OPTS.OPTM_QLIM - {default=0.9375} threshold on mesh cost
 %       function above which gradient-based optimisation is
 %       attempted.
-%
-%   OPTS.OPTM_ZIP_ - {default= true} allow for "merge" oper-
-%       ations on sub-faces.
-%
-%   OPTS.OPTM_DIV_ - {default= true} allow for "split" oper-
-%       ations on sub-faces.
 %
 %   OPTS.OPTM_TRIA - {default= true} allow for optimisation
 %       of TRIA grid geometry.
 %
 %   OPTS.OPTM_DUAL - {default=false} allow for optimisation
 %       of DUAL grid geometry.
+%
+%   OPTS.OPTM_ZIP_ - {default= true} allow for "merge" oper-
+%       ations on sub-faces.
+%
+%   OPTS.OPTM_DIV_ - {default= true} allow for "split" oper-
+%       ations on sub-faces.
 %
 %
 %   OPTIONAL fields (MISC):
@@ -233,7 +233,7 @@ function [varargout] = jigsaw(opts)
 %   JIGSAW-0.9.5.x
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   03-Dec-2017
+%   14-Dec-2017
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
