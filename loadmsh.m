@@ -80,7 +80,7 @@ function [mesh] = loadmsh(name)
 
 %-----------------------------------------------------------
 %   Darren Engwirda
-%   github.com/dengwirda/jigsaw-geo-matlab
+%   github.com/dengwirda/jigsaw/
 %   11-Nov-2017
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
