@@ -81,7 +81,7 @@ function savemsh(name,mesh)
 
 %-----------------------------------------------------------
 %   Darren Engwirda
-%   github.com/dengwirda/jigsaw-geo-matlab
+%   github.com/dengwirda/jigsaw/
 %   03-Dec-2017
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
