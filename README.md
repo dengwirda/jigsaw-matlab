@@ -17,7 +17,7 @@ This package provides a <a href="http://www.mathworks.com">`MATLAB`</a> / <a hre
 
 `JIGSAW` is a multi-part library, consisting of a `MATLAB` / `OCTAVE` front-end, and a core `c++` back-end. All of the heavy-lifting is done in the `c++` layer - the interface contains additional scripts for `file I/O`, `visualisation` and general `data processing`:
 
-	JIGASW :: MATLAB/OCTAVE top-level functions
+	├── JIGSAW  :: MATLAB/OCTAVE top-level functions
 	├── script  -- MATLAB/OCTAVE utilities
 	└── jigsaw
 	    ├── src -- JIGSAW source files
