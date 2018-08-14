@@ -31,7 +31,7 @@
      *
     --------------------------------------------------------
      *
-     * Last updated: 10 June, 2018
+     * Last updated: 13 August, 2018
      *
      * Copyright 2013-2018
      * Darren Engwirda
@@ -174,10 +174,12 @@
                 }
                 }
                 
+                if (_jcfg._iter_opts.dual() )
+                {
                 if (_rdel._euclidean_rdel_2d.
                         _tria._nset.count() > 0)
                 {
-            /*-------------------------- write POWER data */                
+            /*-------------------------- write POWER data */   
                 _file << "POWER=" 
                       << _last << ";1" << "\n" ;
                 
@@ -194,6 +196,7 @@
                     {
                     _file << (real_type)0. << "\n" ;
                     }
+                }
                 }
                 }
                 
@@ -371,6 +374,8 @@
                 }
                 }
                 
+                if (_jcfg._iter_opts.dual() )
+                {
                 if (_rdel._euclidean_rdel_3d.
                         _tria._nset.count() > 0)
                 {
@@ -391,6 +396,7 @@
                     {
                     _file << (real_type)0. << "\n" ;
                     }
+                }
                 }
                 }
                 
@@ -1321,6 +1327,8 @@
                 if (_nnum > +0)
                 {
             /*-------------------------- write POWER data */                
+                if (_jcfg._iter_opts.dual() )
+                {
                 _file << "POWER=" 
                       << _nnum << ";1" << "\n" ;
                 
@@ -1337,6 +1345,7 @@
                     {
                     _file << _iter->pval(2) << "\n" ;
                     }
+                }
                 }
                 }
                 
@@ -1500,6 +1509,8 @@
                 if (_nnum > +0)
                 {
             /*-------------------------- write POWER data */                
+                if (_jcfg._iter_opts.dual() )
+                {
                 _file << "POWER=" 
                       << _nnum << ";1" << "\n" ;
                 
@@ -1516,6 +1527,7 @@
                     {
                     _file << _iter->pval(3) << "\n" ;
                     }
+                }
                 }
                 }
                 
