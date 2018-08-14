@@ -7,7 +7,7 @@ function [ffun] = limgrad(varargin)
 %   FFUN = LIMGRAD(... ,OPTS) specifies an additional set of
 %   user-defined options via the struct OPTS, including:
 %
-% - OPTS.ITER = {+100} -- max. allowable global iterations.
+% - OPTS.ITER = {+250} -- max. allowable global iterations.
 %
 % - OPTS.SLVR = {'CELL-LIMITER'}, 'EDGE-LIMITER' -- select
 %   solver kind: 'CELL-LIMITER' implements a multi-dimensi-
