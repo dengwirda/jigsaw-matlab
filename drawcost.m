@@ -105,7 +105,7 @@ end
 function deghist(dd,ty)
 %DEGHIST draw histogram for "degree" quality-metric.
 
-    dd = dd(:);
+    dd = cast(dd(:),'double');
     be = 1:max(dd);
     hc = histc(dd,be);
     
@@ -152,7 +152,7 @@ end
 function anghist(ad,ty)
 %ANGHIST draw histogram for "angle" quality-metric.
 
-    ad = ad(:);
+    ad = cast(ad(:),'double');
     be = linspace(0.,180.,91);
     bm =(be(1:end-1)+be(2:end))/2.;
     hc = histc(ad,be);
@@ -285,7 +285,7 @@ end
 function scrhist(sc,ty)
 %SCRHIST draw histogram for "score" quality-metric.
 
-    sc = sc(:);
+    sc = cast(sc(:),'double');
     be = linspace(0.,1.,101);
     bm = (be(1:end-1)+be(2:end)) / 2.;
     hc = histc(sc,be);
@@ -406,6 +406,7 @@ end
 function hfnhist(hf,ty)
 %HFNHIST draw histogram for "hfunc" quality-metric.
 
+    hf = cast(hf(:),'double');
     be = linspace(0.,2.,101);
     bm = (be(1:end-1)+be(2:end)) / 2.;
     hc = histc(hf,be);
