@@ -59,7 +59,6 @@ can be used to build a `JIGSAW` shared library. See the headers in <a href="../m
 
 	* Create a new, empty MSVC project.
 	* Import the jigsaw.cpp file, this contains the main() entry-point.
-	* Modify the MSVC project settings to include the "../src/" directory.
 
 #### `Folder Structure`
 
