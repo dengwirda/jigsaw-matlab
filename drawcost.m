@@ -2,7 +2,6 @@ function drawcost(cost,varargin)
 %DRAWCOST draw JIGSAW cost data.
 
 %-----------------------------------------------------------
-%   JIGSAW-0.9.6.x
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
 %   14-Jul-2018

@@ -2,7 +2,6 @@ function [okay] = meshhas(mesh,varargin)
 %MESHHAS helper routine to safely query a MESH structure.
 
 %-----------------------------------------------------------
-%   JIGSAW-0.9.6.x
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
 %   19-Jun-2018
