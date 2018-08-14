@@ -1,11 +1,11 @@
 function [varargout] = jigsaw(opts)
-%JIGSAW a MATLAB interface to the JIGSAW mesh generator.
+%JIGSAW an interface to the JIGSAW mesh generator.
 %
 %   MESH = JIGSAW(OPTS);
 %
-%   Call the JIGSAW mesh generator using the configuration 
-%   options specified in the OPTS structure. See SAVEMSH //
-%   LOADMSH for a description of the MESH output structure.
+%   Call the JIGSAW mesh generator using the config. options 
+%   specified in the OPTS structure. See the SAVEMSH/LOADMSH 
+%   routines for a description of the MESH output structure.
 %
 %   OPTS is a user-defined set of meshing options:
 %
@@ -23,6 +23,12 @@ function [varargout] = jigsaw(opts)
 %   OPTS.MESH_FILE - 'MESHNAME.MSH', a string containing the 
 %       name of the output file (will be created on output).
 %
+%   OPTIONAL fields (INIT):
+%   ----------------------
+%
+%   OPTS.INIT_FILE - 'INITNAME.MSH', a string containing the 
+%       name of the initial distribution file (is required 
+%       at input).
 %
 %   OPTIONAL fields (GEOM):
 %   ----------------------
@@ -50,7 +56,6 @@ function [varargout] = jigsaw(opts)
 %       features are located between any neighbouring 
 %       "faces" that subtend angles less than ETA2 deg.
 %
-%
 %   OPTIONAL fields (HFUN):
 %   ----------------------
 %
@@ -73,7 +78,6 @@ function [varargout] = jigsaw(opts)
 %
 %   OPTS.HFUN_HMIN - {default=0.00} min. mesh-size function 
 %       value. Interpreted based on SCAL setting.
-%
 %
 %   OPTIONAL fields (MESH):
 %   ----------------------
@@ -158,7 +162,6 @@ function [varargout] = jigsaw(opts)
 %       until the volume-length ratio exceeds VOL3. Can be 
 %       used to supress "sliver" elements.
 %
-%
 %   OPTIONAL fields (OPTM):
 %   ----------------------
 %
@@ -182,11 +185,10 @@ function [varargout] = jigsaw(opts)
 %       of DUAL grid geometry.
 %
 %   OPTS.OPTM_ZIP_ - {default= true} allow for "merge" oper-
-%       ations on sub-faces.
+%       ations on sub-face topology.
 %
 %   OPTS.OPTM_DIV_ - {default= true} allow for "split" oper-
-%       ations on sub-faces.
-%
+%       ations on sub-face topology.
 %
 %   OPTIONAL fields (MISC):
 %   ----------------------
@@ -204,36 +206,34 @@ function [varargout] = jigsaw(opts)
 % * D. Engwirda, (2014): "Locally-optimal Delaunay-refineme-
 %   nt and optimisation-based mesh generation", Ph.D. Thesis 
 %   School of Mathematics and Statistics, Univ. of Sydney.
-%   http://hdl.handle.net/2123/13148
+%   https://hdl.handle.net/2123/13148
 %
 % * D. Engwirda & D. Ivers, (2016): "Off-centre Steiner poi-
 %   nts for Delaunay-refinement on curved surfaces", Comput-
 %   er-Aided Design, 72, 157--171.
-%   http://dx.doi.org/10.1016/j.cad.2015.10.007
+%   https://doi.org/10.1016/j.cad.2015.10.007
 %
-% * D. Engwirda, (2016): "Voronoi-based Point-placement for 
-%   Three-dimensional Delaunay-refinement", Proceedngs of 
-%   the 24th International Meshing Roundtable, Procedia Eng-
-%   ineering, 124, 330--342.
-%   http://dx.doi.org/10.1016/j.proeng.2015.10.143
+% * D. Engwirda, (2015): "Voronoi-based Point-placement for 
+%   Three-dimensional Delaunay-refinement", Procedia Engin-
+%   eering, 124, 330--342.
+%   https://doi.org/10.1016/j.proeng.2015.10.143
 %
 % * D. Engwirda, (2016): "Conforming Restricted Delaunay 
-%   Mesh Generation for Piecewise Smooth Complexes", Procee-
-%   dngs of the 25th International Meshing Roundtable, Proc-
-%   edia Engineering, 163, 84--96.
+%   Mesh Generation for Piecewise Smooth Complexes", Proced-
+%   ia Engineering, 163, 84--96.
 %   https://doi.org/10.1016/j.proeng.2016.11.024
 %
 % * D. Engwirda, (2017): "JIGSAW-GEO (1.0): locally orthogo-
 %   nal staggered unstructured grid generation for general 
 %   circulation modelling on the sphere, Geosci. Model Dev., 
-%   10, 2117-2140, https://doi.org/10.5194/gmd-10-2117-2017
+%   10, 2117-2140.
+%   https://doi.org/10.5194/gmd-10-2117-2017
 %
 
 %-----------------------------------------------------------
-%   JIGSAW-0.9.5.x
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   14-Dec-2017
+%   13-Jun-2018
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -339,7 +339,17 @@ function makejig(name,opts)
         case 'verbosity'
         pushints(ffid,opts.verbosity,'VERBOSITY');
     
+        case 'tria_file'
+        pushchar(ffid,opts.tria_file,'TRIA_FILE');
+        
+        case 'bnds_file'
+        pushchar(ffid,opts.bnds_file,'BNDS_FILE');
+        
         case 'jcfg_file' ;
+    
+    %------------------------------------------ INIT options
+        case 'init_file'
+        pushchar(ffid,opts.init_file,'INIT_FILE');
         
     %------------------------------------------ GEOM options
         case 'geom_file'
@@ -377,6 +387,8 @@ function makejig(name,opts)
         case 'mesh_file'
         pushchar(ffid,opts.mesh_file,'MESH_FILE');
         
+        case 'bnds_kern'
+        pushchar(ffid,opts.bnds_kern,'BNDS_KERN');
         case 'mesh_kern'
         pushchar(ffid,opts.mesh_kern,'MESH_KERN');
         

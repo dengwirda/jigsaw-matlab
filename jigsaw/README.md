@@ -1,13 +1,6 @@
-## `JIGSAW: An unstrutured mesh generator`
+## `JIGSAW: An unstructured mesh generator`
 
-<p align="center">
-  <img src = "../master/img/bunny-TRIA3-1.png"> &nbsp
-  <img src = "../master/img/bunny-TRIA3-2.png"> &nbsp
-  <img src = "../master/img/bunny-TRIA3-3.png"> &nbsp
-  <img src = "../master/img/bunny-TRIA4-3.png">
-</p>
-
-`JIGSAW` is a computational library for unstructured mesh generation; designed to generate high-quality Delaunay triangulations and polyhedral decompositions of general planar, surface and volumetric domains. `JIGSAW` includes both `refinement`-based algorithms for the construction of new meshes, as well as `optimisation`-driven techniques designed to improve existing grids.
+`JIGSAW` is a computational library for unstructured mesh generation; designed to generate high-quality Delaunay triangulations and polyhedral decompositions of general planar, surface and volumetric domains. `JIGSAW` includes both refinement-based algorithms for the construction of new meshes, as well as optimisation-driven techniques designed to improve existing grids.
 
 This package provides the underlying `C++` source for `JIGSAW`; defining a basic command-line interface and a `C`-format `API`. A <a href="http://www.mathworks.com">`MATLAB`</a> / <a href="http://www.gnu.org/software/octave">`OCTAVE`</a> based scripting interface, including a range of additional facilities for file I/O, mesh visualisation and post-processing operations can be found <a href="https://github.com/dengwirda/jigsaw-matlab">here</a>.
 
@@ -19,17 +12,20 @@ This package provides the underlying `C++` source for `JIGSAW`; defining a basic
 `JIGSAW` is written as a `header-only` library in `C++`. Both a basic command-line interface and a `C`-format `API` are defined:
 
       JIGSAW::
-      ├── src -- JIGSAW src code
-      ├── inc -- JIGSAW header files (for libjigsaw)
-      ├── bin -- put JIGSAW exe binaries here
-      ├── lib -- put JIGSAW lib binaries here
-      ├── geo -- geometry definitions and input data
-      ├── out -- default folder for JIGSAW output
-      └── uni -- unit tests and libjigsaw example programs
+      └── jigsaw
+	    ├── src -- JIGSAW source files
+	    ├── inc -- JIGSAW header files (for libjigsaw)
+	    ├── bin -- put JIGSAW exe binaries here
+	    ├── lib -- put JIGSAW lib binaries here
+	    ├── geo -- default folder for JIGSAW inputs
+	    ├── out -- default folder for JIGSAW output
+	    └── uni -- unit tests and libjigsaw programs
+
+It's also possible to interact with the `JIGSAW` back-end directly, either through `(i)` scripting: building text file inputs and calling the `JIGSAW` executable from the command-line, or `(ii)` programmatically: using `JIGSAW` data-structures within your own applications and calling the library via its `API`.
 
 ## `Getting Started`
 
-The first step is to compile the code! The `JIGSAW` src can be found in <a href="../master/src/">`../jigsaw/src/`</a>.
+The first step is to compile the code! The `JIGSAW` src can be found in <a href="../master/jigsaw/src/">`../jigsaw/src/`</a>.
 
 `JIGSAW` is a `header-only` package - there is only the single main `jigsaw.cpp` file that simply `#include`'s the rest of the library as headers. The resulting build process should be fairly straight-forward as a result. `JIGSAW` does not currently dependent on any external packages or libraries.
 
@@ -37,15 +33,15 @@ The first step is to compile the code! The `JIGSAW` src can be found in <a href=
 
 `JIGSAW` has been successfully built using various versions of the `g++` and `llvm` compilers. Since the build process is a simple one-liner, there's no `make` script - instead:
 
-	g++ -std=c++11 -pedantic -Wall -s -O3 -flto -D NDEBUG -I libcpp -static-libstdc++ 
+	g++ -std=c++11 -pedantic -Wall -s -O3 -flto -D NDEBUG -static-libstdc++ 
 	jigsaw.cpp -o jigsaw64r
 	
 can be used to build a `JIGSAW` executable, while:
 
-	g++ -std=c++11 -pedantic -Wall -O3 -flto -fPIC -D NDEBUG -I libcpp -static-libstdc++ 
+	g++ -std=c++11 -pedantic -Wall -O3 -flto -fPIC -D NDEBUG -static-libstdc++ 
 	jigsaw.cpp -shared -o libjigsaw64r.so
 
-can be used to build a `JIGSAW` shared library. See the headers in <a href="../master/inc/">`../jigsaw/inc/`</a> for details on the `API`. The `#define __lib_jigsaw` directive in `jigsaw.cpp` toggles the source between executable and shared-library modes.
+can be used to build a `JIGSAW` shared library. See the headers in <a href="../master/jigsaw/inc/">`../jigsaw/inc/`</a> for details on the `API`. The `#define __lib_jigsaw` directive in `jigsaw.cpp` toggles the source between executable and shared-library modes.
 
 #### `On Windows`
 
@@ -53,7 +49,7 @@ can be used to build a `JIGSAW` shared library. See the headers in <a href="../m
 
 	* Create a new, empty MSVC project.
 	* Import the jigsaw.cpp file, this contains the main() entry-point.
-	* Modify the MSVC project settings to include the "../src/" and "../src/libcpp/" directories.
+	* Modify the MSVC project settings to include the "../src/" directory.
 
 #### `Folder Structure`
 
@@ -86,7 +82,7 @@ This program may be freely redistributed under the condition that the copyright 
 
 If you make use of `JIGSAW` please make reference to the following. The algorithmic developments behind `JIGSAW` have been the subject of a number of publications, originally stemming from my PhD research at the University of Sydney:
 
-`[1]` - Darren Engwirda: Generalised primal-dual grids for unstructured co-volume schemes, under review, https://arxiv.org/abs/1712.02657, 2017.
+`[1]` - Darren Engwirda: Generalised primal-dual grids for unstructured co-volume schemes, to appear in J. Comp. Phys., https://arxiv.org/abs/1712.02657, 2018.
 
 `[2]` - Darren Engwirda, Conforming Restricted Delaunay Mesh Generation for Piecewise Smooth Complexes, Procedia Engineering, Volume 163, Pages 84-96, ISSN 1877-7058, https://doi.org/10.1016/j.proeng.2016.11.024, 2016.
 

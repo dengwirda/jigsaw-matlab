@@ -54,12 +54,10 @@ function [mesh] = loadmsh(name)
 %   MESH.VALUE - [NPxNV] array of "values" associated with
 %       the vertices of the mesh.
 %
-%
 %   .IF. MESH.MSHID == 'ELLIPSOID-MESH':
 %   -----------------------------------
 %
 %   MESH.RADII - [ 3x 1] array of principle ellipsoid radii.
-%
 %
 %   .IF. MESH.MSHID == 'EUCLIDEAN-GRID':
 %   .OR. MESH.MSHID == 'ELLIPSOID-GRID':
@@ -80,7 +78,7 @@ function [mesh] = loadmsh(name)
 
 %-----------------------------------------------------------
 %   Darren Engwirda
-%   github.com/dengwirda/jigsaw/
+%   github.com/dengwirda/jigsaw-geo-matlab
 %   11-Nov-2017
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
@@ -159,7 +157,7 @@ function [mesh] = loadmsh(name)
                 
             case 'coord'
 
-        %-- read "coord" data
+        %-- read "COORD" data
               
                 stag = regexp(tstr{2},';','split');
         
