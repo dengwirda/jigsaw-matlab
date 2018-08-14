@@ -37,12 +37,12 @@ function meshdemo(varargin)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   08-Dec-2017
+%   13-Aug-2018
 %   de2363@columbia.edu
 %-----------------------------------------------------------
 %
 
-    close all ;
+    close all ; libpath ;
 
     n = 1;
 
@@ -84,9 +84,9 @@ function demo1
     geom = loadmsh (opts.geom_file);
 
 %-- draw the output
-    drawmesh(geom,...
-        struct('title','Input geometry',...
-            'flips',[3,1,2],'views',[50,10]));
+    figure ; drawmesh(geom);
+    view(0,-110); axis image;
+    title('INPUT GEOMETRY');
     
 %-- meshing options for JIGSAW
     opts.mesh_kern = 'delaunay';
@@ -98,9 +98,9 @@ function demo1
     mesh = jigsaw  (opts) ;
  
 %-- draw the output
-    drawmesh(mesh,...
-        struct('title','JIGSAW output (delaunay)', ...
-            'flips',[3,1,2],'views',[50,10]));
+    figure ; drawmesh(mesh);
+    view(0,-110); axis image;
+    title('JIGSAW (DELAUNAY)');
         
     drawcost(meshcost(mesh)) ;
     
@@ -114,9 +114,9 @@ function demo1
     mesh = jigsaw  (opts) ;
  
 %-- draw the output
-    drawmesh(mesh,...
-        struct('title','JIGSAW output (delfront)', ...
-            'flips',[3,1,2],'views',[50,10]));
+    figure ; drawmesh(mesh);
+    view(0,-110); axis image;
+    title('JIGSAW (DELFRONT)');
 
     drawcost(meshcost(mesh)) ;
     
@@ -158,9 +158,9 @@ function demo2
     geom = loadmsh (opts.geom_file);
 
 %-- draw the output
-    drawmesh(geom,...
-        struct('title','Input geometry',...
-            'flips',[3,1,2],'views',[50,10]));
+    figure ; drawmesh(geom);
+    view(-10,-110); axis image;
+    title('INPUT GEOMETRY');
     
 %-- meshing options for JIGSAW
     opts.mesh_kern = 'delaunay';
@@ -173,9 +173,21 @@ function demo2
     mesh = jigsaw  (opts) ;
  
 %-- draw the output
-    drawmesh(mesh,...
-        struct('title','JIGSAW output (delaunay)',...
-            'flips',[3,1,2],'views',[50,10]));
+    mask = [];
+    mask.tria3 = true(size( ...
+    mesh.tria3.index,1),1);
+    
+    figure ; drawmesh(mesh,mask);
+    view(-10,-110); axis image;
+    title('JIGSAW (DELAUNAY)');
+    
+    mask = [];
+    mask.tria4 = true(size( ...
+    mesh.tria4.index,1),1);
+    
+    figure ; drawmesh(mesh,mask);
+    view(-10,-110); axis image;
+    title('JIGSAW (DELAUNAY)');
     
     drawcost(meshcost(mesh)) ;
     
@@ -190,9 +202,21 @@ function demo2
     mesh = jigsaw  (opts) ;
  
 %-- draw the output
-    drawmesh(mesh,...
-        struct('title','JIGSAW output (delfront)',...
-            'flips',[3,1,2],'views',[50,10]));
+    mask = [];
+    mask.tria3 = true(size( ...
+    mesh.tria3.index,1),1);
+    
+    figure ; drawmesh(mesh,mask);
+    view(-10,-110); axis image;
+    title('JIGSAW (DELFRONT)');
+    
+    mask = [];
+    mask.tria4 = true(size( ...
+    mesh.tria4.index,1),1);
+    
+    figure ; drawmesh(mesh,mask);
+    view(-10,-110); axis image;
+    title('JIGSAW (DELFRONT)');
 
     drawcost(meshcost(mesh)) ;
     
@@ -242,9 +266,9 @@ function demo3
     geom = loadmsh (opts.geom_file);
 
 %-- draw the output
-    drawmesh(geom,...
-        struct('title','Input geometry',...
-            'flips',[3,2,1],'views',[-40,20]));
+    figure ; drawmesh(geom);
+    view(-30,+30); axis image;
+    title('INPUT GEOMETRY');
     
 %-- meshing options for JIGSAW
     opts.mesh_kern = 'delfront';
@@ -258,15 +282,16 @@ function demo3
     mesh = jigsaw  (opts) ;
  
 %-- draw the output
-    drawmesh(mesh,...
-        struct('title','JIGSAW output (FEAT.=false)',...
-            'flips',[3,2,1],'views',[-40,20]));
+    figure ; drawmesh(mesh);
+    view(-30,+30); axis image;
+    title('JIGSAW (FEAT=FALSE)');
     
 %-- meshing options for JIGSAW
     opts.mesh_kern = 'delfront';
     opts.mesh_dims = 2 ;
     
     opts.geom_feat = true ;
+    opts.mesh_top1 = true ;
     
     opts.hfun_hmax = 0.03 ;
     
@@ -274,9 +299,21 @@ function demo3
     mesh = jigsaw  (opts) ;
  
 %-- draw the output
-    drawmesh(mesh,...
-        struct('title','JIGSAW output (FEAT.=true)',...
-            'flips',[3,2,1],'views',[-40,20]));
+    mask = [];
+    mask.edge2 = true(size( ...
+    mesh.edge2.index,1),1);
+    
+    figure ; drawmesh(mesh,mask);
+    view(-30,+30); axis image;
+    title('JIGSAW (FEAT=TRUE)');
+    
+    mask = [];
+    mask.tria3 = true(size( ...
+    mesh.tria3.index,1),1);
+    
+    figure ; drawmesh(mesh,mask);
+    view(-30,+30); axis image;
+    title('JIGSAW (FEAT=TRUE)');
     
     drawnow ;
     
@@ -314,8 +351,7 @@ function demo4
     geom = loadmsh (opts.geom_file);
 
 %-- draw the output
-    drawmesh(geom,...
-        struct('title','Input geometry'));
+    figure ; drawmesh(geom);
     
 %-- meshing options for JIGSAW
     opts.mesh_kern = 'delfront';
@@ -326,14 +362,27 @@ function demo4
     
     opts.geom_feat = true ;
     
-    opts.hfun_hmax = 0.05 ;
+    opts.hfun_hmax = 0.15
     
 %-- build the mesh!
     mesh = jigsaw  (opts) ;
  
 %-- draw the output
-    drawmesh(mesh,...
-        struct('title','JIGSAW output (TOPO.=false)'));
+    mask = [];
+    mask.edge2 = true(size( ...
+    mesh.edge2.index,1),1);
+    
+    figure ; drawmesh(mesh,mask);
+    axis image;
+    title('JIGSAW (TOPO=FALSE)');
+    
+    mask = [];
+    mask.tria3 = true(size( ...
+    mesh.tria3.index,1),1);
+    
+    figure ; drawmesh(mesh,mask);
+    axis image;
+    title('JIGSAW (TOPO=FALSE)');
     
 %-- meshing options for JIGSAW
     opts.mesh_kern = 'delfront';
@@ -344,14 +393,27 @@ function demo4
     
     opts.geom_feat = true ;
     
-    opts.hfun_hmax = 0.05 ;
+    opts.hfun_hmax = 0.15 ;
     
 %-- build the mesh!
     mesh = jigsaw  (opts) ;
  
 %-- draw the output
-    drawmesh(mesh,...
-        struct('title','JIGSAW output (TOPO.=true)') );
+    mask = [];
+    mask.edge2 = true(size( ...
+    mesh.edge2.index,1),1);
+    
+    figure ; drawmesh(mesh,mask);
+    axis image;
+    title('JIGSAW (TOPO=TRUE)');
+    
+    mask = [];
+    mask.tria3 = true(size( ...
+    mesh.tria3.index,1),1);
+    
+    figure ; drawmesh(mesh,mask);
+    axis image;
+    title('JIGSAW (TOPO=TRUE)');
     
     drawnow ;
     
@@ -391,8 +453,9 @@ function demo5
     geom = loadmsh (opts.geom_file);
 
 %-- draw the output
-    drawmesh(geom,...
-        struct('title','Input geometry'));
+    figure ; drawmesh(geom);
+    axis image;
+    title('INPUT GEOMETRY');
     
 %-- meshing options for JIGSAW
     opts.mesh_kern = 'delfront';
@@ -408,18 +471,14 @@ function demo5
 %-- build the mesh!
     back = jigsaw  (opts) ;
  
-%-- draw the output
-    drawmesh(back,...
-        struct('title','JIGSAW output'));
-    
     
     fun1 = ...
-   +.1 * (back.point.coord(:,1)-.40).^2 + ...
-   +2. * (back.point.coord(:,2)-.55).^2 ;
+   +0.1*(back.point.coord(:,1)-.40).^2 + ...
+   +2.0*(back.point.coord(:,2)-.55).^2 ;
    
     fun2 = ...
-   +.7 * (back.point.coord(:,1)-.75).^2 + ...
-   +.7 * (back.point.coord(:,2)-.45).^2 ;
+   +0.7*(back.point.coord(:,1)-.75).^2 + ...
+   +0.7*(back.point.coord(:,2)-.45).^2 ;
     
     hmin = 0.01;
     hmax = 0.10;
@@ -427,10 +486,15 @@ function demo5
     back.value = 0.4 * ...
     max(min(min(fun1,fun2),hmax),hmin) ;
     
+%-- draw the output
+    figure ; drawmesh(back);
+    axis image;
+    title('MESH-SIZE H(X)');
+
     
 %-- setup files for JIGSAW
     opts.geom_file = ...            % domain file
-        ['jigsaw/geo/',name,'.msh'];
+    ['jigsaw/geo/',name,'.msh'];
     
     opts.jcfg_file = ...            % config file
     ['jigsaw/out/',name,'-MESH.jig'] ;
@@ -460,16 +524,11 @@ function demo5
     mesh = jigsaw  (opts) ;
  
 %-- draw the output
-    drawmesh(mesh,...
-        struct('title','JIGSAW output'));
-    
-    figure  ;
-    patch ('faces',back.tria3.index(:,1:3), ...
-        'vertices',back.point.coord(:,1:2), ...
-        'facevertexcdata',back.value, ...
-        'facecolor','flat', ...
-        'edgecolor','k' ) ;
-    axis image off ;
+    figure ; drawmesh(mesh);
+    axis image;
+    title('JIGSAW OUTPUT');
+
+    drawcost(meshcost(mesh));
     
     drawnow ;
     
@@ -477,17 +536,9 @@ function demo5
         'position',[.65,.50,.30,.35]) ;
     
     set(figure(2),'units','normalized', ...
-        'position',[.05,.50,.30,.35]) ;
+        'position',[.35,.50,.30,.35]) ;
     set(figure(3),'units','normalized', ...
         'position',[.05,.50,.30,.35]) ;
-    
-    set(figure(4),'units','normalized', ...
-        'position',[.35,.50,.30,.35]) ;
-    set(figure(5),'units','normalized', ...
-        'position',[.35,.50,.30,.35]) ;
-        
-    set(figure(6),'units','normalized', ...
-        'position',[.05,.05,.30,.35]) ;
         
 end
 
@@ -523,8 +574,9 @@ function demo6
     savemsh(opts.geom_file,geom) ;
     
 %-- draw the output
-    drawmesh(geom,...
-        struct('title','Input surface','views',[-30,+30]));
+    figure ; drawmesh(geom);
+    axis image;
+    title('INPUT GEOMETRY');
     
 %-- meshing options for JIGSAW
     opts.mesh_kern = 'delfront';
@@ -536,8 +588,9 @@ function demo6
     mesh = jigsaw  (opts) ;
  
 %-- draw the output
-    drawmesh(mesh,...
-        struct('title','JIGSAW output','views',[-30,+30]));
+    figure ; drawmesh(mesh);
+    axis image;
+    title('JIGSAW OUTPUT');
     
     drawnow ;
     
@@ -589,8 +642,9 @@ function demo7
     savemsh(opts.geom_file,geom) ;
     
 %-- draw the output
-    drawmesh(geom,...
-        struct('title','Input surface'));
+    figure ; drawmesh(geom);
+    axis image;
+    title('INPUT GEOMETRY');
     
 %-- meshing options for JIGSAW
     opts.mesh_kern = 'delfront';
@@ -604,8 +658,9 @@ function demo7
     mesh = jigsaw  (opts) ;
  
 %-- draw the output
-    drawmesh(mesh,...
-        struct('title','JIGSAW output'));
+    figure ; drawmesh(mesh);
+    axis image;
+    title('JIGSAW OUTPUT');
     
     drawnow ;
     

@@ -2,10 +2,11 @@ function [okay] = meshhas(mesh,varargin)
 %MESHHAS helper routine to safely query a MESH structure.
 
 %-----------------------------------------------------------
+%   JIGSAW-0.9.6.x
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   22-Mar-2016
-%   de2363@columbia.edu
+%   19-Jun-2018
+%   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
 
@@ -15,37 +16,47 @@ function [okay] = meshhas(mesh,varargin)
     if (nargin >= +3), item = varargin{2}; end
     
     if (nargin <= +1 || nargin >= +4)
-        error('Incorrect number of arguments!') ;
+        error('meshhas:incorrectNumbInputs' , ...
+            'Incorrect number of arguments!') ;
     end
    
     if (~isstruct(mesh))
-        error('MESH must be a valid struct.');
+        error('meshhas:incorrectInputClass' , ...
+            'MESH must be a valid struct.') ;
     end
     if (~isempty(base) && ~ischar(base))
-        error('BASE must be a valid string!'); 
+        error('meshhas:incorrectInputClass' , ...
+            'BASE must be a valid string!') ; 
     end
     if (~isempty(item) && ~ischar(item))
-        error('ITEM must be a valid string!');
+        error('meshhas:incorrectInputClass' , ...
+            'ITEM must be a valid string!') ;
     end
     
     if (isempty(item))
 %-- default ITEM kinds given BASE types
-    switch (base)
-        case 'point', item = 'coord';
-        case 'edge2', item = 'index';
-        case 'tria3', item = 'index';
-        case 'quad4', item = 'index';
-        case 'tria4', item = 'index';
-        case 'hexa8', item = 'index';
-        case 'wedg6', item = 'index';
-        case 'pyra5', item = 'index';
+    switch (lower(base))
+        case 'point', item = 'coord' ;
+        case 'edge2', item = 'index' ;
+        case 'tria3', item = 'index' ;
+        case 'quad4', item = 'index' ;
+        case 'tria4', item = 'index' ;
+        case 'hexa8', item = 'index' ;
+        case 'wedg6', item = 'index' ;
+        case 'pyra5', item = 'index' ;
     end
     end
  
+    if (isempty(item))
+%-- check whether MESH.BASE exists    
+    okay = isfield(mesh,base) && ...
+            ~isempty(mesh.(base)) ;
+    else
 %-- check whether MESH.BASE.ITEM exists
     okay = isfield(mesh,base) && ...
         isfield(mesh.(base),item) && ...
             ~isempty(mesh.(base).(item)) ;
+    end
     
 end
 

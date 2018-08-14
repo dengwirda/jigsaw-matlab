@@ -55,12 +55,10 @@ function savemsh(name,mesh)
 %       the vertices of the mesh. NV values are associated
 %       with each vertex.
 %
-%
 %   .IF. MESH.MSHID == 'ELLIPSOID-MESH':
 %   -----------------------------------
 %
 %   MESH.RADII - [ 3x 1] array of principle ellipsoid radii.
-%
 %
 %   .IF. MESH.MSHID == 'EUCLIDEAN-GRID':
 %   .OR. MESH.MSHID == 'ELLIPSOID-GRID':
@@ -81,11 +79,13 @@ function savemsh(name,mesh)
 
 %-----------------------------------------------------------
 %   Darren Engwirda
-%   github.com/dengwirda/jigsaw/
-%   03-Dec-2017
+%   github.com/dengwirda/jigsaw-matlab
+%   26-Jul-2018
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
+
+   [ok] = certify(mesh);
 
     if (~ischar  (name))
         error('NAME must be a valid file-name!') ;

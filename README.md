@@ -1,4 +1,4 @@
-## `JIGSAW: An unstrutured mesh generator`
+## `JIGSAW: An unstructured mesh generator`
 
 <p align="center">
   <img src = "../master/jigsaw/img/bunny-TRIA3-1.png"> &nbsp
@@ -15,35 +15,40 @@ This package provides a <a href="http://www.mathworks.com">`MATLAB`</a> / <a hre
 
 ## `Code Structure`
 
-`JIGSAW` is written as a `header-only` library in `C++`. Both a basic command-line interface and a `C`-format `API` are defined:
+`JIGSAW` is a multi-part library, consisting of a `MATLAB` / `OCTAVE` front-end, and a core `c++` back-end. All of the heavy-lifting is done in the `c++` layer - the interface contains additional scripts for `file I/O`, `visualisation` and general `data processing`:
 
-      JIGSAW::
-      ├── MATLAB/OCTAVE utilities
-      └── jigsaw
-          ├── src -- JIGSAW src code
-          ├── inc -- JIGSAW header files (for libjigsaw)
-          ├── bin -- put JIGSAW exe binaries here
-          ├── lib -- put JIGSAW lib binaries here
-          ├── geo -- geometry definitions and input data
-          ├── out -- default folder for JIGSAW output
-          └── uni -- unit tests and libjigsaw example programs
+	JIGASW :: MATLAB/OCTAVE top-level functions
+	├── script  -- MATLAB/OCTAVE utilities
+	└── jigsaw
+	    ├── src -- JIGSAW source files
+	    ├── inc -- JIGSAW header files (for libjigsaw)
+	    ├── bin -- put JIGSAW exe binaries here
+	    ├── lib -- put JIGSAW lib binaries here
+	    ├── geo -- default folder for JIGSAW inputs
+	    ├── out -- default folder for JIGSAW output
+	    └── uni -- unit tests and libjigsaw programs
+
+
+The `MATLAB` / `OCTAVE` interface is provided for convenience - you're not forced to use it, but it's perhaps the easiest way to get started!
+
+It's also possible to interact with the `JIGSAW` back-end directly, either through `(i)` scripting: building text file inputs and calling the `JIGSAW` executable from the command-line, or `(ii)` programmatically: using `JIGSAW` data-structures within your own applications and calling the library via its `API`.
 
 ## `Getting Started`
 
 The first step is to compile the code! The `JIGSAW` src can be found in <a href="../master/jigsaw/src/">`../jigsaw/src/`</a>.
 
-`JIGSAW` is a `header-only` package - there is only the single main `jigsaw.cpp` file that simply `#include`'s the rest of the library as headers. The resulting build process should be fairly straight-forward as a result. `JIGSAW` does not currently dependent on any external packages or libraries. To make use of `JIGSAW`'s  scripting interface, users are required to have access to a working <a href="http://www.mathworks.com">`MATLAB`</a> and/or <a href="https://www.gnu.org/software/octave">`OCTAVE`</a> installation.
+`JIGSAW` is a `header-only` package - there is only the single main `jigsaw.cpp` file that simply `#include`'s the rest of the library as headers. The resulting build process should be fairly straight-forward as a result. `JIGSAW` does not currently dependent on any external packages or libraries.
 
 #### `On Linux/Mac`
 
 `JIGSAW` has been successfully built using various versions of the `g++` and `llvm` compilers. Since the build process is a simple one-liner, there's no `make` script - instead:
 
-	g++ -std=c++11 -pedantic -Wall -s -O3 -flto -D NDEBUG -I libcpp -static-libstdc++ 
+	g++ -std=c++11 -pedantic -Wall -s -O3 -flto -D NDEBUG -static-libstdc++ 
 	jigsaw.cpp -o jigsaw64r
 	
 can be used to build a `JIGSAW` executable, while:
 
-	g++ -std=c++11 -pedantic -Wall -O3 -flto -fPIC -D NDEBUG -I libcpp -static-libstdc++ 
+	g++ -std=c++11 -pedantic -Wall -O3 -flto -fPIC -D NDEBUG -static-libstdc++ 
 	jigsaw.cpp -shared -o libjigsaw64r.so
 
 can be used to build a `JIGSAW` shared library. See the headers in <a href="../master/jigsaw/inc/">`../jigsaw/inc/`</a> for details on the `API`. The `#define __lib_jigsaw` directive in `jigsaw.cpp` toggles the source between executable and shared-library modes.
@@ -54,11 +59,11 @@ can be used to build a `JIGSAW` shared library. See the headers in <a href="../m
 
 	* Create a new, empty MSVC project.
 	* Import the jigsaw.cpp file, this contains the main() entry-point.
-	* Modify the MSVC project settings to include the "../src/" and "../src/libcpp/" directories.
+	* Modify the MSVC project settings to include the "../src/" directory.
 
 #### `Folder Structure`
 
-Once you have built the `JIGSAW` binaries, place them in the appropriate sub-folders in`../jigsaw/bin/` and/or `../jigsaw/lib/` directories, so that they can be found by the unit tests in `../jigsaw/uni/`.
+Once you have built the `JIGSAW` binaries, place them in the appropriate sub-folders in`../jigsaw/bin/` and/or `../jigsaw/lib/` directories, so that they can be found by the `MATLAB` / `OCTAVE` interface, and the unit tests in `../jigsaw/uni/`. If you wish to support multiple platforms, simply build binaries for each `OS` and place them in the appropriate directory - the `MATLAB` / `OCATVE` interface will do an `OS`-dependent lookup to call the appropriate binary.
 
 ## `Example Problems`
 
@@ -82,9 +87,9 @@ This program may be freely redistributed under the condition that the copyright 
 
 ## `Attribution!`
 
-If you make use of `JIGSAW` please make reference to the following. The algorithmic developments behind `JIGSAW` have been the subject of a number of publications, originally stemming from my PhD research at the University of Sydney:
+If you make use of `JIGSAW` please make reference to the following papers. The algorithmic developments behind `JIGSAW` have been the subject of a number of publications, originally stemming from my PhD research at the University of Sydney:
 
-`[1]` - Darren Engwirda: Generalised primal-dual grids for unstructured co-volume schemes, under review, https://arxiv.org/abs/1712.02657, 2017.
+`[1]` - Darren Engwirda: Generalised primal-dual grids for unstructured co-volume schemes, to appear: J. Comp. Phys., https://arxiv.org/abs/1712.02657, 2017.
 
 `[2]` - Darren Engwirda, Conforming Restricted Delaunay Mesh Generation for Piecewise Smooth Complexes, Procedia Engineering, Volume 163, Pages 84-96, ISSN 1877-7058, https://doi.org/10.1016/j.proeng.2016.11.024, 2016.
 
