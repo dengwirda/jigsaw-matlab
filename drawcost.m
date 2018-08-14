@@ -4,7 +4,7 @@ function drawcost(cost,varargin)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   14-Jul-2018
+%   13-Aug-2018
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -13,17 +13,17 @@ function drawcost(cost,varargin)
 %-- silly inconsistent ax spacing...!
     
     axpos = cell(4,4);
-    axpos{2,1} = [.125,.550,.800,.300] ;
-    axpos{2,2} = [.125,.150,.800,.300] ;
+    axpos{2,1} = [.125,.600,.800,.275] ;
+    axpos{2,2} = [.125,.150,.800,.275] ;
     
     axpos{3,1} = [.125,.750,.800,.150] ;
     axpos{3,2} = [.125,.450,.800,.150] ;
     axpos{3,3} = [.125,.150,.800,.150] ;
     
-    axpos{4,1} = [.125,.835,.800,.135] ;
-    axpos{4,2} = [.125,.590,.800,.135] ;
-    axpos{4,3} = [.125,.345,.800,.135] ;
-    axpos{4,4} = [.125,.100,.800,.135] ;
+    axpos{4,1} = [.125,.835,.800,.125] ;
+    axpos{4,2} = [.125,.590,.800,.125] ;
+    axpos{4,3} = [.125,.345,.800,.125] ;
+    axpos{4,4} = [.125,.100,.800,.125] ;
     
 %-- draw cost histograms for 2-tria elements
     if (isfield(cost,'tria3'))

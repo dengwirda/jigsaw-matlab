@@ -575,6 +575,7 @@ function demo6
     
 %-- draw the output
     figure ; drawmesh(geom);
+    view(-30,+20); 
     axis image;
     title('INPUT GEOMETRY');
     
@@ -589,6 +590,7 @@ function demo6
  
 %-- draw the output
     figure ; drawmesh(mesh);
+    view(-30,+20); 
     axis image;
     title('JIGSAW OUTPUT');
     
@@ -598,8 +600,6 @@ function demo6
         'position',[.05,.50,.30,.35]) ;
     set(figure(2),'units','normalized',...
         'position',[.35,.50,.30,.35]) ;
-    set(figure(3),'units','normalized',...
-        'position',[.65,.50,.30,.35]) ;
     
 end
 
@@ -658,7 +658,19 @@ function demo7
     mesh = jigsaw  (opts) ;
  
 %-- draw the output
-    figure ; drawmesh(mesh);
+    mask = [];
+    mask.tria3 = true(size( ...
+    mesh.tria3.index,1),1);
+    
+    figure ; drawmesh(mesh,mask);
+    axis image;
+    title('JIGSAW OUTPUT');
+    
+    mask = [];
+    mask.tria4 = true(size( ...
+    mesh.tria4.index,1),1);
+    
+    figure ; drawmesh(mesh,mask);
     axis image;
     title('JIGSAW OUTPUT');
     
