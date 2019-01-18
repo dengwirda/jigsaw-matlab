@@ -4,7 +4,7 @@ function [okay] = meshhas(mesh,varargin)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   19-Jun-2018
+%   19-Dec-2018
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -43,6 +43,7 @@ function [okay] = meshhas(mesh,varargin)
         case 'hexa8', item = 'index' ;
         case 'wedg6', item = 'index' ;
         case 'pyra5', item = 'index' ;
+        case 'bound', item = 'index' ;
     end
     end
  

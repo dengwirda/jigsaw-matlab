@@ -7,7 +7,7 @@ function libpath
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   13-Aug-2018
+%   07-Sep-2018
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -16,6 +16,8 @@ function libpath
     
     filename = mfilename('fullpath') ;
     filepath = fileparts( filename ) ;
+    
+    libdata;
     
     addpath([filepath,'/script/aabb-tree']) ;
     addpath([filepath,'/script/draw-util']) ;
