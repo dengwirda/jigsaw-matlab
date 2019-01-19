@@ -81,8 +81,8 @@ meshdemo(1); % simple 3-dim. examples to get started
 meshdemo(2); % frontal-delaunay methods for surfaces
 meshdemo(3); % frontal-delaunay methods for volumes
 meshdemo(4); % dealing with sharp-features in piecewise smooth domains
-meshdemo(5); % dealing with topological constraints
-meshdemo(6); % dealing with user mesh-size controls
+meshdemo(5); % dealing with user mesh-size controls
+meshdemo(6); % dealing with topological constraints
 meshdemo(7); % mesh iso-surface geometry -- (case 1)
 meshdemo(8); % mesh iso-surface geometry -- (case 2)
 ````
