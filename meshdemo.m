@@ -88,17 +88,17 @@ function demo0
     set(figure(1),'units','normalized', ...
         'position',[.05,.50,.25,.30]) ;
     set(figure(2),'units','normalized', ...
-        'position',[.05,.20,.25,.20]) ;
+        'position',[.05,.15,.25,.25]) ;
     
     set(figure(3),'units','normalized', ...
         'position',[.30,.50,.25,.30]) ;
     set(figure(4),'units','normalized', ...
-        'position',[.30,.20,.25,.20]) ;
+        'position',[.30,.15,.25,.25]) ;
     
     set(figure(5),'units','normalized', ...
         'position',[.55,.50,.25,.30]) ;    
     set(figure(6),'units','normalized', ...
-        'position',[.55,.20,.25,.20]) ;
+        'position',[.55,.15,.25,.25]) ;
 
 end
 
@@ -115,12 +115,12 @@ function demo1
     set(figure(1),'units','normalized', ...
         'position',[.05,.50,.25,.30]) ;
     set(figure(2),'units','normalized', ...
-        'position',[.05,.15,.25,.30]) ;
+        'position',[.05,.10,.25,.30]) ;
     
     set(figure(3),'units','normalized', ...
         'position',[.30,.50,.25,.30]) ;
     set(figure(4),'units','normalized', ...
-        'position',[.30,.15,.25,.30]) ;    
+        'position',[.30,.10,.25,.30]) ;    
 
 end
 
@@ -667,9 +667,9 @@ function demo2
         'position',[.30,.50,.25,.30]) ;
     
     set(figure(3),'units','normalized', ...
-        'position',[.05,.20,.25,.20]) ;
+        'position',[.05,.15,.25,.25]) ;
     set(figure(5),'units','normalized', ...
-        'position',[.30,.20,.25,.20]) ;
+        'position',[.30,.15,.25,.25]) ;
     
 end
 
@@ -770,13 +770,13 @@ function demo3
         'position',[.30,.50,.25,.30]) ;
     
     set(figure(4),'units','normalized',...
-        'position',[.05,.20,.25,.20]) ;
+        'position',[.05,.15,.25,.25]) ;
     set(figure(5),'units','normalized',...
-        'position',[.05,.20,.25,.20]) ;
+        'position',[.05,.15,.25,.25]) ;
     set(figure(8),'units','normalized',...
-        'position',[.30,.20,.25,.20]) ;
+        'position',[.30,.15,.25,.25]) ;
     set(figure(9),'units','normalized',...
-        'position',[.30,.20,.25,.20]) ;
+        'position',[.30,.15,.25,.25]) ;
 
 end
 
@@ -971,7 +971,7 @@ function demo5
         'position',[.05,.50,.25,.30]) ;
         
     set(figure(4),'units','normalized', ...
-        'position',[.05,.20,.25,.20]) ;
+        'position',[.05,.15,.25,.25]) ;
         
 end
 
