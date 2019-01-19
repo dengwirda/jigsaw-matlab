@@ -30,7 +30,7 @@ function meshdemo(varargin)
 %
 %   - DEMO-6: Build planar meshes for the "lake" test-case. 
 %     Investigate options designed to preserve "topological" 
-%     consistency.
+%     consistency and sharp features.
 %
 %   - DEMO-7: Build surface- and volume-meshes based on an 
 %     analytic geometry definition. [iso-surface extraction 
@@ -45,7 +45,7 @@ function meshdemo(varargin)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   18-Jan-2019
+%   19-Jan-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -109,6 +109,7 @@ function demo1
 
     demoD() ;
     demoE() ;
+    demoF() ;
     
     drawnow ;        
     
@@ -120,8 +121,13 @@ function demo1
     set(figure(3),'units','normalized', ...
         'position',[.30,.50,.25,.30]) ;
     set(figure(4),'units','normalized', ...
-        'position',[.30,.10,.25,.30]) ;    
-
+        'position',[.30,.10,.25,.30]) ;
+        
+    set(figure(5),'units','normalized', ...
+        'position',[.55,.50,.25,.30]) ;
+    set(figure(6),'units','normalized', ...
+        'position',[.55,.10,.25,.30]) ;    
+    
 end
 
 function demoA
@@ -468,24 +474,122 @@ function demoD
     mesh = jigsaw  (opts) ;
     
     mask = [];
-    mask.tria3 = true(size( ...
+    mask.tria3 = true(size( ...         % just draw TRIA-3
     mesh.tria3.index,1),1);
     
     figure ; drawmesh(mesh,mask);
     view(-10,-110); axis image;
-    title('JIGSAW (DELFRONT)');
     
     mask = [];
-    mask.tria4 = true(size( ...
+    mask.tria4 = true(size( ...         % just draw TRIA-4
     mesh.tria4.index,1),1);
     
     figure ; drawmesh(mesh,mask);
     view(-10,-110); axis image;
-    title('JIGSAW (DELFRONT)');
     
 end
 
 function demoE
+% DEMO-1 --- Simple 3-dimensional examples illustrating the 
+%   construction of geometry + user-defined mesh-size const-
+%   raints.
+
+%------------------------------------ setup files for JIGSAW
+
+    opts.geom_file = ...                % GEOM file
+        ['jigsaw/geo/BOX3D-GEOM.msh'];
+    
+    opts.jcfg_file = ...                % JCFG file
+        ['jigsaw/out/BOX3D.jig'] ;
+    
+    opts.mesh_file = ...                % MESH file
+        ['jigsaw/out/BOX3D-MESH.msh'];
+    
+%------------------------------------ define JIGSAW geometry
+    
+    global JIGSAW_TRIA3_TAG ;
+    
+    geom.mshID = 'EUCLIDEAN-MESH';
+    
+    geom.point.coord = [    % list of xyz "node" coordinates
+        0, 0, 0, 0          % outer cube
+        3, 0, 0, 0
+        3, 3, 0, 0
+        0, 3, 0, 0
+        0, 0, 3, 0
+        3, 0, 3, 0
+        3, 3, 3, 0
+        0, 3, 3, 0
+        1, 1, 1, 0          % inner flat
+        2, 1, 1, 0
+        2, 2, 2, 0
+        1, 2, 2, 0 ] ;
+        
+    geom.tria3.index = [    % list of "trias" between points
+        1, 2, 3, 0          % outer cube
+        1, 3, 4, 0
+        5, 6, 7, 0
+        5, 7, 8, 0
+        1, 2, 6, 0
+        1, 6, 5, 0
+        2, 3, 7, 0
+        2, 7, 6, 0
+        3, 4, 8, 0
+        3, 8, 7, 0
+        4, 8, 5, 0
+        4, 5, 1, 0
+        9,10,11, 1          % inner flat
+        9,11,12, 1 ] ;
+        
+    geom.bound.index = [
+        1, 1, JIGSAW_TRIA3_TAG
+        1, 2, JIGSAW_TRIA3_TAG
+        1, 3, JIGSAW_TRIA3_TAG
+        1, 4, JIGSAW_TRIA3_TAG
+        1, 5, JIGSAW_TRIA3_TAG
+        1, 6, JIGSAW_TRIA3_TAG
+        1, 7, JIGSAW_TRIA3_TAG
+        1, 8, JIGSAW_TRIA3_TAG
+        1, 9, JIGSAW_TRIA3_TAG
+        1,10, JIGSAW_TRIA3_TAG
+        1,11, JIGSAW_TRIA3_TAG
+        1,12, JIGSAW_TRIA3_TAG
+            ] ;
+        
+    savemsh(opts.geom_file,geom);
+
+%------------------------------------ make mesh using JIGSAW 
+  
+    opts.hfun_hmax = 0.08 ;             % null HFUN limits
+    
+   %opts.mesh_kern = 'delaunay' ;
+    
+    opts.mesh_dims = +3 ;               % 3-dim. simplexes
+   
+    opts.mesh_top1 = true ;             % for sharp feat's
+    opts.geom_feat = true ;
+    
+    mesh = jigsaw  (opts) ;
+    
+    mask = [];
+    mask.tria3 = true(size( ...         % just draw TRIA-3
+    mesh.tria3.index,1),1);
+    
+    figure ; drawmesh(mesh,mask);
+    view(-10,-110); axis image;
+    
+    mask = [];
+    mask.tria4 = true(size( ...         % just draw TRIA-4
+    mesh.tria4.index,1),1);
+    mask.tria3 = ...
+    mesh.tria3.index(:,4)==+1 ;         % also "inner" tri
+    
+    figure ; drawmesh(mesh,mask);
+    view(-10,-110); axis image;
+    
+end
+
+function demoF
 % DEMO-1 --- Simple 3-dimensional examples illustrating the 
 %   construction of geometry + user-defined mesh-size const-
 %   raints.
@@ -583,20 +687,18 @@ function demoE
     mesh = jigsaw  (opts) ;
     
     mask = [];
-    mask.tria3 = true(size( ...
+    mask.tria3 = true(size( ...         % just draw TRIA-3
     mesh.tria3.index,1),1);
     
     figure ; drawmesh(mesh,mask);
     view(-10,-110); axis image;
-    title('JIGSAW (DELAUNAY)');
     
     mask = [];
-    mask.tria4 = true(size( ...
+    mask.tria4 = true(size( ...         % just draw TRIA-4
     mesh.tria4.index,1),1);
     
     figure ; drawmesh(mesh,mask);
     view(-10,-110); axis image;
-    title('JIGSAW (DELAUNAY)');
     
 end
 
@@ -710,7 +812,7 @@ function demo3
     mesh = jigsaw  (opts) ;
  
     mask = [];
-    mask.tria3 = true(size( ...
+    mask.tria3 = true(size( ...         % just draw TRIA-3
     mesh.tria3.index,1),1);
     
     figure ; drawmesh(mesh,mask);
@@ -718,7 +820,7 @@ function demo3
     title('JIGSAW (DELAUNAY)');
     
     mask = [];
-    mask.tria4 = true(size( ...
+    mask.tria4 = true(size( ...         % just draw TRIA-4
     mesh.tria4.index,1),1);
     
     figure ; drawmesh(mesh,mask);
@@ -738,7 +840,7 @@ function demo3
     mesh = jigsaw  (opts) ;
  
     mask = [];
-    mask.tria3 = true(size( ...
+    mask.tria3 = true(size( ...         % just draw TRIA-3
     mesh.tria3.index,1),1);
     
     figure ; drawmesh(mesh,mask);
@@ -746,7 +848,7 @@ function demo3
     title('JIGSAW (DELFRONT)');
     
     mask = [];
-    mask.tria4 = true(size( ...
+    mask.tria4 = true(size( ...         % just draw TRIA-4
     mesh.tria4.index,1),1);
     
     figure ; drawmesh(mesh,mask);
@@ -834,7 +936,7 @@ function demo4
     mesh = jigsaw  (opts) ;
  
     mask = [];
-    mask.edge2 = true(size( ...
+    mask.edge2 = true(size( ...         % just draw EDGE-2
     mesh.edge2.index,1),1);
     
     figure ; drawmesh(mesh,mask);
@@ -842,7 +944,7 @@ function demo4
     title('JIGSAW (FEAT=TRUE)');
     
     mask = [];
-    mask.tria3 = true(size( ...
+    mask.tria3 = true(size( ...         % just draw TRIA-3
     mesh.tria3.index,1),1);
     
     figure ; drawmesh(mesh,mask);
@@ -978,7 +1080,7 @@ end
 function demo6
 % DEMO-6 --- Build planar meshes for the "lake" test-case. 
 %   Investigate options designed to preserve "topological" 
-%   consistency.
+%   consistency and sharp features.
 
     name = 'lake' ;
 
@@ -1003,63 +1105,63 @@ function demo6
     
 %------------------------------------ make mesh using JIGSAW
 
-    opts.mesh_kern = 'delfront';
+    opts.mesh_kern = 'delaunay';
     opts.mesh_dims = 2 ;
-    opts.mesh_top1 =false ;
+    
+    opts.mesh_top1 =false ;             % skip sharp feat.
+    opts.geom_feat =false ;
     
     opts.optm_iter = 0 ;
     
-    opts.geom_feat = true ;
-    
-    opts.hfun_hmax = 0.20
+    opts.hfun_hmax = 0.05 ;
     
     mesh = jigsaw  (opts) ;
  
     mask = [];
-    mask.edge2 = true(size( ...
+    mask.edge2 = true(size( ...         % just draw EDGE-2
     mesh.edge2.index,1),1);
     
     figure ; drawmesh(mesh,mask);
     axis image;
-    title('JIGSAW (TOPO=FALSE)');
+    title('JIGSAW (FEAT.=FALSE)');
     
     mask = [];
-    mask.tria3 = true(size( ...
+    mask.tria3 = true(size( ...         % just draw TRIA-3
     mesh.tria3.index,1),1);
     
     figure ; drawmesh(mesh,mask);
     axis image;
-    title('JIGSAW (TOPO=FALSE)');
+    title('JIGSAW (FEAT.=FALSE)');
     
 %------------------------------------ make mesh using JIGSAW
 
-    opts.mesh_kern = 'delfront';
+    opts.mesh_kern = 'delaunay';
     opts.mesh_dims = 2 ;
-    opts.mesh_top1 = true ;
+    
+    opts.mesh_top1 = true ;             % mesh sharp feat.
+    opts.geom_feat = true ;
     
     opts.optm_iter = 0 ;
     
-    opts.geom_feat = true ;
-    
-    opts.hfun_hmax = 0.20 ;
+    opts.hfun_hmax = 0.05 ;
     
     mesh = jigsaw  (opts) ;
  
     mask = [];
-    mask.edge2 = true(size( ...
+    mask.edge2 = true(size( ...         % just draw EDGE-2
     mesh.edge2.index,1),1);
     
     figure ; drawmesh(mesh,mask);
     axis image;
-    title('JIGSAW (TOPO=TRUE)');
+    title('JIGSAW (FEAT.=TRUE)');
     
     mask = [];
-    mask.tria3 = true(size( ...
+    mask.tria3 = true(size( ...         % just draw TRIA-3
     mesh.tria3.index,1),1);
     
     figure ; drawmesh(mesh,mask);
     axis image;
-    title('JIGSAW (TOPO=TRUE)');
+    title('JIGSAW (FEAT.=TRUE)');
     
     drawnow ;
     
@@ -1192,7 +1294,7 @@ function demo8
     mesh = jigsaw  (opts) ;
  
     mask = [];
-    mask.tria3 = true(size( ...
+    mask.tria3 = true(size( ...         % just draw TRIA-3
     mesh.tria3.index,1),1);
     
     figure ; drawmesh(mesh,mask);
@@ -1200,7 +1302,7 @@ function demo8
     title('JIGSAW OUTPUT');
     
     mask = [];
-    mask.tria4 = true(size( ...
+    mask.tria4 = true(size( ...         % just draw TRIA-4
     mesh.tria4.index,1),1);
     
     figure ; drawmesh(mesh,mask);
