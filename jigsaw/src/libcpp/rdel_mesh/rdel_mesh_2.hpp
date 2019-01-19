@@ -563,7 +563,8 @@
             }
         }
        
-        iptr_type _NBOX = std::pow(8,2) ;       // 8^ndim
+        iptr_type _NBOX = 
+            (iptr_type) std::pow (8, 2) ;       // 8^ndim
        
         _tree.load(_bbox.head(),
                    _bbox.tend(), _NBOX) ;
