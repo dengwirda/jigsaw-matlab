@@ -1245,7 +1245,7 @@
         )
     {
         this->_ftag = -1 ;
-        this->_ndim = -1 ;
+        this->_ndim = +0 ;
     
         std::string _line;
         while (std::getline(_ffid, _line))
