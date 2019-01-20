@@ -71,7 +71,7 @@
             std::int32_t         _ftag ;
             jmsh_kind::
             enum_data            _kind ;
-            std::int32_t         _ndim ;
+            std:: size_t         _ndim ;
         public  :
     /*---------------------------------- construct reader */
         __normal_call geom_reader (
@@ -102,7 +102,7 @@
         }
     /*---------------------------------- parse NDIMS data */
         __normal_call void_type push_ndims (
-            std::int32_t  _ndim
+            std:: size_t  _ndim
             )
         {   
             this->_ndim = _ndim ;
@@ -111,7 +111,7 @@
         }
     /*---------------------------------- parse POINT data */
         __normal_call void_type push_point (
-            std::int32_t  _ipos ,
+            std:: size_t  _ipos ,
             double       *_pval ,
             std::int32_t  _itag
             )
@@ -159,7 +159,7 @@
         }
     /*---------------------------------- parse EDGE2 data */
         __normal_call void_type push_edge2 (
-            std::int32_t  _ipos ,
+            std:: size_t  _ipos ,
             std::int32_t *_node ,
             std::int32_t  _itag
             )
@@ -206,7 +206,7 @@
         }
     /*---------------------------------- parse TRIA3 data */
         __normal_call void_type push_tria3 (
-            std::int32_t  _ipos ,
+            std:: size_t  _ipos ,
             std::int32_t *_node ,
             std::int32_t  _itag
             )
@@ -245,7 +245,7 @@
         }
     /*---------------------------------- parse BOUND data */
         __normal_call void_type push_bound (
-            std::int32_t  _ipos ,
+            std:: size_t  _ipos ,
             std::int32_t  _itag ,
             std::int32_t  _inum ,
             std::int32_t  _kind
@@ -362,7 +362,7 @@
                 = jmsh_kind::euclidean_mesh ;
             _geom._ndim = +2;
     
-            for (auto _ipos = (iptr_type)+0 ;
+            for (auto _ipos = (size_t) +0 ;
                 _ipos != _gmsh._vert2._size ; 
                     ++_ipos )
             {
@@ -380,7 +380,7 @@
                 _tria.push_node(_ndat , false) ;
             }
             
-            for (auto _ipos = (iptr_type)+0 ;
+            for (auto _ipos = (size_t) +0 ;
                 _ipos != _gmsh._edge2._size ; 
                     ++_ipos )
             {
@@ -398,7 +398,7 @@
                 _tria.push_edge(_edat , false) ;
             }
             
-            for (auto _ipos = (iptr_type)+0 ;
+            for (auto _ipos = (size_t) +0 ;
                 _ipos != _gmsh._bound._size ; 
                     ++_ipos )
             {
@@ -425,7 +425,7 @@
                 = jmsh_kind::euclidean_mesh ;
             _geom._ndim = +3;
             
-            for (auto _ipos = (iptr_type)+0 ;
+            for (auto _ipos = (size_t) +0 ;
                 _ipos != _gmsh._vert3._size ; 
                     ++_ipos )
             {
@@ -445,7 +445,7 @@
                 _tria.push_node(_ndat , false) ;
             }
             
-            for (auto _ipos = (iptr_type)+0 ;
+            for (auto _ipos = (size_t) +0 ;
                 _ipos != _gmsh._edge2._size ; 
                     ++_ipos )
             {
@@ -463,7 +463,7 @@
                 _tria.push_edge(_edat , false) ;
             }
             
-            for (auto _ipos = (iptr_type)+0 ;
+            for (auto _ipos = (size_t) +0 ;
                 _ipos != _gmsh._tria3._size ; 
                     ++_ipos )
             {
@@ -483,7 +483,7 @@
                 _tria.push_tri3(_tdat , false) ;
             }
      
-            for (auto _ipos = (iptr_type)+0 ;
+            for (auto _ipos = (size_t) +0 ;
                 _ipos != _gmsh._bound._size ; 
                     ++_ipos )
             {
