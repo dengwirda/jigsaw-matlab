@@ -57,6 +57,7 @@
 #   define __LIB_JIGSAW__
 
 #   include "stdint.h"
+#   include "stddef.h"
 
     typedef int32_t         indx_t ;    // yes, 32 bit ints,
                                         // but, 64 bit ptrs!
