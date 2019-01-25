@@ -25,7 +25,7 @@ function [ff,ok] = limmesh( ...
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   02-Aug-2018
+%   22-Jan-2019
 %   de2363@columbia.edu
 %-----------------------------------------------------------
 %
@@ -234,7 +234,10 @@ end
 function [ff] = limit_edge_2(pp,e2,ff,DFDX,opts)
 %LIMIT-EDGE-2 local Eikonal solver for EDGE-2 cells.
 
-    f0 = min(ff(e2),[],2);
+    if (isempty(e2)), return; end
+
+    f0 = min([ff(e2(:,1)), ...
+              ff(e2(:,2))],[],2);
     
     up = f0<ff(e2(:,2),:);
 
@@ -255,7 +258,11 @@ end
 function [ff] = limit_tria_3(pp,t3,ff,DFDX,opts)
 %LIMIT-TRIA-3 local Eikonal solver for TRIA-3 cells.
     
-    f0 = min(ff(t3),[],2);
+    if (isempty(t3)), return; end
+    
+    f0 = min([ff(t3(:,1)), ...
+              ff(t3(:,2)), ...
+              ff(t3(:,3))],[],2);
     
     up = f0<ff(t3(:,3),:); 
 
