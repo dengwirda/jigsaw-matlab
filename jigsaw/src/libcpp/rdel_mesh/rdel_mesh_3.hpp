@@ -1083,7 +1083,7 @@
             
         /*--------- calc. "restricted-ness" incrementally */
 
-            bool_type _init = false ;
+            bool_type _irDT = false ;
 
             if (_mode == null_mode )
             {
@@ -1094,7 +1094,7 @@
 
                 _mode  = node_mode;
              
-                _init  = true;
+                _irDT  = true;   // init. new face in rDT
              
                 init_rdel( _geom, _hfun, 
                     _mesh, false,
@@ -1124,7 +1124,7 @@
 
                 _mode  = edge_mode;
                
-                _init  = true;
+                _irDT  = true;   // init. new face in rDT
                
                 init_ball( _geom, _hfun,
                     _mesh,
@@ -1167,7 +1167,7 @@
 
                 _mode  = face_mode;
                  
-                _init  = true;
+                _irDT  = true;   // init. new face in rDT
                  
                 init_rdel( _geom, _hfun, 
                     _mesh, false,
@@ -1206,7 +1206,7 @@
                 
                 _mode  = tria_mode;
         
-                _init  = true;
+                _irDT  = true;   // init. new face in rDT
         
                 init_rdel( _geom, _hfun, 
                     _mesh, false,
@@ -1226,7 +1226,7 @@
 
         /*------------- refine "bad" sub-faces until done */
 
-            if (_init == false )
+            if (_irDT == false )
             {
 
             char_type _tdim = -1;

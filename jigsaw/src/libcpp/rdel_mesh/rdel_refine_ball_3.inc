@@ -327,12 +327,13 @@
     mesh_type::edge_list &_epro ,
         typename 
     mesh_type::face_list &_fpro ,
-        char_type  _mode ,
+        iptr_type  _mode ,
         iptr_type  _pass ,
         rdel_opts &_args
         )
     {
     /*--------------------- push finalised "collar" nodes */
+        __unreferenced(_hfun) ;
         __unreferenced(_mode) ;
         __unreferenced(_pass) ;
         __unreferenced(_args) ;
