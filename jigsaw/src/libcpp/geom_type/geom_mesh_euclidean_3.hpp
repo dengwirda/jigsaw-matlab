@@ -31,7 +31,7 @@
      *
     --------------------------------------------------------
      *
-     * Last updated: 19 January, 2019
+     * Last updated: 02 February, 2019
      *
      * Copyright 2013-2019
      * Darren Engwirda
@@ -415,12 +415,14 @@
                   _iter != _lsrc.tend() ;
                 ++_iter  )
         {
-        if  (this->_tria .
-            _set2[*_iter].
-                feat() != null_feat)
-        {
-            _ldst.push_tail (*_iter)  ;
-        }
+             auto _feat  = 
+                this->
+            _tria._set2[ *_iter].feat() ;
+        
+            if (_feat != null_feat)
+            {
+                _ldst.push_tail(*_iter) ;
+            }
         }
     }
      
@@ -786,7 +788,10 @@
     {
         containers::array<iptr_type> _eadj ;
         containers::array<iptr_type> _fadj ;
-        containers::array<iptr_type> _set2 ;
+        containers::array<iptr_type> _ebnd ;
+    
+        containers::array<iptr_type> _nmrk ;
+        containers::array<iptr_type> _emrk ;
     
     /*---------------------------------- init. geom feat. */
         for (auto _iter  = 
@@ -827,18 +832,32 @@
             }
         }
   
-        if (_opts.feat() )
-        {
     /*---------------------------------- find sharp feat. */
+        _nmrk.set_count (
+         this->_tria._set1.count() , 
+            containers::loose_alloc,-1) ;
+            
+        _emrk.set_count (
+         this->_tria._set2.count() , 
+            containers::loose_alloc,-1) ;
+        
+        iptr_type _nnum  = +0 ;
+        iptr_type _enum  = +0 ;
+    
         for (auto _epos  = 
              this->_tria._set2.head() ;
                   _epos != 
              this->_tria._set2.tend() ;
-                ++_epos  )
+                ++_epos, ++_enum)
         {
     /*---------------------------------- find sharp 1-dim */
             if (_epos->mark() >= +0)
             {
+            if (_epos->itag() <= -1 ||
+                _emrk[_enum]  >= +1 ||
+                _opts .feat() )
+            {
+    /*---------------------------------- set geo.-defined */
             _fadj.set_count (0);
             
              this->_tria.edge_tri3 (
@@ -849,7 +868,19 @@
 
             _epos->feat () = edge_feat(
                 &_epos->node(0), _fadj, 
-                    _opts) ;        
+                    _opts) ;
+             
+            if (_epos->itag() <= -1)
+            {
+    /*---------------------------------- set user-defined */
+            _epos->feat () = 
+                std::max(_epos->feat () , 
+                    soft_feat) ;
+                    
+            _nmrk[_epos->node(0)] = +1;
+            _nmrk[_epos->node(1)] = +1;
+            }
+            }
             }
         }
         
@@ -857,15 +888,18 @@
              this->_tria._set1.head() ;
                   _npos != 
              this->_tria._set1.tend() ;
-                ++_npos  )
+                ++_npos, ++_nnum)
         {
     /*---------------------------------- find sharp 0-dim */
-            if (_npos->mark() >= +0)
+            if (_npos->mark() >= +0 )
             {
+            if (_npos->itag() <= -1 ||
+                _nmrk[_nnum]  >= +1 ||
+                _opts .feat() )
+            {
+    /*---------------------------------- set geo.-defined */
             _eadj.set_count (0);
             _fadj.set_count (0);
-            
-            _set2.set_count (0);
             
              this->_tria.node_edge (
                 &_npos->node(0), _eadj) ;
@@ -873,17 +907,26 @@
              this->_tria.node_tri3 (
                 &_npos->node(0), _fadj) ;
 
-             feat_list(_eadj, _set2);
+            _ebnd.set_count (0);
+
+             feat_list(_eadj, _ebnd);
 
             _npos->topo () =  
-               (char_type)_set2.count() ;
+               (char_type)_ebnd.count() ;
             
             _npos->feat () = node_feat(
-                &_npos->node(0), _set2, 
+                &_npos->node(0), _ebnd, 
                     _opts) ;
+            
+            if (_npos->itag() <= -1)
+            {
+    /*---------------------------------- set user-defined */
+            _npos->feat () = 
+                std::max(_npos->feat () , 
+                    soft_feat) ;
             }
-        }
-        
+            }
+            }
         }
   
         for (auto _iter  = 
@@ -992,7 +1035,7 @@
         if (_imin < (iptr_type) +0 &&
             _imax < (iptr_type) +0 )
             __assert( _imin >=  +0 && 
-            "INIT-PART:-ve part index") ;
+        "GEOM::INIT-PART: -ve part index!") ;
         
     /*----------------------------- push unique PART id's */
         auto _flag = 
@@ -1170,44 +1213,6 @@
             }
             } ;
         
-    /*----------------------------- setup user-feat. face */
-        for (auto _iter  = 
-             this->_tria._set2.head() ;
-                  _iter != 
-             this->_tria._set2.tend() ;
-                ++_iter  )
-        {
-            if (_iter->mark() >= +0 &&
-                _iter->itag() <= -1 )
-            {
-                this->_tria._set1[
-            _iter->node(0)].itag() =  -1 ;
-                
-                this->_tria._set1[
-            _iter->node(1)].itag() =  -1 ;
-            }
-        }
-        
-        for (auto _iter  = 
-             this->_tria._set3.head() ;
-                  _iter != 
-             this->_tria._set3.tend() ;
-                ++_iter  )
-        {
-            if (_iter->mark() >= +0 &&
-                _iter->itag() <= -1 )
-            {
-                this->_tria._set1[
-            _iter->node(0)].itag() =  -1 ;
-                
-                this->_tria._set1[
-            _iter->node(1)].itag() =  -1 ;
-            
-                this->_tria._set1[
-            _iter->node(2)].itag() =  -1 ;
-            }
-        }
-    
     /*----------------------------- init. aabb at -+ inf. */
         for(auto _idim = 3; _idim-- != 0 ; )
         {
@@ -1313,8 +1318,7 @@
         {
             if (_iter->mark() >= +0 )
             {
-            if (_opts .feat() && 
-                _iter->feat() != null_feat)
+            if (_iter->feat() != null_feat)
             {
     /*----------------------------- push any 'real' feat. */
             iptr_type _node = -1 ;
@@ -1332,6 +1336,10 @@
                 _mesh._tria.node
                     (_node)->topo() 
                         = _iter->topo() ;
+                        
+                _mesh._tria.node
+                    (_node)->part() 
+                        = _iter->itag() ;
             }
             }
             else
@@ -1353,6 +1361,10 @@
                 _mesh._tria.node
                     (_node)->topo() 
                         = _iter->topo() ;
+                        
+                _mesh._tria.node
+                    (_node)->part() 
+                        = _iter->itag() ;
             }
             }
             }

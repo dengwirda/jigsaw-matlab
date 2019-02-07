@@ -152,16 +152,16 @@
     class edge_data
         {
         public  :
-        iptr_type       _mark ;
-        iptr_type       _imax ;
+        iptr_type       _mark = +0;
+        iptr_type       _imax = +0;
         real_type       _cost ;
         } ;
         
     class tria_data
         {
         public  :
-        iptr_type       _mark ;
-        iptr_type       _imax ;        
+        iptr_type       _mark = +0;
+        iptr_type       _imax = +0;        
         real_type       _cost ;
         } ;
 

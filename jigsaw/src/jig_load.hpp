@@ -31,7 +31,7 @@
      *
     --------------------------------------------------------
      *
-     * Last updated: 02 January, 2019
+     * Last updated: 02 February, 2019
      *
      * Copyright 2013-2019
      * Darren Engwirda
@@ -391,7 +391,7 @@
             jcfg_reader   _read;
             std::ifstream _file; 
             _file. open(
-            _jcfg._jcfg_file, std::ifstream::in);
+            _jcfg._jcfg_file, std::ifstream::in) ;
 
             if (_file.is_open())
             {
@@ -399,7 +399,10 @@
                 _file, jcfg_loader(&_jcfg));
             }
             else
-            {           
+            {   
+                _jlog.push(
+            "**parse error: file not found!\n" ) ;
+                    
                 _errv = __file_not_located ;
             }
             _file.close ();
@@ -411,7 +414,7 @@
                     ++_iter  )
             {
                 _jlog.push(
-            "**parse error: " + * _iter + "\n") ;
+            "**parse error: " + * _iter + "\n" ) ;
             }        
         }
         catch (...)

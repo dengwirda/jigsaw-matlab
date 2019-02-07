@@ -31,7 +31,7 @@
      *
     --------------------------------------------------------
      *
-     * Last updated: 19 January, 2019
+     * Last updated: 02 February, 2019
      *
      * Copyright 2013-2019
      * Darren Engwirda
@@ -491,8 +491,6 @@
             }
         }
     
-        if (_opts.feat() )
-        {
     /*---------------------------------- find sharp feat. */
         for (auto _iter  = 
              this->_tria._set1.head() ;
@@ -501,8 +499,12 @@
                 ++_iter  )
         {
     /*---------------------------------- find sharp 0-dim */
-            if (_iter->mark() >= +0)
+            if (_iter->mark() >= +0 )
             {
+            if (_iter->itag() <= -1 ||
+                _opts .feat() )
+            {
+    /*---------------------------------- set geo.-defined */
             _eadj.set_count (0);
             
              this->_tria.node_edge (
@@ -514,9 +516,16 @@
             _iter->feat () = node_feat(
                 &_iter->node(0), _eadj, 
                     _opts) ;
+                    
+            if (_iter->itag() <= -1)
+            {
+    /*---------------------------------- set user-defined */
+            _iter->feat () = 
+                std::max(_iter->feat () , 
+                    soft_feat) ;
             }
-        }
-        
+            }
+            }
         }
         
         for (auto _iter  = 
@@ -605,7 +614,7 @@
         if (_imin < (iptr_type) +0 &&
             _imax < (iptr_type) +0 )
             __assert( _imin >=  +0 && 
-            "INIT-PART: -ve part index");
+        "GEOM::INIT-PART: -ve part index!") ;
         
     /*----------------------------- push unique PART id's */
         auto _flag = 
@@ -746,24 +755,6 @@
             }
             } ;
             
-    /*----------------------------- setup user-feat. face */
-        for (auto _iter  = 
-             this->_tria._set2.head() ;
-                  _iter != 
-             this->_tria._set2.tend() ;
-                ++_iter  )
-        {
-            if (_iter->mark() >= +0 &&
-                _iter->itag() <= -1 )
-            {
-                this->_tria._set1[
-            _iter->node(0)].itag() =  -1 ;
-                
-                this->_tria._set1[
-            _iter->node(1)].itag() =  -1 ;
-            }
-        }
-            
     /*----------------------------- init. aabb at -+ inf. */
         for(auto _idim = 2; _idim-- != 0 ; )
         {
@@ -854,8 +845,7 @@
         {
             if (_iter->mark() >= +0 )
             {
-            if (_opts .feat() && 
-                _iter->feat() != null_feat)
+            if (_iter->feat() != null_feat)
             {
     /*----------------------------- push any 'real' feat. */
             iptr_type _node = -1 ;
@@ -873,6 +863,10 @@
                 _mesh._tria.node
                     (_node)->topo() 
                         = _iter->topo() ;
+                        
+                _mesh._tria.node
+                    (_node)->part() 
+                        = _iter->itag() ;
             }
             }
             else
@@ -894,6 +888,10 @@
                 _mesh._tria.node
                     (_node)->topo() 
                         = _iter->topo() ;
+                        
+                _mesh._tria.node
+                    (_node)->part() 
+                        = _iter->itag() ;
             }
             }
             }
