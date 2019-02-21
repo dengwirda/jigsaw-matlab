@@ -31,7 +31,7 @@
      *
     --------------------------------------------------------
      *
-     * Last updated: 02 February, 2019
+     * Last updated: 20 February, 2019
      *
      * Copyright 2013-2019
      * Darren Engwirda
@@ -230,6 +230,13 @@
         { 
             this->_jjig->
            _rdel_opts.iter() = _iter;
+        }
+        __normal_call void_type push_mesh_rule (
+            std::int32_t  _rule
+            ) 
+        { 
+            this->_jjig->
+           _rdel_opts.rule() = _rule;
         }
         __normal_call void_type push_mesh_siz1 (
             double        _siz1

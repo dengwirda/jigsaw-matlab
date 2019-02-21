@@ -31,7 +31,7 @@
      *
     --------------------------------------------------------
      *
-     * Last updated: 02 February, 2019
+     * Last updated: 15 February, 2019
      *
      * Copyright 2013-2019
      * Darren Engwirda
@@ -359,18 +359,20 @@
         typename  list_type ,
         typename  geom_opts
              >
-    __normal_call char_type node_feat (
+    __normal_call void_type node_feat (
         iptr_type *_node ,
         list_type &_aset ,
+        char_type &_feat ,
+        char_type &_topo ,
         geom_opts &_opts
         )
     {
-        char_type _feat = 
-           (_aset.count() == +2)
-                ? null_feat : soft_feat ;
-    
         real_type _DtoR = 
        (real_type) +3.1415926536 / 180. ;
+       
+        real_type _ZERO = -1. + 
+            std::numeric_limits
+                <real_type>::epsilon();
     
         real_type _phi1 = 
        (real_type)+180. - _opts.phi1();
@@ -384,9 +386,14 @@
   
         __unreferenced(_node) ;
   
+        _feat =  null_feat ;
+        _topo = (char_type)_aset.count();
+  
         for (auto _ipos  = _aset.head() ;
                   _ipos != _aset.tend() ;
                 ++_ipos  )
+        {
+        char_type _tbad  = +1 ;
         for (auto _jpos  = _ipos+1 ;
                   _jpos != _aset.tend() ;
                 ++_jpos  )
@@ -432,6 +439,8 @@
             else
                 _acos *= (real_type)-1.;
                 
+            if (_acos >= _ZERO)
+            {
             if (_acos <= _hard)
             {
                 _feat  = 
@@ -443,9 +452,22 @@
                 _feat  = 
             std::max(_feat, soft_feat) ;
             } 
-        }    
-        
-        return  _feat  ;   
+            }
+            else
+            {
+            if (_tbad >= +  1 )
+            {
+                _topo -= _tbad--;
+            }
+            } 
+        } 
+        }   
+        {
+            if (_topo != +  0 )
+            if (_topo != +  2 )
+                _feat = 
+            std::max(_feat, soft_feat) ;
+        }
     }
 
     /*
@@ -507,15 +529,15 @@
     /*---------------------------------- set geo.-defined */
             _eadj.set_count (0);
             
-             this->_tria.node_edge (
-                &_iter->node(0), _eadj) ;
+            this->_tria.node_edge (
+               &_iter->node (0), _eadj) ;
                 
-            _iter->topo () =  
-               (char_type)_eadj.count() ;
-
-            _iter->feat () = node_feat(
-                &_iter->node(0), _eadj, 
-                    _opts) ;
+            node_feat (
+               &_iter->node (0), 
+                _eadj ,
+                _iter->feat () ,
+                _iter->topo () , 
+                _opts ) ;
                     
             if (_iter->itag() <= -1)
             {

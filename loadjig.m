@@ -4,7 +4,7 @@ function [opts] = loadjig(name)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   30-Dec-2018
+%   20-Feb-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -91,6 +91,9 @@ function [opts] = loadjig(name)
             
             case 'mesh_iter'
             opts .mesh_iter = str2double(tstr{2});
+            
+            case 'mesh_rule'
+            opts .mesh_rule = str2double(tstr{2});
             
             case 'mesh_dims'
             opts .mesh_dims = str2double(tstr{2});
