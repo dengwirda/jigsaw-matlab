@@ -228,7 +228,7 @@
                 _node = _next;
             }
         }
-
+        
     /*------------- walk elements toward _ppos from _elem */
         iptr_type _next = +0 ;
         iptr_type _face = +0 ;

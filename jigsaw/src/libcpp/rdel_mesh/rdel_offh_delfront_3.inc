@@ -391,7 +391,7 @@
             {
                 return  rdel_opts::null_kind ;
             }
-
+            
             if (_move <= _rtol*_hmin ) break ;
         }
 

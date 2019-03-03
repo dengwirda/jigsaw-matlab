@@ -60,6 +60,7 @@
         iter_opts &_opts ,
         iptr_type  _enum ,
         bool_type &_okay ,
+        iptr_type &_inew ,
         iptr_list &_tset ,
         iptr_list &_tnew ,
         real_list &_tsrc ,
@@ -266,6 +267,8 @@
          
         iptr_type _nnew = 
             _mesh.push_node(_ndat) ;
+            
+        _inew =   _nnew ;
             
          auto _nptr  = 
         _mesh._set1.head() + _nnew ;

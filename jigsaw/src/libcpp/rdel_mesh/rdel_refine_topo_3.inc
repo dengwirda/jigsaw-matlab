@@ -566,6 +566,7 @@
             - (real_type)+2.*_rrad ;
         _fdat._rmin[2] = _ppos[2]
             - (real_type)+2.*_rrad ;
+
         _fdat._rmax[0] = _ppos[0]
             + (real_type)+2.*_rrad ;
         _fdat._rmax[1] = _ppos[1]
@@ -582,7 +583,13 @@
                          
         auto _ioff = _halo._list.tend();
 
-        auto _best =
+        real_type _dmin  = 
+            _rEPS * std::pow(_rrad, +2);
+
+        real_type static constexpr
+            _NEAR = (real_type) +.75 ;
+
+        real_type _best  =
             +std::numeric_limits
                 <real_type>::infinity();
 
@@ -592,22 +599,31 @@
                 _halo._list.tend() ;
                 ++_iter  )
         {
-            real_type _dsqr = 
-                geometry::lensqr_3d(
-                   &_iter->pval(0), _ppos) ;
-
             iptr_type _near = -1;
             _mesh._tria.find_node (
            &_iter->pval(0), _near , _npos) ;
 
-            if (_near ==_npos )
+            auto _nptr = &_mesh.
+                _tria.node(_near)->pval(0) ;
+
+            real_type _nsqr = 
+                geometry::lensqr_3d (
+                   &_iter->pval(0), _nptr) ;
+
+            real_type _dsqr = 
+                geometry::lensqr_3d (
+                   &_iter->pval(0), _ppos) ;
+
+            if (_nsqr > _dsqr * 
+                        _NEAR )
             if (_dsqr < _best &&
-                _dsqr > _rEPS )
+                _dsqr > _dmin )
             {
                 _kind = 
                  rdel_opts::offT_kind  ;
             
                 _best = _dsqr ;
+
                 _ioff = _iter ;
             }
         }
@@ -653,7 +669,7 @@
         _vnrm[3] = (real_type) +0. ;
     
         _pmax[3] = (real_type) +0. ;
-        
+     
     /*--------------------- find max. SDB in face-set */
         for (auto _face  = _fset.head() ;
                   _face != _fset.tend() ;
@@ -701,7 +717,7 @@
             _fnrm[0]/= _fnrm[3] ;
             _fnrm[1]/= _fnrm[3] ;
             _fnrm[2]/= _fnrm[3] ;
-            
+
             real_type _sign = 
             geometry::dot_3d(_fnrm, _vnrm) ;
 
@@ -717,7 +733,7 @@
                 _vnrm[1]-= _fnrm[1];
                 _vnrm[2]-= _fnrm[2];
             }
-
+            
             if (_pmax[3] < _sbal[3])
             {
                 _pmax[3] = _sbal[3];
@@ -759,25 +775,14 @@
         _vnrm[2]*= _rrad * 
             (real_type) +2. ;
 
-        real_type _vdir[3];
-        geometry::
-        vector_3d(_ppos, _pmax, _vdir) ;
-
-        real_type _sign = 
-        geometry::dot_3d(_vnrm, _vdir) ;
-
-        if (_sign < (real_type) + 0. )
-        {
-            _vnrm[0] *= -1. ;
-            _vnrm[1] *= -1. ;
-            _vnrm[2] *= -1. ;
-        }
-
         typename
         geom_type::line_type _ldat ;
-        _ldat._ipos[0] = _ppos[0];
-        _ldat._ipos[1] = _ppos[1];
-        _ldat._ipos[2] = _ppos[2];
+        _ldat._ipos[0] = _ppos[0] 
+                       - _vnrm[0];
+        _ldat._ipos[1] = _ppos[1]
+                       - _vnrm[1];
+        _ldat._ipos[2] = _ppos[2]
+                       - _vnrm[2];
         
         _ldat._jpos[0] = _ppos[0]
                        + _vnrm[0];
@@ -795,7 +800,13 @@
 
         auto _ioff = _halo._list.tend();
 
-        auto _best =
+        real_type _dmin  = 
+            _rEPS * std::pow(_rrad, +2);
+
+        real_type static constexpr
+            _NEAR = (real_type) +.75 ;
+
+        real_type _best  =
             +std::numeric_limits
                 <real_type>::infinity();
 
@@ -805,22 +816,31 @@
                 _halo._list.tend() ;
                 ++_iter  )
         {
-            real_type _dsqr = 
-                geometry::lensqr_3d(
-                   &_iter->pval(0), _ppos) ;
-
             iptr_type _near = -1;
             _mesh._tria.find_node (
            &_iter->pval(0), _near , _npos) ;
 
-            if (_near ==_npos )
+            auto _nptr = &_mesh.
+                _tria.node(_near)->pval(0) ;
+
+            real_type _nsqr = 
+                geometry::lensqr_3d (
+                   &_iter->pval(0), _nptr) ;
+
+            real_type _dsqr = 
+                geometry::lensqr_3d (
+                   &_iter->pval(0), _ppos) ;
+
+            if (_nsqr > _dsqr * 
+                        _NEAR )
             if (_dsqr < _best &&
-                _dsqr > _rEPS )
+                _dsqr > _dmin )
             {
                 _kind = 
                  rdel_opts::offT_kind  ;
             
                 _best = _dsqr ;
+
                 _ioff = _iter ;
             }
         }

@@ -222,7 +222,8 @@
             node_data const& _idat,
             node_data const& _jdat
             ) const
-        {   return _idat._pass < _jdat._pass ; 
+        {   return _idat._node[0] < 
+                   _jdat._node[0] ; 
         }
         } ;
     class ball_pred

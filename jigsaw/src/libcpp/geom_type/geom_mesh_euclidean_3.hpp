@@ -31,7 +31,7 @@
      *
     --------------------------------------------------------
      *
-     * Last updated: 15 February, 2019
+     * Last updated: 02 March, 2019
      *
      * Copyright 2013-2019
      * Darren Engwirda
@@ -829,12 +829,17 @@
         geom_opts &_opts
         )
     {
-        containers::array<iptr_type> _eadj ;
-        containers::array<iptr_type> _fadj ;
-        containers::array<iptr_type> _ebnd ;
+        containers::
+            array <iptr_type> _eadj ;
+        containers::
+            array <iptr_type> _fadj ;
+        containers::
+            array <iptr_type> _ebnd ;
     
-        containers::array<iptr_type> _nmrk ;
-        containers::array<iptr_type> _emrk ;
+        containers::
+            array <iptr_type> _nmrk ;
+        containers::
+            array <iptr_type> _emrk ;
     
     /*---------------------------------- init. geom feat. */
         for (auto _iter  = 
@@ -2020,12 +2025,11 @@
         hits_func &_hfun
         )
     {
-    /*------------------ tree-rect intersection predicate */
+    /*------------------ tree-flat intersection predicate */
         typedef 
-        geom_tree::aabb_pred_rect_k <
+        geom_tree::aabb_pred_flat_3 <
              real_type, 
-             iptr_type, 
-             +3        >    tree_pred ; 
+             iptr_type >    tree_pred ; 
 
     /*------------------ dual-face intersection predicate */
         typedef 
@@ -2033,7 +2037,9 @@
              hits_func >    hits_pred ; 
 
     /*------------------ call actual intersection testing */
-        tree_pred _pred(_flat. _rmin, 
+        tree_pred _pred(_flat. _ppos,
+                        _flat. _nvec,
+                        _flat. _rmin, 
                         _flat. _rmax) ;     
         hits_pred _func(_flat. _ppos, 
                         _flat. _nvec,
@@ -2061,10 +2067,9 @@
     {
     /*------------------ tree-line intersection predicate */
         typedef 
-        geom_tree::aabb_pred_line_k <
+        geom_tree::aabb_pred_line_3 <
              real_type, 
-             iptr_type, 
-             +3        >    tree_pred ;
+             iptr_type >    tree_pred ;
              
     /*------------------ tria-line intersection predicate */
         typedef 
@@ -2098,31 +2103,20 @@
         hits_func &_hfun
         )
     {
-    /*------------------ tree-rect intersection predicate */
+    /*------------------ tree-ball intersection predicate */
         typedef 
-        geom_tree::aabb_pred_rect_k <
+        geom_tree::aabb_pred_ball_3 <
              real_type, 
-             iptr_type, 
-             +3        >    tree_pred ; 
+             iptr_type >    tree_pred ; 
             
     /*------------------ ball-line intersection predicate */
         typedef 
         ball_line_pred <
              hits_func >    hits_pred ;
 
-    /*------------------ call actual intersection testing */      
-        real_type _rmin[ 3] = {
-        _ball._pmid[0] - _ball._rrad  ,
-        _ball._pmid[1] - _ball._rrad  ,
-        _ball._pmid[2] - _ball._rrad
-            } ;
-        real_type _rmax[ 3] = {
-        _ball._pmid[0] + _ball._rrad  ,
-        _ball._pmid[1] + _ball._rrad  ,
-        _ball._pmid[2] + _ball._rrad
-            } ;
-      
-        tree_pred _pred(_rmin, _rmax) ;
+    /*------------------ call actual intersection testing */          
+        tree_pred _pred(_ball. _pmid,
+                        _ball. _rrad) ;
         hits_pred _func(_ball. _pmid, 
                         _ball. _rrad,
                         *this, _hfun) ;
@@ -2148,12 +2142,11 @@
         hits_func &_hfun
         )
     {
-    /*------------------ tree-rect intersection predicate */
+    /*------------------ tree-ball intersection predicate */
         typedef 
-        geom_tree::aabb_pred_rect_k <
+        geom_tree::aabb_pred_ball_3 <
              real_type, 
-             iptr_type, 
-             +3        >    tree_pred ; 
+             iptr_type >    tree_pred ; 
 
     /*------------------ circ_tria intersection predicate */
         typedef 
@@ -2163,18 +2156,8 @@
         __unreferenced(_sbal) ;
 
     /*------------------ call actual intersection testing */ 
-        real_type _rmin[ 3] = {
-        _disc._pmid[0] - _disc._rrad  ,
-        _disc._pmid[1] - _disc._rrad  ,
-        _disc._pmid[2] - _disc._rrad
-            } ;
-        real_type _rmax[ 3] = {
-        _disc._pmid[0] + _disc._rrad  ,
-        _disc._pmid[1] + _disc._rrad  ,
-        _disc._pmid[2] + _disc._rrad
-            } ;
-            
-        tree_pred _pred(_rmin, _rmax) ;
+        tree_pred _pred(_disc. _pmid, 
+                        _disc. _rrad) ;
         hits_pred _func(_disc. _pmid, 
                         _disc. _nvec, 
                         _disc. _rrad, 
@@ -2321,10 +2304,9 @@
 
         /*-------------- tree-line intersection predicate */
             typedef 
-            geom_tree::aabb_pred_line_k <
+            geom_tree::aabb_pred_line_3 <
                  real_type, 
-                 iptr_type, 
-                 +3        >  tree_pred ; 
+                 iptr_type >  tree_pred ; 
 
         /*-------------- tria-line intersection predicate */
             typedef 
@@ -2416,10 +2398,9 @@
 
         /*-------------- tree-line intersection predicate */
             typedef 
-            geom_tree::aabb_pred_line_k <
+            geom_tree::aabb_pred_line_3 <
                  real_type, 
-                 iptr_type, 
-                 +3        >  tree_pred ; 
+                 iptr_type >  tree_pred ; 
 
         /*-------------- tria-line intersection predicate */
             typedef 

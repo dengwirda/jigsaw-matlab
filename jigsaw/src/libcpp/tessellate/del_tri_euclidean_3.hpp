@@ -96,7 +96,7 @@
         __inline_call bool_type operator() (
             mesh_type    &_mesh,
         __const_ptr ( real_type) _ppos,
-            real_type     _dmin,
+            real_type    &_dmin,
             iptr_type    &_nmin,
             iptr_type     _tpos,
             iptr_type    &_fmin

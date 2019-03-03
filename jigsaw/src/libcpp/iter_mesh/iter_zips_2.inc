@@ -60,6 +60,7 @@
         iter_opts &_opts ,
         iptr_type  _edge ,
         bool_type &_okay ,
+        iptr_type &_nnew ,
         iptr_list &_iset ,
         iptr_list &_jset ,
         iptr_list &_aset ,
@@ -339,6 +340,8 @@
         
         iptr_type _inew =
             _mesh.push_node(_ndat) ;
+         
+        _nnew =   _inew ;
             
          auto _nptr  = 
         _mesh._set1.head() + _inew ;

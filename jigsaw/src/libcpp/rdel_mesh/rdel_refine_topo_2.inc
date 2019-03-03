@@ -255,23 +255,12 @@
         _vnrm[1]*= _rrad * 
             (real_type) +2. ;
 
-        real_type _vdir[2];
-        geometry::
-        vector_2d(_ppos, _pmax, _vdir) ;
-
-        real_type _sign = 
-        geometry::dot_2d(_vnrm, _vdir) ;
-
-        if (_sign < (real_type) + 0. )
-        {
-            _vnrm[0] *= -1. ;
-            _vnrm[1] *= -1. ;
-        }
-
         typename
         geom_type::line_type _ldat ;
-        _ldat._ipos[0] = _ppos[0];
-        _ldat._ipos[1] = _ppos[1];
+        _ldat._ipos[0] = _ppos[0]
+                       - _vnrm[0];
+        _ldat._ipos[1] = _ppos[1]
+                       - _vnrm[1];
         
         _ldat._jpos[0] = _ppos[0]
                        + _vnrm[0];
@@ -287,7 +276,13 @@
 
         auto _ioff = _halo._list.tend();
 
-        auto _best =
+        real_type _dmin  = 
+            _rEPS * std::pow(_rrad, +2);
+
+        real_type static constexpr
+            _NEAR = (real_type) +.75 ;
+
+        real_type _best  =
             +std::numeric_limits
                 <real_type>::infinity();
 
@@ -297,22 +292,31 @@
                 _halo._list.tend() ;
                 ++_iter  )
         {
-            real_type _dsqr = 
-                geometry::lensqr_2d(
-                   &_iter->pval(0), _ppos) ;
-
             iptr_type _near = -1;
             _mesh._tria.find_node (
            &_iter->pval(0), _near , _npos) ;
 
-            if (_near ==_npos )
+            auto _nptr = &_mesh.
+                _tria.node(_near)->pval(0) ;
+
+            real_type _nsqr = 
+                geometry::lensqr_2d (
+                   &_iter->pval(0), _nptr) ;
+
+            real_type _dsqr = 
+                geometry::lensqr_2d (
+                   &_iter->pval(0), _ppos) ;
+
+            if (_nsqr > _dsqr * 
+                        _NEAR )
             if (_dsqr < _best &&
-                _dsqr > _rEPS )
+                _dsqr > _dmin )
             {
                 _kind = 
                  rdel_opts::offT_kind  ;
             
                 _best = _dsqr ;
+
                 _ioff = _iter ;
             }
         }
