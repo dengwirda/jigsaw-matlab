@@ -950,7 +950,7 @@
         real_type _ppos[3] ;
         real_type _qpos[3] ;
         iptr_type _inum = 
-            geometry::ball_line_3d (
+       (iptr_type)geometry::ball_line_3d (
             _ball._pmid, 
             _ball._rrad, 
             _apos,_bpos, 
