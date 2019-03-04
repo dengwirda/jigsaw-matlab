@@ -4,7 +4,7 @@ function savejig(name,opts)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   29-Dec-2018
+%   20-Feb-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -92,6 +92,9 @@ function savejig(name,opts)
         
         case 'mesh_iter'
         pushints(ffid,opts.mesh_iter,'MESH_ITER');
+        
+        case 'mesh_rule'
+        pushints(ffid,opts.mesh_rule,'MESH_RULE');
         
         case 'mesh_dims'
         pushints(ffid,opts.mesh_dims,'MESH_DIMS');
