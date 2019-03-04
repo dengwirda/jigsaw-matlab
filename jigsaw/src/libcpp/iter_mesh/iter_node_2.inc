@@ -434,7 +434,7 @@
         iptr_type _hnum   = +1  ;
         
         real_type _qlim = _qmin + 
-            (real_type) +1.0E-004 ;
+            (real_type) +1.0E-003 ;
 
         _tnum = (iptr_type) +0  ;
         for (auto _tria  = _tset.head() ,

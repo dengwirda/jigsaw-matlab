@@ -75,7 +75,14 @@
     
     iptr_type static 
         constexpr _dims = pred_type::_dims ;
-    
+   
+    char_type static 
+        constexpr _odt_kind = +1 ;   // optimal delaunay
+    char_type static 
+        constexpr _cvt_kind = +2 ;   // centroidal voro.
+    char_type static 
+        constexpr _sdQ_kind = +3 ;   // local cost grad.
+ 
     typedef mesh::iter_params  <
             real_type ,
             iptr_type          >        iter_opts ;
@@ -448,7 +455,7 @@
         real_list &_hval ,
         iter_opts &_opts ,
         node_iter  _node ,
-        iptr_type  _kind ,
+        char_type  _kind ,
         bool_type &_okay ,
         iptr_list &_tset ,
         real_list &_told ,
@@ -484,7 +491,7 @@
         real_list &_hval ,
         iter_opts &_opts ,
         node_iter  _node ,
-        iptr_type  _kind ,
+        char_type  _kind ,
         iptr_type &_move ,
         iptr_list &_tset ,
         real_list &_told ,
@@ -511,43 +518,43 @@
         real_type _proj [_dims] = {
        (real_type) +0.0 } ;
        
-        real_type _ladj = (real_type) +0.00 ;     
-        real_type _scal = (real_type) +0.00 ;
+        real_type _ladj = (real_type) + 0.0 ;
         
     /*---------------- calc. line search direction vector */
-        if (_kind == +1 )
+        if (_kind == _odt_kind)
         {
-            _scal = (real_type) +5./3. ;
-        
             _odt_move_2 ( 
                 _mesh, _hfun, _pred, 
                 _hval, _tset, _node, 
                 _line, _ladj) ;
         }
         else
-        if (_TMIN<=_TLIM)
-        { 
-            _scal = (real_type) +1./1. ;
-        
+        if (_kind == _sdQ_kind)
+        {
+            if (_TMIN<=_TLIM)
+            { 
             grad_move_2 ( 
                 _mesh, _hfun, _pred, 
                 _tset, _node, _told, 
                 _line, _ladj) ;
+            }
+            else { return ; }
         }
-        else { return ; }
-      
+
     /*---------------- scale line search direction vector */
         real_type _llen = std::
         sqrt(_pred.length_sq(_line)) ;
-        
+
         real_type _xtol = 
        (real_type)+.1 * _opts.qtol() ;
-       
-        if (_llen <= _ladj * _xtol) return;
+
+        if (_llen<= 
+            _ladj * _xtol) return;
+
+        real_type _scal =           // overrelaxation
+            _llen * (real_type)5./3. ;
         
     /*---------------- do backtracking line search iter's */
-      
-        _scal *=  _llen ;
       
         for (auto _idim = _dims; _idim-- != +0; )
         {
@@ -708,7 +715,7 @@
             _wadj * _xtol) return;
         
         real_type _scal =           // overrelaxation
-            _llen * (real_type)1./1. ;
+            _llen * (real_type)5./3. ;
       
         _line /= _llen  ;
         
@@ -1028,7 +1035,7 @@
         /*---------------- attempt a GRAD-based smoothing */
                 move_dual( _geom, _mesh ,
                     _hfun, _pred, _hval , 
-                    _opts, _node, 
+                    _opts, _node,
                     _okay, _tset, 
                     _dold, _dnew, 
                     _DMIN, _DLIM ) ;
@@ -1094,7 +1101,8 @@
         /*---------------- attempt a CCVT-style smoothing */
                 move_node( _geom, _mesh ,
                     _hfun, _pred, _hval , 
-                    _opts, _node, +1    , 
+                    _opts, _node, 
+                       _odt_kind, 
                     _okay, _tset, 
                     _told, _tnew,
                     _dold, _dnew, 
@@ -1106,7 +1114,8 @@
         /*---------------- attempt a GRAD-based smoothing */
                 move_node( _geom, _mesh ,
                     _hfun, _pred, _hval , 
-                    _opts, _node, +2    , 
+                    _opts, _node, 
+                       _sdQ_kind, 
                     _okay, _tset, 
                     _told, _tnew,
                     _dold, _dnew, 
@@ -1436,7 +1445,7 @@
                         real_type _ltol = 
                             (real_type) +0.500 ;
                     
-                        iptr_type  _nnew;
+                        iptr_type  _nnew = -1;
                                 
                         if (_opts.div_())
                         _div_edge( _geom, _mesh, 
@@ -1456,7 +1465,7 @@
                     }
                     else
                     {
-                        iptr_type  _nnew;
+                        iptr_type  _nnew = -1;
                     
                         if (_opts.div_())
                         _div_edge( _geom, _mesh, 
@@ -1486,7 +1495,7 @@
                         real_type _ltol = 
                             (real_type) +2.000 ;
                         
-                        iptr_type  _nnew;
+                        iptr_type  _nnew = -1;
                         
                         if (_opts.zip_())
                         _zip_edge( _geom, _mesh, 
@@ -1507,7 +1516,7 @@
                     }
                     else
                     {  
-                        iptr_type  _nnew;
+                        iptr_type  _nnew = -1;
                         
                         if (_opts.zip_())
                         _zip_edge( _geom, _mesh, 
