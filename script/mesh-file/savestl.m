@@ -31,8 +31,7 @@ function savestl(name,mesh,varargin)
 %   file generated, as either FORMAT = 'binary', or FORMAT = 
 %   'ascii'.
 %
-%   See also SAVEMSH, LOADMSH, SAVEVTK, LOADVTK, LOADSTL, 
-%            SAVEOFF, LOADOFF, 
+%   See also SAVEMSH, LOADMSH
 %            
 
 %-----------------------------------------------------------

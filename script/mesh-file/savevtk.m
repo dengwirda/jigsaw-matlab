@@ -44,8 +44,7 @@ function savevtk(name,mesh)
 %       associated with the K-TH elem, and INDEX(K,6) is an 
 %       associated ID tag.
 %
-%   See also SAVEMSH, LOADMSH, SAVEOFF, LOADOFF, LOADVTK, 
-%            SAVESTL, LOADSTL, 
+%   See also SAVEMSH, LOADMSH
 %            
 
 %-----------------------------------------------------------
@@ -218,7 +217,7 @@ function savevtk(name,mesh)
         '%u','\n'],repmat(vtk_pyra5,1,npyra5));
     end
     
-    fclose(ffid);
+    fclose(ffid) ;
     
     catch err
     

@@ -1,4 +1,4 @@
-function [mesh] = readvtk(name)
+function [mesh] = loadvtk(name)
 %LOADVTK read an *.VTK file for JIGSAW.
 %
 %   MESH = LOADVTK(NAME);
@@ -14,8 +14,7 @@ function [mesh] = readvtk(name)
 %       associated with the K-TH tria, and INDEX(K,4) is an 
 %       associated ID tag.
 %
-%   See also SAVEMSH, LOADMSH, SAVESTL, LOADSTL, SAVEVTK, 
-%            SAVEOFF, LOADOFF, 
+%   See also SAVEMSH, LOADMSH
 %            
 
 %-----------------------------------------------------------

@@ -14,8 +14,7 @@ function [mesh] = readstl(name)
 %       associated with the K-TH tria, and INDEX(K,4) is an 
 %       associated ID tag.
 %
-%   See also SAVEMSH, LOADMSH, SAVEVTK, LOADVTK, SAVESTL, 
-%            SAVEOFF, LOADOFF, 
+%   See also SAVEMSH, LOADMSH
 %            
 
 %-----------------------------------------------------------

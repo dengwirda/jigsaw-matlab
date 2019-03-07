@@ -19,8 +19,7 @@ function [mesh] = loadoff(name)
 %       associated with the K-TH quad, and INDEX(K,5) is an 
 %       associated ID tag.
 %
-%   See also SAVEMSH, LOADMSH, SAVEVTK, LOADVTK, SAVEOFF, 
-%            SAVESTL, LOADSTL, 
+%   See also SAVEMSH, LOADMSH 
 %            
 
 %-----------------------------------------------------------
