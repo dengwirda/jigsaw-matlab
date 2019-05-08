@@ -33,44 +33,66 @@ The `MATLAB` / `OCTAVE` interface is provided for convenience - you're not force
 
 It's also possible to interact with the `JIGSAW` back-end directly, either through `(i)` scripting: building text file inputs and calling the `JIGSAW` executable from the command-line, or `(ii)` programmatically: using `JIGSAW` data-structures within your own applications and calling the library via its `API`.
 
-## `Getting Started`
+### `Getting Started`
 
-The first step is to compile the code! The `JIGSAW` src can be found in <a href="../master/jigsaw/src/">`../jigsaw/src/`</a>.
+The first step is to compile and configure the code! `JIGSAW` can either be built directly from src, or installed using the <a href="https://anaconda.org/conda-forge/jigsaw">`conda`</a> package manager.
 
-`JIGSAW` is a `header-only` package - there is only the single main `jigsaw.cpp` file that simply `#include`'s the rest of the library as headers. The resulting build process should be fairly straight-forward as a result. `JIGSAW` does not currently dependent on any external packages or libraries.
+### `Building from src`
 
-#### `On Linux/Mac`
+The full `JIGSAW` src can be found in <a href="../master/jigsaw/src/">`../jigsaw/src/`</a>.
 
-`JIGSAW` has been successfully built using various versions of the `g++` and `llvm` compilers. Since the build process is a simple one-liner, there's no `make` script - instead:
+`JIGSAW` is a `header-only` package - the single main `jigsaw.cpp` file simply `#include`'s the rest of the library directly. `JIGSAW` does not currently dependent on any external packages or libraries.
 
-	g++ -std=c++11 -pedantic -Wall -s -O3 -flto -D NDEBUG
-	-D __cmd_jigsaw -static-libstdc++ jigsaw.cpp
-	-o jigsaw64r
-	
-will build the main `JIGSAW` cmd-line executable,
+`JIGSAW` consists of several pieces: `(a)` a set of command-line utilities that read and write mesh data from/to file, and `(b)` a shared library, accessible via a `C`-format `API`.
 
-	g++ -std=c++11 -pedantic -Wall -s -O3 -flto -D NDEBUG
-	-D __cmd_tripod -static-libstdc++ jigsaw.cpp
-	-o tripod64r
-	
-will build the `TRIPOD` cmd-line utility (`JIGSAW`'s tessellation infrastructure) and,
+#### `Using cmake`
 
-	g++ -std=c++11 -pedantic -Wall -O3 -flto -fPIC -D NDEBUG
-	-D __lib_jigsaw -static-libstdc++ jigsaw.cpp
-	-shared -o libjigsaw64r.so
+`JIGSAW` can be built using the <a href="https://cmake.org/">`cmake`</a> utility. To build, follow the steps below:
 
-will build `JIGSAW` as shared library. See the headers in <a href="../master/jigsaw/inc/">`../jigsaw/inc/`</a> for details on the `API`.
+    * Ensure you have the cmake utility installed.
+    * Clone or download this repository.
+    * Navigate to the main `../jigsaw/` directory.
+    * Create a new temporary directory BUILD (to store the cmake build files).
+    * Navigate into the temporary directory.
+    * Execute: cmake -D CMAKE_BUILD_TYPE=BUILD_MODE ..
+    * Execute: make
+    * Execute: make install
+    * Delete the temporary directory.
 
-#### `On Windows`
+This process will build a series of executables and the shared library: `jigsaw` itself - the main command-line meshing utility, `tripod` - `JIGSAW`'s tessellation infrastructure, as well as `libjigsaw` - `JIGSAW`'s shared `API`. `BUILD_MODE` can be used to select different compiler configurations and should be either `RELEASE` or `DEBUG`. 
 
-`JIGSAW` has been successfully built using various versions of the `msvc` compiler. I do not provide a sample `msvc` project, but the following steps can be used to create one:
+See `example.jig` for documentation on calling the command-line executables, and the headers in <a href="../master/jigsaw/inc/">`../jigsaw/inc/`</a> for details on the `API`.
 
-	* Create a new, empty MSVC project.
-	* Import the jigsaw.cpp file, this contains the main() entry-point.
+#### `Using g++ / llvm`
 
-#### `Folder Structure`
+`JIGSAW` has been successfully built using various versions of the `g++` and `llvm` compilers. The build process is a simple one-liner (from <a href="../master/jigsaw/src/">`../jigsaw/src/`</a>):
+````
+g++ -std=c++11 -pedantic -Wall -O3 -flto -D NDEBUG
+-D __cmd_jigsaw jigsaw.cpp -o ../bin/jigsaw
+````
+will build the main `jigsaw` command-line executable,
+````
+g++ -std=c++11 -pedantic -Wall -O3 -flto -D NDEBUG
+-D __cmd_tripod jigsaw.cpp -o ../bin/tripod
+````
+will build the `tripod` command-line utility (`JIGSAW`'s tessellation infrastructure) and,
+````
+g++ -std=c++11 -pedantic -Wall -O3 -flto -fPIC -D NDEBUG
+-D __lib_jigsaw jigsaw.cpp -shared -o ../lib/libjigsaw.so
+````
+will build `JIGSAW` as a shared library (`libjigsaw`).
 
-Once you have built the `JIGSAW` binaries, place them in the appropriate sub-folders in`../jigsaw/bin/` and/or `../jigsaw/lib/` directories, so that they can be found by the `MATLAB` / `OCTAVE` interface, and the unit tests in `../jigsaw/uni/`. If you wish to support multiple platforms, simply build binaries for each `OS` and place them in the appropriate directory - the `MATLAB` / `OCATVE` interface will do an `OS`-dependent lookup to call the appropriate binary.
+### `Install via conda`
+
+`JIGSAW` is also available as a `conda` environment. To install and use, follow the steps below:
+
+	* Ensure you have conda installed. If not, consider miniconda as a lightweight option.
+	* Add conda-forge as a channel: conda config --add channels conda-forge
+	* Create a jigsaw environment: conda create -n jigsaw jigsaw
+
+Each time you want to use `JIGSAW` simply activate the environment using: `conda activate jigsaw`
+
+Once activated, the various `JIGSAW` command-line utilities will be available in your run path, `JIGSAW`'s shared library (`libjigsaw`) will be available in your library path and its include files in your include path.
 
 ## `Example Problems`
 

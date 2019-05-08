@@ -1,7 +1,7 @@
-function saveobj(name,mesh)
-%SAVEOBJ save an *.OBJ file for JIGSAW.
+function savewav(name,mesh)
+%SAVEWAV save an *.OBJ file for JIGSAW.
 %
-%   SAVEOBJ(NAME,MESH);
+%   SAVEWAV(NAME,MESH);
 %
 %   The following entities are optionally saved to the file
 %   "NAME.OBJ":

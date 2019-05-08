@@ -75,64 +75,64 @@ function [varargout] = tripod(opts)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   30-Dec-2018
+%   27-Apr-20189
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
 
-    jexename = '';
+    jexename = '' ;
 
     if ( isempty(opts))
-        error('TRIPOD: insufficient inputs.');
+        error('TRIPOD: insufficient inputs!!') ;
     end
     
     if (~isempty(opts) && ~isstruct(opts))
-        error('TRIPOD: invalid input types.');
+        error('TRIPOD: invalid input types!!') ;
     end
         
     savejig(opts.jcfg_file,opts);
-    
-    filename = mfilename('fullpath');
-    filepath = fileparts( filename );
 
-%---------------------------------- default to _debug binary
+%---------------------------- set-up path for "local" binary
     if (strcmp(jexename,''))
+    
+    filename = ...
+            mfilename('fullpath') ;
+    filepath = ...
+            fileparts( filename ) ;
+
     if (ispc())
         jexename = [filepath, ...
-            '\jigsaw\bin\WIN-64\tripod64d.exe'];
+            '\jigsaw\bin\tripod.exe'] ;
     elseif (ismac ())
         jexename = [filepath, ...
-            '/jigsaw/bin/MAC-64/tripod64d'];
+            '/jigsaw/bin/tripod'] ;
     elseif (isunix())
         jexename = [filepath, ...
-            '/jigsaw/bin/LNX-64/tripod64d'];
-    end
-    end
-    
-    if (exist(jexename,'file')~=2), jexename=''; end
-    
-%---------------------------------- switch to release binary
-    if (strcmp(jexename,''))
-    if (ispc())
-        jexename = [filepath, ...
-            '\jigsaw\bin\WIN-64\tripod64r.exe'];
-    elseif (ismac ())
-        jexename = [filepath, ...
-            '/jigsaw/bin/MAC-64/tripod64r'];
-    elseif (isunix())
-        jexename = [filepath, ...
-            '/jigsaw/bin/LNX-64/tripod64r'];
+            '/jigsaw/bin/tripod'] ;
     end
     end
   
     if (exist(jexename,'file')~=2), jexename=''; end
   
-%---------------------------- call JIGSAW and capture stdout
+%---------------------------- search machine path for binary
+    if (strcmp(jexename,''))
+    if (ispc())
+        jexename = ['tripod.exe'] ;
+    elseif (ismac ())
+        jexename = ['tripod'] ;
+    elseif (isunix())
+        jexename = ['tripod'] ;
+    end
+    end
+  
+    if (exist(jexename,'file')~=2), jexename=''; end
+
+%---------------------------- call TRIPOD and capture stdout
     if (exist(jexename,'file')==2)
  
    [status, result] = system( ...
         [jexename,' ',opts.jcfg_file], '-echo');
-        
+   
 %---------------------------- OCTAVE doesn't handle '-echo'!
     if (exist('OCTAVE_VERSION', 'builtin') > 0)
         fprintf(1, '%s', result) ;
@@ -141,7 +141,7 @@ function [varargout] = tripod(opts)
     else
 %---------------------------- couldn't find JIGSAW's backend
         error([ ...
-        'JIGSAW''s executable not found -- ', ...
+        'TRIPOD''s executable not found -- ', ...
         'has JIGSAW been compiled from src?', ...
             ] ) ;
     end

@@ -4,7 +4,7 @@ function savejig(name,opts)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   20-Feb-2019
+%   15-Apr-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -49,6 +49,9 @@ function savejig(name,opts)
         case 'init_file'
         pushchar(ffid,opts.init_file,'INIT_FILE');
         
+        case 'init_near'
+        pushreal(ffid,opts.init_near,'INIT-NEAR');
+
     %------------------------------------------ GEOM options
         case 'geom_file'
         pushchar(ffid,opts.geom_file,'GEOM_FILE');

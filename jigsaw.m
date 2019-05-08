@@ -30,6 +30,13 @@ function [varargout] = jigsaw(opts)
 %       name of the initial distribution file (is required 
 %       at input).
 %
+%   OPTS.INIT_NEAR - {default = 1.E-8} relative "zip" tol.
+%       applied when processing initial conditions. In cases
+%       where "sharp-feature" detection is active, nodes in 
+%       the initial set are zipped to their nearest feature
+%       node if the separation length is less than NEAR*SCAL
+%       where SCAL is the max. bounding-box dimension.
+%
 %   OPTIONAL fields (GEOM):
 %   ----------------------
 %
@@ -232,53 +239,53 @@ function [varargout] = jigsaw(opts)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   29-Dec-2018
+%   27-Apr-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
 
-    jexename = '';
+    jexename = '' ;
 
     if ( isempty(opts))
-        error('JIGSAW: insufficient inputs.');
+        error('JIGSAW: insufficient inputs!!') ;
     end
     
     if (~isempty(opts) && ~isstruct(opts))
-        error('JIGSAW: invalid input types.');
+        error('JIGSAW: invalid input types!!') ;
     end
         
     savejig(opts.jcfg_file,opts);
     
-    filename = mfilename('fullpath');
-    filepath = fileparts( filename );
+%---------------------------- set-up path for "local" binary
+    if (strcmp(jexename,''))
+    
+    filename = ...
+            mfilename('fullpath') ;
+    filepath = ...
+            fileparts( filename ) ;
 
-%---------------------------------- default to _debug binary
-    if (strcmp(jexename,''))
     if (ispc())
         jexename = [filepath, ...
-            '\jigsaw\bin\WIN-64\jigsaw64d.exe'];
+            '\jigsaw\bin\jigsaw.exe'] ;
     elseif (ismac ())
         jexename = [filepath, ...
-            '/jigsaw/bin/MAC-64/jigsaw64d'];
+            '/jigsaw/bin/jigsaw'] ;
     elseif (isunix())
         jexename = [filepath, ...
-            '/jigsaw/bin/LNX-64/jigsaw64d'];
+            '/jigsaw/bin/jigsaw'] ;
     end
     end
-    
+  
     if (exist(jexename,'file')~=2), jexename=''; end
-    
-%---------------------------------- switch to release binary
+
+%---------------------------- search machine path for binary
     if (strcmp(jexename,''))
     if (ispc())
-        jexename = [filepath, ...
-            '\jigsaw\bin\WIN-64\jigsaw64r.exe'];
+        jexename = ['jigsaw.exe'] ;
     elseif (ismac ())
-        jexename = [filepath, ...
-            '/jigsaw/bin/MAC-64/jigsaw64r'];
+        jexename = ['jigsaw'] ;
     elseif (isunix())
-        jexename = [filepath, ...
-            '/jigsaw/bin/LNX-64/jigsaw64r'];
+        jexename = ['jigsaw'] ;
     end
     end
   
