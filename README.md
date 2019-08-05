@@ -23,6 +23,8 @@ This package provides a <a href="http://www.mathworks.com">`MATLAB`</a> / <a hre
     
 ### `Function Listing`
 
+See `details.m` for a description of the various functions available.
+
     compile.m   - compile and install JIGSAW's c++ backend using cmake.
     example.m   - a list of demo programs. 
     initjig.m   - config. path and init. global constants.
@@ -41,8 +43,6 @@ This package provides a <a href="http://www.mathworks.com">`MATLAB`</a> / <a hre
     drawmesh.m  - draw mesh as 2- or 3-dim. "patch" object. 
     drawcost.m  - draw cost metrics associated with a mesh.
 
-See `details.m` for additional information.
-
 ### `Example Problems`
 
 The following set of example problems are available in `example.m`:
@@ -55,7 +55,7 @@ The following set of example problems are available in `example.m`:
     example(5); % user-defined mesh-spacing constraints
     example(6); % dealing with sharp-features in piecewise smooth domains
     example(7); % dealing with sharp-features in piecewise smooth domains
-    example(8); % (re)meshing marching-cubes type input
+    example(8); % (re)mesh marching-cubes style outputs
 
 ### `License`
 
