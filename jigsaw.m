@@ -239,7 +239,7 @@ function [varargout] = jigsaw(opts)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   27-Apr-2019
+%   26-Jul-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -266,13 +266,13 @@ function [varargout] = jigsaw(opts)
 
     if (ispc())
         jexename = [filepath, ...
-            '\jigsaw\bin\jigsaw.exe'] ;
+    '\external\jigsaw\bin\jigsaw.exe'];
     elseif (ismac ())
         jexename = [filepath, ...
-            '/jigsaw/bin/jigsaw'] ;
+    '/external/jigsaw/bin/jigsaw'];
     elseif (isunix())
         jexename = [filepath, ...
-            '/jigsaw/bin/jigsaw'] ;
+    '/external/jigsaw/bin/jigsaw'];
     end
     end
   
@@ -281,11 +281,11 @@ function [varargout] = jigsaw(opts)
 %---------------------------- search machine path for binary
     if (strcmp(jexename,''))
     if (ispc())
-        jexename = ['jigsaw.exe'] ;
+        jexename =       'jigsaw.exe' ;
     elseif (ismac ())
-        jexename = ['jigsaw'] ;
+        jexename =       'jigsaw' ;
     elseif (isunix())
-        jexename = ['jigsaw'] ;
+        jexename =       'jigsaw' ;
     end
     end
   
@@ -307,13 +307,18 @@ function [varargout] = jigsaw(opts)
         error([ ...
         'JIGSAW''s executable not found -- ', ...
         'has JIGSAW been compiled from src?', ...
+        'See COMPILE for additional detail.', ...
             ] ) ;
     end
 
     if (nargout == +1)
 %---------------------------- read mesh if output requested!
+    if (status  == +0)
     varargout{1} = loadmsh (opts.mesh_file) ;
-    
+    else
+    varargout{1} = [];
+    end
+
     end
     
 end

@@ -67,6 +67,11 @@ function [mesh] = loadmsh(name)
 %   MESH.VALUE - [NPxNV] array of "values" associated with
 %       the vertices of the mesh.
 %
+%   MESH.SLOPE - [NPx 1] array of "slopes" associated with
+%       the vertices of the mesh. Slope values define the
+%       gradient-limits ||dh/dx|| used by the Eikonal solver
+%       MARCHE.
+%
 %   .IF. MESH.MSHID == 'ELLIPSOID-MESH':
 %   -----------------------------------
 %
@@ -89,13 +94,19 @@ function [mesh] = loadmsh(name)
 %       the dimensions of the grid. NV values are associated 
 %       with each vertex.
 %
+%   MESH.SLOPE - [NMx 1] array of "slopes" associated with
+%       the vertices of the grid, where NM is the product of
+%       the dimensions of the grid. Slope values define the
+%       gradient-limits ||dh/dx|| used by the Eikonal solver 
+%       MARCHE.
+%
 %   See also JIGSAW, SAVEMSH
 %
 
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   19-Dec-2018
+%   26-Jul-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -111,6 +122,10 @@ function [mesh] = loadmsh(name)
     
     kind = 'EUCLIDEAN-MESH';
     
+    if (ffid < +0) 
+    error(['File not found: ', name]) ;
+    end
+
     nver = +0 ;
     ndim = +0 ;
     
@@ -409,8 +424,8 @@ function [mesh] = loadmsh(name)
                 
                 for vpos = +1 : vnum
                 
-                mesh.value(:,vpos) = ...
-                    data(vpos:vnum:end) ;
+                    mesh.value(:,vpos) = ...
+                       data(vpos:vnum:end) ;
 
                 end
                
@@ -444,10 +459,47 @@ function [mesh] = loadmsh(name)
                 
                 for ppos = +1 : pnum
                 
-                mesh.point.power(:,ppos) = ...
-                    data(ppos:pnum:end) ;
+                    mesh.point.power(:,ppos) = ...
+                       data(ppos:pnum:end) ;
 
                 end
+
+            case 'slope'
+
+        %-- read "SLOPE" data
+
+                stag = regexp(tstr{2},';','split');
+                
+                if (length(stag) == +2)
+                
+                nnum = str2double(stag{1}) ;
+                vnum = str2double(stag{2}) ;
+  
+                else
+                
+                warning(['Invalid SLOPE: ', lstr]);
+                continue;
+                
+                end
+               
+                numr = nnum * (vnum+0) ;
+                
+                fstr = repmat(real,1,vnum) ;
+                
+                data = fscanf( ...
+                  ffid,fstr(1:end-1),numr) ;
+                
+                mesh.slope = ...
+                    zeros(nnum, vnum) ;
+                
+                for ppos = +1 : vnum
+                
+                    mesh.slope(:,ppos) = ...
+                       data(ppos:vnum:end) ;
+
+                end
+
+
                 
             end
                        

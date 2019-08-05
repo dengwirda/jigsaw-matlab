@@ -4,7 +4,7 @@ function [flag] = certify(mesh)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   15-Jan-2019
+%   26-Jul-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -16,7 +16,7 @@ function [flag] = certify(mesh)
             'Incorrect input class.') ;
     end 
 
-    if (meshhas(mesh,'point'))
+    if (inspect(mesh,'point'))
         if (~isempty (mesh.point.coord))
         if (isnumeric(mesh.point.coord))
 %----------------------------------------- check MESH coords
@@ -95,7 +95,7 @@ function [flag] = certify(mesh)
         end
     end
     
-    if (meshhas(mesh,'radii'))
+    if (inspect(mesh,'radii'))
 %----------------------------------------- check RADII value
         if (~isempty  (mesh.radii))
         if (~isnumeric(mesh.radii))
@@ -122,7 +122,7 @@ function [flag] = certify(mesh)
         end    
     end
     
-    if (meshhas(mesh,'value'))
+    if (inspect(mesh,'value'))
 %----------------------------------------- check VALUE value
         if (~isempty  (mesh.value))
         if (isnumeric(mesh.point.coord))
@@ -217,8 +217,104 @@ function [flag] = certify(mesh)
         end
         end
     end
+
+    if (inspect(mesh,'slope'))
+%----------------------------------------- check SLOPE value
+        if (~isempty  (mesh.slope))
+        if (isnumeric(mesh.point.coord))
+%----------------------------------------- for MESH obj kind
+       
+        if (ndims(mesh.slope) ~= 2)
+        error('certify:incorrectDimensions', ...
+            'Invalid SLOPE dimensions.') ;
+        end
+        if ( size(mesh.slope,1) ~= np)
+        error('certify:incorrectDimensions', ...
+            'Invalid SLOPE dimensions.') ;
+        end
+       
+        if (any(isinf(mesh.slope)))
+        error('certify:invalidValueEntries', ...
+            'Invalid SLOPE entries.') ;
+        end
+        if (any(isnan(mesh.slope)))
+        error('certify:invalidValueEntries', ...
+            'Invalid SLOPE entries.') ;
+        end
+        
+        elseif(iscell(mesh.point.coord))
+%----------------------------------------- for GRID obj kind
+        
+        if (length(mesh.point.coord) ~= ...
+            ndims (mesh.slope))
+        error('certify:incorrectDimensions', ...
+            'Invalid SLOPE dimensions.') ;    
+        end
+        
+        if (length(mesh.point.coord) == 2)
+        
+        if (isvector(mesh.slope))
+        if (length(mesh.point.coord{2}) ...
+           *length(mesh.point.coord{1}) ...
+            ~= numel(mesh.slope))
+        error('certify:incorrectDimensions', ...
+            'Invalid SLOPE dimensions.') ;
+        end
+        else
+        if (length(mesh.point.coord{2}) ...
+            ~= size(mesh.slope,1) || ...
+            length(mesh.point.coord{1}) ...
+            ~= size(mesh.slope,2) )
+        error('certify:incorrectDimensions', ...
+            'Invalid SLOPE dimensions.') ;
+        end
+        end
+        
+        end
+        
+        if (length(mesh.point.coord) == 3)
+        
+        if (isvector(mesh.slope))
+        if (length(mesh.point.coord{2}) ...
+           *length(mesh.point.coord{1}) ...
+           *length(mesh.point.coord{3}) ...
+            ~= numel(mesh.slope))
+        error('certify:incorrectDimensions', ...
+            'Invalid SLOPE dimensions.') ;
+        end    
+        else
+        if (length(mesh.point.coord{2}) ...
+            ~= size(mesh.slope,1) || ...
+            length(mesh.point.coord{1}) ...
+            ~= size(mesh.slope,2) || ...
+            length(mesh.point.coord{3}) ...
+            ~= size(mesh.slope,3) )
+        error('certify:incorrectDimensions', ...
+            'Invalid SLOPE dimensions.') ;
+        end
+        end
+
+        end
+        
+        if (any(isinf(mesh.slope)))
+        error('certify:invalidValueEntries', ...
+            'Invalid SLOPE entries.') ;
+        end
+        if (any(isnan(mesh.slope)))
+        error('certify:invalidValueEntries', ...
+            'Invalid SLOPE entries.') ;
+        end
+        
+        else
+%----------------------------------------- wrong VALUE class
+        error('certify:incorrectInputClass', ...
+            'Invalid SLOPE class.') ;
+        
+        end
+        end
+    end
      
-    if (meshhas(mesh,'edge2'))
+    if (inspect(mesh,'edge2'))
 %----------------------------------------- check EDGE2 index
         if (~isempty  (mesh.edge2.index))
         if (~isnumeric(mesh.edge2.index))
@@ -251,7 +347,7 @@ function [flag] = certify(mesh)
         end
     end
     
-    if (meshhas(mesh,'tria3'))
+    if (inspect(mesh,'tria3'))
 %----------------------------------------- check TRIA3 index
         if (~isempty  (mesh.tria3.index))
         if (~isnumeric(mesh.tria3.index))
@@ -284,7 +380,7 @@ function [flag] = certify(mesh)
         end
     end
     
-    if (meshhas(mesh,'quad4'))
+    if (inspect(mesh,'quad4'))
 %----------------------------------------- check QUAD4 index
         if (~isempty  (mesh.quad4.index))
         if (~isnumeric(mesh.quad4.index))
@@ -317,7 +413,7 @@ function [flag] = certify(mesh)
         end
     end
     
-    if (meshhas(mesh,'tria4'))
+    if (inspect(mesh,'tria4'))
 %----------------------------------------- check TRIA4 index
         if (~isempty  (mesh.tria4.index))
         if (~isnumeric(mesh.tria4.index))
@@ -350,7 +446,7 @@ function [flag] = certify(mesh)
         end
     end
     
-    if (meshhas(mesh,'hexa8'))
+    if (inspect(mesh,'hexa8'))
 %----------------------------------------- check HEXA8 index
         if (~isempty  (mesh.hexa8.index))
         if (~isnumeric(mesh.hexa8.index))
@@ -383,7 +479,7 @@ function [flag] = certify(mesh)
         end
     end
     
-    if (meshhas(mesh,'bound'))
+    if (inspect(mesh,'bound'))
 %----------------------------------------- check BOUND index
         if (~isempty  (mesh.bound.index))
         if (~isnumeric(mesh.bound.index))

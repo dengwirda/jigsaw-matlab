@@ -14,6 +14,10 @@ function [opts] = loadjig(name)
     try
 
     ffid = fopen(name,'r') ;
+
+    if (ffid < +0) 
+    error(['File not found: ', name]) ; 
+    end
     
     while (true)
   

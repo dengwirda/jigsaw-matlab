@@ -68,6 +68,11 @@ function savemsh(name,mesh)
 %       the vertices of the mesh. NV values are associated
 %       with each vertex.
 %
+%   MESH.SLOPE - [NPx 1] array of "slopes" associated with
+%       the vertices of the mesh. Slope values define the
+%       gradient-limits ||dh/dx|| used by the Eikonal solver
+%       MARCHE.
+%
 %   .IF. MESH.MSHID == 'ELLIPSOID-MESH':
 %   -----------------------------------
 %
@@ -90,13 +95,19 @@ function savemsh(name,mesh)
 %       the dimensions of the grid. NV values are associated 
 %       with each vertex.
 %
+%   MESH.SLOPE - [NMx 1] array of "slopes" associated with
+%       the vertices of the grid, where NM is the product of
+%       the dimensions of the grid. Slope values define the
+%       gradient-limits ||dh/dx|| used by the Eikonal solver 
+%       MARCHE.
+%
 %   See also JIGSAW, LOADMSH
 %
 
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   15-Jan-2019
+%   26-Jul-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -290,15 +301,53 @@ function save_mesh_format(ffid,nver,mesh,kind)
         nrow = size(mesh.value,1);
         nval = size(mesh.value,2);
 
-        if (isa(mesh.value, 'double')) 
+        if     (isa(mesh.value, 'double')) 
         vstr = sprintf('%%1.%ug;',+16) ;
-        else
+        elseif (isa(mesh.value, 'single'))
         vstr = sprintf('%%1.%ug;',+ 8) ;
+        elseif (isa(mesh.value,'integer'))
+        vstr = '%d;' ;
+        else
+            error('Incorrect input type!');
         end
         vstr = repmat(vstr,+1,nval) ;
 
         fprintf(ffid,['VALUE=%u;%u','\n'],[nrow,nval]);        
         fprintf(ffid,[vstr(1:end-1),'\n'],mesh.value');
+
+    end
+
+    if (isfield(mesh,'slope'))
+    
+    %------------------------------------ write "SLOPE" data
+        
+        if (~isnumeric(mesh.slope))
+            error('Incorrect input type!');
+        end
+        if (ndims(mesh.slope) ~= 2)
+            error('Incorrect dimensions!');
+        end
+        if (size(mesh.slope,1) ~= npts && ...
+            size(mesh.slope,1) ~= +1 )
+            error('Incorrect dimensions!');
+        end
+            
+        nrow = size(mesh.slope,1);
+        nval = size(mesh.slope,2);
+
+        if     (isa(mesh.slope, 'double')) 
+        vstr = sprintf('%%1.%ug;',+16) ;
+        elseif (isa(mesh.slope, 'single'))
+        vstr = sprintf('%%1.%ug;',+ 8) ;
+        elseif (isa(mesh.slope,'integer'))
+        vstr = '%d;' ;
+        else
+            error('Incorrect input type!');
+        end
+        vstr = repmat(vstr,+1,nval) ;
+
+        fprintf(ffid,['SLOPE=%u;%u','\n'],[nrow,nval]);        
+        fprintf(ffid,[vstr(1:end-1),'\n'],mesh.slope');
 
     end
     
@@ -655,10 +704,14 @@ function save_grid_format(ffid,nver,mesh,kind)
         end
         end
            
-        if (isa(mesh.value, 'double')) 
+        if     (isa(mesh.value, 'double')) 
         vstr = sprintf('%%1.%ug;',+16) ;
-        else
+        elseif (isa(mesh.value, 'single'))
         vstr = sprintf('%%1.%ug;',+ 8) ;
+        elseif (isa(mesh.value,'integer'))
+        vstr = '%d;' ;
+        else
+            error('Incorrect input type!');
         end
         vstr = repmat(vstr,+1,nval(end)) ;
         
@@ -667,6 +720,56 @@ function save_grid_format(ffid,nver,mesh,kind)
 
         fprintf(ffid, ...
           'VALUE=%u;%u\n',[prod(dims),nval(end)]); 
+      
+        fprintf(ffid,[vstr(+1:end-1),'\n'],vals');
+
+    end
+
+    if (isfield(mesh,'slope'))
+    
+    %------------------------------------ write "SLOPE" data
+            
+        if (~isnumeric(mesh.slope))
+            error('Incorrect input types') ;
+        end
+        if (ndims(mesh.slope) ~= length(dims)+0 && ...
+            ndims(mesh.slope) ~= length(dims)+1 )
+            error('Incorrect dimensions!') ;
+        end
+        
+        if (ndims(mesh.slope) == length(dims))
+            nval = size(mesh.slope);
+            nval = [nval, +1] ;
+        else
+            nval = size(mesh.slope);
+        end
+        
+        if (isvector(mesh.slope))
+        if (prod(nval(1:end-1)) ~= prod(dims))
+            error('Incorrect dimensions!') ;
+        end 
+        else
+        if (~all(nval(1:end-1) == dims))
+            error('Incorrect dimensions!') ;
+        end
+        end
+           
+        if     (isa(mesh.slope, 'double')) 
+        vstr = sprintf('%%1.%ug;',+16) ;
+        elseif (isa(mesh.slope, 'single'))
+        vstr = sprintf('%%1.%ug;',+ 8) ;
+        elseif (isa(mesh.slope,'integer'))
+        vstr = '%d;' ;
+        else
+            error('Incorrect input type!');
+        end
+        vstr = repmat(vstr,+1,nval(end)) ;
+        
+        vals = ...
+        reshape(mesh.slope,[],nval(end)) ;
+
+        fprintf(ffid, ...
+          'SLOPE=%u;%u\n',[prod(dims),nval(end)]); 
       
         fprintf(ffid,[vstr(+1:end-1),'\n'],vals');
 

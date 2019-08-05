@@ -75,7 +75,7 @@ function [varargout] = tripod(opts)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   27-Apr-20189
+%   27-Apr-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -102,26 +102,26 @@ function [varargout] = tripod(opts)
 
     if (ispc())
         jexename = [filepath, ...
-            '\jigsaw\bin\tripod.exe'] ;
+    '\external\jigsaw\bin\tripod.exe'];
     elseif (ismac ())
         jexename = [filepath, ...
-            '/jigsaw/bin/tripod'] ;
+    '/external/jigsaw/bin/tripod'];
     elseif (isunix())
         jexename = [filepath, ...
-            '/jigsaw/bin/tripod'] ;
+    '/external/jigsaw/bin/tripod'];
     end
     end
   
     if (exist(jexename,'file')~=2), jexename=''; end
-  
+
 %---------------------------- search machine path for binary
     if (strcmp(jexename,''))
     if (ispc())
-        jexename = ['tripod.exe'] ;
+        jexename =       'tripod.exe' ;
     elseif (ismac ())
-        jexename = ['tripod'] ;
+        jexename =       'tripod' ;
     elseif (isunix())
-        jexename = ['tripod'] ;
+        jexename =       'tripod' ;
     end
     end
   
@@ -143,13 +143,18 @@ function [varargout] = tripod(opts)
         error([ ...
         'TRIPOD''s executable not found -- ', ...
         'has JIGSAW been compiled from src?', ...
+        'See COMPILE for additional detail.', ...
             ] ) ;
     end
 
     if (nargout == +1)
 %---------------------------- read mesh if output requested!
+    if (status  == +0)
     varargout{1} = loadmsh (opts.mesh_file) ;
-    
+    else
+    varargout{1} = [];
+    end
+
     end
 
 end
