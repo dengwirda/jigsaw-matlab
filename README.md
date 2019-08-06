@@ -21,6 +21,8 @@ This package provides a <a href="http://www.mathworks.com">`MATLAB`</a> / <a hre
     Run compile.m
     Run example.m
     
+Note: installation of `JIGSAW` requires a `c++` compiler and the `cmake` utility. `JIGSAW` may also be installed as a `conda` package. See <a href="https://github.com/dengwirda/jigsaw">here</a> for details.
+    
 ### `Function Listing`
 
 See `details.m` for a description of the various functions available.
