@@ -94,7 +94,7 @@ function [mesh] = bisect_sphere(opts,nlev)
         if (nlev >= +1)
         mesh =   jitter (OPTS, +8) ;
         else
-        mesh =   jitter (OPTS, +1) ;
+        mesh =   jitter (OPTS, +2) ;
         end
         
         nlev = nlev - 1 ;

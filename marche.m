@@ -19,15 +19,12 @@ function [varargout] = marche(opts)
 %   ---------------
 %
 %   OPTS.HFUN_FILE - 'HFUNNAME.MSH', a string containing the 
-%       name of the initial distribution file (is required 
-%       at input). See SAVEMSH for additional details regar-
+%       name of the file defining h(x). Data is overwritten
+%       *in-place*. See SAVEMSH for additional details regar-
 %       ding the creation of *.MSH files.
 %
 %   OPTS.JCFG_FILE - 'JCFGNAME.JIG', a string containing the 
 %       name of the cofig. file (will be created on output).
-%
-%   OPTS.MESH_FILE - 'MESHNAME.MSH', a string containing the 
-%       name of the output file (will be created on output).
 %
 %   OPTIONAL fields (MISC):
 %   ----------------------
@@ -41,7 +38,7 @@ function [varargout] = marche(opts)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   26-Jul-2019
+%   05-Aug-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -116,7 +113,7 @@ function [varargout] = marche(opts)
     if (nargout == +1)
 %---------------------------- read mesh if output requested!
     if (status  == +0)
-    varargout{1} = loadmsh (opts.mesh_file) ;
+    varargout{1} = loadmsh (opts.hfun_file) ;
     else
     varargout{1} = [];
     end

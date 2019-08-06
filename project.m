@@ -1,6 +1,6 @@
-function [pmsh] = mapproj(mesh,proj,kind)
-%MAPPROJ projection operators for JIGSAW MSH objects.
-%   [PMSH] = MAPPROJ(MESH,PROJ,KIND) returns the projected
+function [pmsh] = project(mesh,proj,kind)
+%PROJECT cartographic projections for JIGSAW MSH objects.
+%   [PMSH] = PROJECT(MESH,PROJ,KIND) returns the projected
 %   mesh object PMSH resulting from application of the
 %   projection operator PROJ to the input object MESH. KIND
 %   is a string defining the 'direction' of the projection,
@@ -28,7 +28,7 @@ function [pmsh] = mapproj(mesh,proj,kind)
     if (~isstruct(mesh) || ...
         ~isstruct(proj) || ...
         ~ischar  (kind) )
-    error('mapproj:incorrectInputClass', ...
+    error('project:incorrectInputClass', ...
         'Incorrect input class.') ; 
     end
     
@@ -40,7 +40,7 @@ function [pmsh] = mapproj(mesh,proj,kind)
     case{'EUCLIDEAN-MESH',
          'ELLIPSOID-MESH'}
  
-        if (meshhas(mesh,'point') && ...
+        if (inspect(mesh,'point') && ...
                 size(mesh.point.coord,2) == +3)
     
         pmsh = mesh;
@@ -64,7 +64,7 @@ function [pmsh] = mapproj(mesh,proj,kind)
         
         otherwise
         
-        error('mapproj:unsupportedProjection', ...
+        error('project:unsupportedProjection', ...
             'Unsupported projection operator.') ;
         
         end
@@ -87,7 +87,7 @@ function [pmsh] = mapproj(mesh,proj,kind)
         
         otherwise
         
-        error('mapproj:invalidProjectionKind', ...
+        error('project:invalidProjectionKind', ...
             'Incorrect projection KIND flags.') ;
         
         end
@@ -98,13 +98,13 @@ function [pmsh] = mapproj(mesh,proj,kind)
         pmsh.point.coord(:, 2) = YNEW ;
         
     %------------------------------- setup proj.'d extras
-        if (meshhas(mesh,'value'))
+        if (inspect(mesh,'value'))
         
         pmsh.value = mesh.value.*SCAL ;
         
         end
         
-        if (meshhas(mesh,'point', ...
+        if (inspect(mesh,'point', ...
                          'power'))
         
         pmsh.point.power = ...
@@ -118,7 +118,7 @@ function [pmsh] = mapproj(mesh,proj,kind)
     case{'EUCLIDEAN-GRID',
          'ELLIPSOID-GRID'}
     
-        if (meshhas(mesh,'point') && ...
+        if (inspect(mesh,'point') && ...
                 size(mesh.point.coord,2) == +2)
     
         dim1 = ...
@@ -150,7 +150,7 @@ function [pmsh] = mapproj(mesh,proj,kind)
         
         otherwise
         
-        error('mapproj:unsupportedProjection', ...
+        error('project:unsupportedProjection', ...
             'Unsupported projection operator.') ;
         
         end
@@ -173,7 +173,7 @@ function [pmsh] = mapproj(mesh,proj,kind)
         
         otherwise
         
-        error('mapproj:invalidProjectionKind', ...
+        error('project:invalidProjectionKind', ...
             'Incorrect projection KIND flags.') ;
         
         end
@@ -204,9 +204,15 @@ function [pmsh] = mapproj(mesh,proj,kind)
         end
         
     %------------------------------- setup proj.'d extras
-        if (meshhas(mesh,'value'))
+        if (inspect(mesh,'value'))
         
         pmsh.value = mesh.value(:).*SCAL ;
+        
+        end
+        
+        if (inspect(mesh,'slope'))
+        
+        pmsh.slope = mesh.slope(:) ;
         
         end
     
