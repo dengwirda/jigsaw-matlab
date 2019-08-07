@@ -76,28 +76,28 @@ function savevtk(name,mesh)
     npoint = 0; nedge2 = 0; ntria3 = 0; ntria4 = 0;
     nquad4 = 0; nhexa8 = 0; nwedg6 = 0; npyra5 = 0;
     
-    if (meshhas(mesh,'point'))
+    if (inspect(mesh,'point'))
         npoint = size(mesh.point.coord,1);
     end
-    if (meshhas(mesh,'edge2'))
+    if (inspect(mesh,'edge2'))
         nedge2 = size(mesh.edge2.index,1);
     end
-    if (meshhas(mesh,'tria3'))
+    if (inspect(mesh,'tria3'))
         ntria3 = size(mesh.tria3.index,1);
     end
-    if (meshhas(mesh,'quad4'))
+    if (inspect(mesh,'quad4'))
         nquad4 = size(mesh.quad4.index,1);
     end
-    if (meshhas(mesh,'tria4'))
+    if (inspect(mesh,'tria4'))
         ntria4 = size(mesh.tria4.index,1);
     end
-    if (meshhas(mesh,'hexa8'))
+    if (inspect(mesh,'hexa8'))
         nhexa8 = size(mesh.hexa8.index,1);
     end
-    if (meshhas(mesh,'wedg6'))
+    if (inspect(mesh,'wedg6'))
         nwedg6 = size(mesh.wedg6.index,1);
     end
-    if (meshhas(mesh,'pyra5'))
+    if (inspect(mesh,'pyra5'))
         npyra5 = size(mesh.pyra5.index,1);
     end
     
@@ -108,7 +108,7 @@ function savevtk(name,mesh)
     
     fprintf(ffid,['POINTS %u double','\n'],npoint);
     
-    if (meshhas(mesh,'point'))
+    if (inspect(mesh,'point'))
 %-- write "POINT" data
         switch (size(mesh.point.coord,2))
             case +3
@@ -135,37 +135,37 @@ function savevtk(name,mesh)
     
     fprintf(ffid,['CELLS %u %u\n'],[nline,nints]) ;
     
-    if (meshhas(mesh,'edge2'))
+    if (inspect(mesh,'edge2'))
 %-- write "EDGE2" data
     fprintf(ffid,['2 ',repmat('%u ',1,2),'\n'], ...
         mesh.edge2.index(:,1:2)'-1);
     end
-    if (meshhas(mesh,'tria3'))
+    if (inspect(mesh,'tria3'))
 %-- write "TRIA3" data
     fprintf(ffid,['3 ',repmat('%u ',1,3),'\n'], ...
         mesh.tria3.index(:,1:3)'-1);
     end
-    if (meshhas(mesh,'quad4'))
+    if (inspect(mesh,'quad4'))
 %-- write "QUAD4" data
     fprintf(ffid,['4 ',repmat('%u ',1,4),'\n'], ...
         mesh.quad4.index(:,1:3)'-1);
     end
-    if (meshhas(mesh,'tria4'))
+    if (inspect(mesh,'tria4'))
 %-- write "TRIA4" data
     fprintf(ffid,['4 ',repmat('%u ',1,4),'\n'], ...
         mesh.tria4.index(:,1:4)'-1);
     end
-    if (meshhas(mesh,'hexa8'))
+    if (inspect(mesh,'hexa8'))
 %-- write "HEXA8" data
     fprintf(ffid,['8 ',repmat('%u ',1,8),'\n'], ...
         mesh.hexa8.index(:,1:8)'-1);
     end
-    if (meshhas(mesh,'wedg6'))
+    if (inspect(mesh,'wedg6'))
 %-- write "WEDG6" data
     fprintf(ffid,['6 ',repmat('%u ',1,6),'\n'], ...
         mesh.wedg6.index(:,1:6)'-1);
     end
-    if (meshhas(mesh,'pyra5'))
+    if (inspect(mesh,'pyra5'))
 %-- write "PYRA5" data
     fprintf(ffid,['5 ',repmat('%u ',1,5),'\n'], ...
         mesh.pyra5.index(:,1:5)'-1);
@@ -181,37 +181,37 @@ function savevtk(name,mesh)
     vtk_wedg6 = +13 ;
     vtk_pyra5 = +14 ;
     
-    if (meshhas(mesh,'edge2'))
+    if (inspect(mesh,'edge2'))
 %-- write "EDGE2" type
     fprintf(ffid,[ ...
         '%u','\n'],repmat(vtk_edge2,1,nedge2));
     end
-    if (meshhas(mesh,'tria3'))
+    if (inspect(mesh,'tria3'))
 %-- write "TRIA3" type
     fprintf(ffid,[ ...
         '%u','\n'],repmat(vtk_tria3,1,ntria3));
     end
-    if (meshhas(mesh,'quad4'))
+    if (inspect(mesh,'quad4'))
 %-- write "QUAD4" type
     fprintf(ffid,[ ...
         '%u','\n'],repmat(vtk_quad4,1,nquad4));
     end
-    if (meshhas(mesh,'tria4'))
+    if (inspect(mesh,'tria4'))
 %-- write "TRIA4" type
     fprintf(ffid,[ ...
         '%u','\n'],repmat(vtk_tria4,1,ntria4));
     end
-    if (meshhas(mesh,'hexa8'))
+    if (inspect(mesh,'hexa8'))
 %-- write "HEXA8" type
     fprintf(ffid,[ ...
         '%u','\n'],repmat(vtk_hexa8,1,nhexa8));
     end
-    if (meshhas(mesh,'wedg6'))
+    if (inspect(mesh,'wedg6'))
 %-- write "WEDG6" type
     fprintf(ffid,[ ...
         '%u','\n'],repmat(vtk_wedg6,1,nwedg6));
     end
-    if (meshhas(mesh,'pyra5'))
+    if (inspect(mesh,'pyra5'))
 %-- write "PYRA5" type
     fprintf(ffid,[ ...
         '%u','\n'],repmat(vtk_pyra5,1,npyra5));

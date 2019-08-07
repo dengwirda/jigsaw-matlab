@@ -56,28 +56,28 @@ function saveoff(name,mesh)
     fprintf(ffid,[ ...
         '# %s.off file, created by JIGSAW','\n'],file) ;
     
-    if (meshhas(mesh,'point'))
+    if (inspect(mesh,'point'))
         npoint = size(mesh.point.coord,1);
     end
-    if (meshhas(mesh,'edge2'))
+    if (inspect(mesh,'edge2'))
         nedge2 = size(mesh.edge2.index,1);
     end
-    if (meshhas(mesh,'tria3'))
+    if (inspect(mesh,'tria3'))
         ntria3 = size(mesh.tria3.index,1);
     end
-    if (meshhas(mesh,'quad4'))
+    if (inspect(mesh,'quad4'))
         nquad4 = size(mesh.quad4.index,1);
     end
-    if (meshhas(mesh,'tria4'))
+    if (inspect(mesh,'tria4'))
         ntria4 = size(mesh.tria4.index,1);
     end
-    if (meshhas(mesh,'hexa8'))
+    if (inspect(mesh,'hexa8'))
         nhexa8 = size(mesh.hexa8.index,1);
     end
-    if (meshhas(mesh,'wedg6'))
+    if (inspect(mesh,'wedg6'))
         nwedg6 = size(mesh.wedg6.index,1);
     end
-    if (meshhas(mesh,'pyra5'))
+    if (inspect(mesh,'pyra5'))
         npyra5 = size(mesh.pyra5.index,1);
     end
 
@@ -85,7 +85,7 @@ function saveoff(name,mesh)
     
     fprintf(ffid,'%u %u %u \n',[npoint,nfaces,nedges]) ;
     
-    if (meshhas(mesh,'point'))
+    if (inspect(mesh,'point'))
 %-- write "POINT" data
     switch (size(mesh.point.coord,2))
         case +2
@@ -105,39 +105,39 @@ function saveoff(name,mesh)
     fprintf(ffid,['%1.16g %1.16g %1.16g','\n'],coord') ;
     end
     
-    if (meshhas(mesh,'edge2'))
+    if (inspect(mesh,'edge2'))
 %-- write "EDGE2" data
     warning('EDGE2 elements not supported!') ;   
     end
     
-    if (meshhas(mesh,'tria3'))
+    if (inspect(mesh,'tria3'))
 %-- write "TRIA3" data
     fprintf(ffid,['3',repmat(' %u',1,3),'\n'], ...
         mesh.tria3.index(:,1:3)'-1) ;
     end
     
-    if (meshhas(mesh,'quad4'))
+    if (inspect(mesh,'quad4'))
 %-- write "QUAD4" data
     fprintf(ffid,['4',repmat(' %u',1,4),'\n'], ...
         mesh.quad4.index(:,1:4)'-1) ;
     end
     
-    if (meshhas(mesh,'tria4'))
+    if (inspect(mesh,'tria4'))
 %-- write "TRIA4" data
     warning('TRIA4 elements not supported!') ;
     end
     
-    if (meshhas(mesh,'hexa8'))
+    if (inspect(mesh,'hexa8'))
 %-- write "HEXA8" data
     warning('HEXA8 elements not supported!') ;
     end
     
-    if (meshhas(mesh,'wedg6'))
+    if (inspect(mesh,'wedg6'))
 %-- write "WEDG6" data
     warning('WEDG6 elements not supported!') ;
     end
     
-    if (meshhas(mesh,'pyra5'))
+    if (inspect(mesh,'pyra5'))
 %-- write "PYRA5" data
     warning('PYRA5 elements not supported!') ;
     end

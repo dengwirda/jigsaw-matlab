@@ -21,16 +21,21 @@ function [mesh] = jitter(opts,imax)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   19-Jul-2019
+%   06-Aug-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
 
-    mesh = [] ;
+    if (isfield(opts,'init_file'))
+        mesh = ...
+            loadmsh (opts.init_file) ;
+    else
+        mesh = [] ;
+    end
 
     for iter = +1 : imax
 
-        if (iter > +1)
+        if (~isempty(mesh))
         
 %---------------------------------- setup initial conditions
        [path,name,fext] = ...

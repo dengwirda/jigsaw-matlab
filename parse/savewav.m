@@ -56,7 +56,7 @@ function savewav(name,mesh)
     fprintf(ffid, ...
         ['# %s.obj file, created by JIGSAW','\n'], file) ;
 
-    if (meshhas(mesh,'point'))
+    if (inspect(mesh,'point'))
 %-- write "POINT" data
     switch (size(mesh.point.coord,2))
         case +2
@@ -76,40 +76,40 @@ function savewav(name,mesh)
     fprintf(ffid,['v %1.16g %1.16g %1.16g','\n'],coord') ;
     end
 
-    if (meshhas(mesh,'edge2'))
+    if (inspect(mesh,'edge2'))
 %-- write "EDGE2" data
     fprintf(ffid,['l',repmat(' %u',1,2),'\n'], ...
         mesh.edge2.index(:,1:2)'-0) ;
     end
 
-    if (meshhas(mesh,'tria3'))
+    if (inspect(mesh,'tria3'))
 %-- write "TRIA3" data
     fprintf(ffid,['f',repmat(' %u',1,3),'\n'], ...
         mesh.tria3.index(:,1:3)'-0) ;
     end
 
-    if (meshhas(mesh,'quad4'))
+    if (inspect(mesh,'quad4'))
 %-- write "QUAD4" data
     fprintf(ffid,['f',repmat(' %u',1,4),'\n'], ...
         mesh.quad4.index(:,1:4)'-0) ;
     end
 
-    if (meshhas(mesh,'tria4'))
+    if (inspect(mesh,'tria4'))
 %-- write "TRIA4" data
     warning('TRIA4 elements not supported!') ;
     end
     
-    if (meshhas(mesh,'hexa8'))
+    if (inspect(mesh,'hexa8'))
 %-- write "HEXA8" data
     warning('HEXA8 elements not supported!') ;
     end
     
-    if (meshhas(mesh,'wedg6'))
+    if (inspect(mesh,'wedg6'))
 %-- write "WEDG6" data
     warning('WEDG6 elements not supported!') ;
     end
     
-    if (meshhas(mesh,'pyra5'))
+    if (inspect(mesh,'pyra5'))
 %-- write "PYRA5" data
     warning('PYRA5 elements not supported!') ;
     end

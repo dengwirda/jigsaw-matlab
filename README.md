@@ -17,7 +17,7 @@ This package provides a <a href="http://www.mathworks.com">`MATLAB`</a> / <a hre
 
     Ensure you have a c++ compiler and the cmake utility installed.
     Clone/download + unpack this repository.
-    From `MATLAB` / `OCTAVE`:
+    From MATLAB / OCTAVE:
     Run compile.m
     Run example.m
     

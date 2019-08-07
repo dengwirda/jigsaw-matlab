@@ -10,7 +10,7 @@ function [mesh] = bisect_sphere(opts,nlev)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   30-Jul-2019
+%   06-Aug-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -88,13 +88,23 @@ function [mesh] = bisect_sphere(opts,nlev)
         opts.optm_qlim * 1.000 ;
             
         end
+        else                % no QLIM specified!
+        if (nlev >= +1)
+            
+        OPTS.optm_qlim = .8625 ;
+
+        else
+    
+        OPTS.optm_qlim = .9375 ;
+            
+        end
         end
         
 %---------------------------- call JIGSAW kernel at this lev
         if (nlev >= +1)
-        mesh =   jitter (OPTS, +8) ;
+        mesh = jitter (OPTS, +8) ;
         else
-        mesh =   jitter (OPTS, +2) ;
+        mesh = jitter (OPTS, +2) ;
         end
         
         nlev = nlev - 1 ;

@@ -95,7 +95,7 @@ function savestl(name,mesh,varargin)
     trias = [] ; 
     facet = [] ;
     
-    if (meshhas(mesh,'point'))
+    if (inspect(mesh,'point'))
 %-- write "POINT" data
     switch (size(mesh.point.coord,2))
         case +2
@@ -116,12 +116,12 @@ function savestl(name,mesh,varargin)
     
     if (~isempty(coord))
 %-- calc. "FACET" data
-    if (meshhas(mesh,'tria3'))
+    if (inspect(mesh,'tria3'))
 %-- write "TRIA3" data    
         trias = [...
         trias ; mesh.tria3.index(:,[1,2,3])] ;
     end
-    if (meshhas(mesh,'quad4'))
+    if (inspect(mesh,'quad4'))
 %-- write "QUAD4" data
         trias = [
         trias ; mesh.quad4.index(:,[1,2,3])] ;
@@ -186,26 +186,26 @@ function savestl(name,mesh,varargin)
     end
     end
     
-    if (meshhas(mesh,'edge2'))
+    if (inspect(mesh,'edge2'))
 %-- write "EDGE2" data
     warning('EDGE2 elements not supported!') ;   
     end
-    if (meshhas(mesh,'tria4'))
+    if (inspect(mesh,'tria4'))
 %-- write "TRIA4" data
     warning('TRIA4 elements not supported!') ;
     end
     
-    if (meshhas(mesh,'hexa8'))
+    if (inspect(mesh,'hexa8'))
 %-- write "HEXA8" data
     warning('HEXA8 elements not supported!') ;
     end
     
-    if (meshhas(mesh,'wedg6'))
+    if (inspect(mesh,'wedg6'))
 %-- write "WEDG6" data
     warning('WEDG6 elements not supported!') ;
     end
     
-    if (meshhas(mesh,'pyra5'))
+    if (inspect(mesh,'pyra5'))
 %-- write "PYRA5" data
     warning('PYRA5 elements not supported!') ;
     end
