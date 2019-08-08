@@ -41,6 +41,7 @@ See `details.m` for a description of the various functions available.
     savejig.m   - save *.jig files.
 
     bisect.m    - refine a mesh obj. via bisection.
+    extrude.m   - create a mesh obj. via extrusion.
     
     drawmesh.m  - draw mesh as 2- or 3-dim. "patch" object. 
     drawcost.m  - draw cost metrics associated with a mesh.
@@ -58,6 +59,7 @@ The following set of example problems are available in `example.m`:
     example(6); % dealing with sharp-features in piecewise smooth domains
     example(7); % dealing with sharp-features in piecewise smooth domains
     example(8); % (re)mesh marching-cubes style outputs
+    example(9); % creating prismatic volumes via extrusion
 
 ### `License`
 

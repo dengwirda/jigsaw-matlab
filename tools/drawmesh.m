@@ -4,7 +4,7 @@ function drawmesh(mesh,varargin)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   13-Aug-2018
+%   07-Aug-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -45,6 +45,14 @@ function drawmesh(mesh,varargin)
         mask.hexa8 = ...
         true(size(mesh.hexa8.index,1),1) ;
     end
+    if (inspect(mesh,'wedg6'))
+        mask.wedg6 = ...
+        true(size(mesh.wedg6.index,1),1) ;
+    end
+    if (inspect(mesh,'pyra5'))
+        mask.pyra5 = ...
+        true(size(mesh.pyra5.index,1),1) ;
+    end
     if (inspect(mesh,'value'))
         mask.value = ...
         true(size(mesh.value      ,1),1) ;
@@ -77,6 +85,16 @@ function drawmesh(mesh,varargin)
        ~isfield(mask,'hexa8') )
         mask.hexa8 = ...
        false(size(mesh.hexa8.index,1),1) ;
+    end
+    if (inspect(mesh,'wedg6') && ...
+       ~isfield(mask,'wedg6') )
+        mask.wedg6 = ...
+       false(size(mesh.wedg6.index,1),1) ;
+    end
+    if (inspect(mesh,'pyra5') && ...
+       ~isfield(mask,'pyra5') )
+        mask.pyra5 = ...
+       false(size(mesh.pyra5.index,1),1) ;
     end
     if (inspect(mesh,'value') && ...
        ~isfield(mask,'value') )
@@ -250,6 +268,69 @@ function draw_euclidean_mesh(mesh,mask,cuts)
         m = mask.tria4 ;
         drawtria_4(mesh.point.coord(:,1:3), ...
                    mesh.tria4.index(m,1:4)) ;
+        axis image off ; hold on;
+        set(gcf,'color','w') ;
+        set(gca,'clipping','off') ;
+    end
+    end
+
+    if (inspect(mesh,'hexa8'))
+    %-- draw HEXA8 mesh obj.
+    if (inspect(mesh,'value'))
+        m = mask.hexa8 ;
+        drawhexa_8(mesh.point.coord(:,1:3), ...
+                   mesh.hexa8.index(m,1:8), ...
+        'facevertexcdata',mesh.value, ...
+        'facecolor', 'flat') ;
+        axis image off ; hold on;
+        set(gcf,'color','w') ;
+        set(gca,'clipping','off') ;
+    else
+        m = mask.hexa8 ;
+        drawhexa_8(mesh.point.coord(:,1:3), ...
+                   mesh.hexa8.index(m,1:8)) ;
+        axis image off ; hold on;
+        set(gcf,'color','w') ;
+        set(gca,'clipping','off') ;
+    end
+    end
+    
+    if (inspect(mesh,'wedg6'))
+    %-- draw WEDG6 mesh obj.
+    if (inspect(mesh,'value'))
+        m = mask.wedg6 ;
+        drawwedg_6(mesh.point.coord(:,1:3), ...
+                   mesh.wedg6.index(m,1:6), ...
+        'facevertexcdata',mesh.value, ...
+        'facecolor', 'flat') ;
+        axis image off ; hold on;
+        set(gcf,'color','w') ;
+        set(gca,'clipping','off') ;
+    else
+        m = mask.wedg6 ;
+        drawwedg_6(mesh.point.coord(:,1:3), ...
+                   mesh.wedg6.index(m,1:6)) ;
+        axis image off ; hold on;
+        set(gcf,'color','w') ;
+        set(gca,'clipping','off') ;
+    end
+    end
+
+    if (inspect(mesh,'pyra5'))
+    %-- draw PYRA5 mesh obj.
+    if (inspect(mesh,'value'))
+        m = mask.pyra5 ;
+        drawpyra_5(mesh.point.coord(:,1:3), ...
+                   mesh.pyra5.index(m,1:5), ...
+        'facevertexcdata',mesh.value, ...
+        'facecolor', 'flat') ;
+        axis image off ; hold on;
+        set(gcf,'color','w') ;
+        set(gca,'clipping','off') ;
+    else
+        m = mask.pyra5 ;
+        drawpyra_5(mesh.point.coord(:,1:3), ...
+                   mesh.pyra5.index(m,1:5)) ;
         axis image off ; hold on;
         set(gcf,'color','w') ;
         set(gca,'clipping','off') ;

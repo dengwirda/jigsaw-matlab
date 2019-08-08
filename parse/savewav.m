@@ -35,6 +35,8 @@ function savewav(name,mesh)
 %-----------------------------------------------------------
 %
 
+   [ok] = certify(mesh);
+
     if (~ischar  (name))
         error('NAME must be a valid file-name!') ;
     end

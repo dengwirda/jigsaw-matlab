@@ -37,12 +37,15 @@ function example(varargin)
 %   - DEMO-8: remesh geometry generated using marching-cubes 
 %     approach.
 %
+%   - DEMO-9: extrude a surface mesh into a prismatic volume
+%     representation.
+%
 %   See also DETAILS
 
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   01-Aug-2019
+%   07-Aug-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -63,6 +66,7 @@ function example(varargin)
         case 6, demo_6 ;
         case 7, demo_7 ;
         case 8, demo_8 ;
+        case 9, demo_9 ;
         
         otherwise
         error( ...
@@ -70,7 +74,6 @@ function example(varargin)
     end
 
 end
-
 
 function demo_0
 % DEMO-0 --- Simple 2-dimensional examples illustrating the 
@@ -1370,6 +1373,89 @@ function demo_8
         'position',[.05,.10,.25,.30]) ;
     
 end
+
+function demo_9
+% DEMO-9 --- extrude a surface mesh into a prismatic volume 
+%   representation.
+
+%------------------------------------ setup files for JIGSAW
+
+    rootpath = fileparts( ...
+        mfilename( 'fullpath' ) ) ;
+
+    opts.geom_file = ...                % domian file
+        fullfile(rootpath,...
+        'cache','box2d-geom.msh') ;
+    
+    opts.jcfg_file = ...                % config file
+        fullfile(rootpath,...
+        'cache','box2d.jig') ;
+    
+    opts.mesh_file = ...                % output file
+        fullfile(rootpath,...
+        'cache','box2d-mesh.msh') ;
+
+    initjig ;                           % init jigsaw
+    
+%------------------------------------ define JIGSAW geometry
+    
+    geom.mshID = 'EUCLIDEAN-MESH';
+
+    geom.point.coord = [    % list of xy "node" coordinates
+        0, 0, 0             % outer square
+        9, 0, 0
+        9, 9, 0
+        0, 9, 0 
+        4, 4, 0             % inner square
+        5, 4, 0
+        5, 5, 0
+        4, 5, 0 ] ;
+    
+    geom.edge2.index = [    % list of "edges" between nodes
+        1, 2, 0             % outer square 
+        2, 3, 0
+        3, 4, 0
+        4, 1, 0 
+        5, 6, 0             % inner square
+        6, 7, 0
+        7, 8, 0
+        8, 5, 0 ] ;
+        
+    savemsh(opts.geom_file,geom) ;
+    
+%------------------------------------ make mesh using JIGSAW
+  
+    opts.hfun_hmax = 0.05 ;             % null HFUN limits
+   
+    opts.mesh_dims = +2 ;               % 2-dim. simplexes
+    
+    opts.optm_qlim = +.95 ;
+   
+    opts.mesh_top1 = true ;             % for sharp feat's
+    opts.geom_feat = true ;
+    
+    base = jigsaw  (opts) ;
+
+%------------------------------------ extrude from 2-surface
+    xpos = base.point.coord(:,1) ;
+    ypos = base.point.coord(:,2) ;
+
+    base.point.coord(:,4) = 0 ;
+    base.point.coord(:,3) = 1. + ...
+        .05*(xpos-4.).^2  + ...
+        .05*(ypos-3.).^2  ;
+
+    base = rmfield(base,'edge2') ;      % only from TRIA-3
+
+    levs = [1.5; 0.5; 0.0];             % extrude position
+
+    mesh = extrude( ...
+        base,levs,-3,0.10);    
+    
+    figure; drawmesh(mesh);
+
+end
+
 
 
 

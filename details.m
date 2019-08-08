@@ -48,6 +48,7 @@
 %   savejig.m   - save *.jig files.
 %
 %   bisect.m    - refine a mesh obj. via bisection.
+%   extrude.m   - create a mesh obj. via extrusion.
 %
 %   drawmesh.m  - draw mesh as 2- or 3-dim. "patch" object. 
 %

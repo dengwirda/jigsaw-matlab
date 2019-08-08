@@ -4,7 +4,7 @@ function [flag] = certify(mesh)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   26-Jul-2019
+%   07-Aug-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -475,6 +475,72 @@ function [flag] = certify(mesh)
         mesh.hexa8.index(:,1:8))) > np  )
         error('certify:invalidMeshIndexing', ...
             'Invalid HEXA8.INDEX indexing.') ;
+        end
+        end
+    end
+
+    if (inspect(mesh,'wedg6'))
+%----------------------------------------- check WEDG6 index
+        if (~isempty  (mesh.wedg6.index))
+        if (~isnumeric(mesh.wedg6.index))
+        error('certify:incorrectInputClass', ...
+            'Invalid WEDG6.INDEX type.') ;
+        end
+        if (ndims(mesh.wedg6.index) ~= 2)
+        error('certify:incorrectDimensions', ...
+            'Invalid WEDG6.INDEX dimensions.') ;
+        end
+        if (size(mesh.wedg6.index,2)~= 7)
+        error('certify:incorrectDimensions', ...
+            'Invalid WEDG6.INDEX dimensions.') ;
+        end
+        if (any(isinf(mesh.wedg6.index)))
+        error('certify:invalidMeshIndexing', ...
+            'Invalid WEDG6.INDEX indexing.') ;
+        end
+        if (any(isnan(mesh.wedg6.index)))
+        error('certify:invalidMeshIndexing', ...
+            'Invalid WEDG6.INDEX indexing.') ;
+        end
+        if (min(min( ...
+        mesh.wedg6.index(:,1:6))) < +1 || ...
+            max(max( ...
+        mesh.wedg6.index(:,1:6))) > np  )
+        error('certify:invalidMeshIndexing', ...
+            'Invalid WEDG6.INDEX indexing.') ;
+        end
+        end
+    end
+
+    if (inspect(mesh,'pyra5'))
+%----------------------------------------- check PYRA5 index
+        if (~isempty  (mesh.pyra5.index))
+        if (~isnumeric(mesh.pyra5.index))
+        error('certify:incorrectInputClass', ...
+            'Invalid PYRA5.INDEX type.') ;
+        end
+        if (ndims(mesh.pyra5.index) ~= 2)
+        error('certify:incorrectDimensions', ...
+            'Invalid PYRA5.INDEX dimensions.') ;
+        end
+        if (size(mesh.pyra5.index,2)~= 6)
+        error('certify:incorrectDimensions', ...
+            'Invalid PYRA5.INDEX dimensions.') ;
+        end
+        if (any(isinf(mesh.pyra5.index)))
+        error('certify:invalidMeshIndexing', ...
+            'Invalid PYRA5.INDEX indexing.') ;
+        end
+        if (any(isnan(mesh.pyra5.index)))
+        error('certify:invalidMeshIndexing', ...
+            'Invalid PYRA5.INDEX indexing.') ;
+        end
+        if (min(min( ...
+        mesh.pyra5.index(:,1:5))) < +1 || ...
+            max(max( ...
+        mesh.pyra5.index(:,1:5))) > np  )
+        error('certify:invalidMeshIndexing', ...
+            'Invalid PYRA5.INDEX indexing.') ;
         end
         end
     end

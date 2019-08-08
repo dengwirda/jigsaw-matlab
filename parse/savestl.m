@@ -49,6 +49,8 @@ function savestl(name,mesh,varargin)
 
     if (nargin >= +3), opts = varargin{1} ; end
     
+    ok = certify (mesh);
+
     if (~ischar  (name))
         error('NAME must be a valid file-name!') ;
     end
