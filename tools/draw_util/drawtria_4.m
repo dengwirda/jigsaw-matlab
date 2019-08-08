@@ -10,7 +10,7 @@ function drawtria_4(pp,t4,varargin)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   01-Aug-2019
+%   07-Aug-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -29,15 +29,12 @@ function drawtria_4(pp,t4,varargin)
 %-- calc. default R^3 splitting plane   
         if (size(t4,1) > 1) 
     
-        ip = unique(t4(:));
-        
-        dc = max(pp(ip,:),[],1) - ...
-             min(pp(ip,:),[],1) ;
+        dc = max(pp( :,:),[],1) - ...
+             min(pp( :,:),[],1) ;
        [dd,id] = max( dc) ;
          
-        ok = false(size(pp,1),1);
-        ok(ip) = pp(ip,id) < ...
-          median(pp(ip,id))+ .10*dd ;
+        ok = pp( :,id) < ...
+          median(pp( :,id))+ .10*dd ;
             
         ti = all(ok(t4),2);
 

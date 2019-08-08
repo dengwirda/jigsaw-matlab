@@ -10,7 +10,7 @@ function drawhexa_8(pp,h8,varargin)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   01-Aug-2019
+%   07-Aug-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -19,7 +19,7 @@ function drawhexa_8(pp,h8,varargin)
 
     ec = [.20,.20,.20] ;
     ei = [.25,.25,.25] ;
-    fe = [.95,.95,.50] ;
+    fe = [.50,.75,.95] ;
     fi = [.95,.95,.90] ;
 
     if (nargin >= 3)
@@ -28,16 +28,13 @@ function drawhexa_8(pp,h8,varargin)
     else
 %-- calc. default R^3 splitting plane   
         if (size(h8,1) > 1) 
-    
-        ip = unique(h8(:));
         
-        dc = max(pp(ip,:),[],1) - ...
-             min(pp(ip,:),[],1) ;
+        dc = max(pp( :,:),[],1) - ...
+             min(pp( :,:),[],1) ;
        [dd,id] = max( dc) ;
          
-        ok = false(size(pp,1),1);
-        ok(ip) = pp(ip,id) < ...
-          median(pp(ip,id))+ .10*dd ;
+        ok = pp( :,id) < ...
+          median(pp( :,id))+ .10*dd ;
             
         ti = all(ok(h8),2);
 
