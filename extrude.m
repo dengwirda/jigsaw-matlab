@@ -10,12 +10,11 @@ function [mesh] = extrude( ...
 %   prevent the formation of cells with thickness < NEAR.
 %
 %   See also BISECT
-%
 
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   07-Aug-2019
+%   09-Aug-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -119,7 +118,7 @@ function [mesh,next] = ...
     mesh.point.coord(mask,idim) < lpos - near ;
     end
 
-%------------------------------ new POINT's to extrude layer
+%------------------------------ new POINT's to extrude level
     pnew = mesh.point.coord(mark,:) ;
     pnew(:,idim) = lpos ;
 
@@ -134,8 +133,101 @@ function [mesh,next] = ...
     mesh.point.coord = [ 
         mesh.point.coord ; pnew] ;
     
-%------------------------------ new ELEMENT to extrude layer
+%------------------------------ new ELEMENT to extrude level
     next = struct () ;
+
+    if (inspect(base,'edge2','index') && ...
+           ~isempty(base.edge2.index) )
+    %-------------------------- extrude from EDGE-2 elements
+        M = false(size( ...
+            base.edge2.index,1),2) ;
+        M(:,1) = ...
+        mark(base.edge2.index(:,1));
+        M(:,2) = ...
+        mark(base.edge2.index(:,2));
+        
+        Q = sum(int32(M),2) == +2 ;
+        T = sum(int32(M),2) == +1 ;
+        N = sum(int32(M),2) == +0 ;
+
+        if (any(N))
+    %-------------------------- copy "no-extrusion" elements
+        if (~inspect(next,'edge2'))
+        next.edge2.index = [];
+        end
+        next.edge2.index = [
+             next.edge2.index(:,:) ;
+             base.edge2.index(N,1) , ...
+             base.edge2.index(N,2) , ...
+             base.edge2.index(N,3)
+            ] ;
+        end
+
+        if (any(Q))
+    %-------------------------- extrude into QUAD-4 elements
+        if (~inspect(mesh,'quad4'))
+        mesh.quad4.index = [];
+        end
+        if (~inspect(next,'edge2'))
+        next.edge2.index = [];
+        end
+        mesh.quad4.index = [
+             mesh.quad4.index(:,:) ;
+             base.edge2.index(Q,1) , ...
+             base.edge2.index(Q,2) , ...
+        inew(base.edge2.index(Q,2)), ...
+        inew(base.edge2.index(Q,1)), ...
+             base.edge2.index(Q,3)
+            ] ;
+        next.edge2.index = [
+             next.edge2.index(:,:) ;
+        inew(base.edge2.index(Q,1)), ...
+        inew(base.edge2.index(Q,2)), ...
+             base.edge2.index(Q,3)
+            ] ;
+        end
+
+        if (any(T))
+    %-------------------------- extrude into TRIA-3 elements
+        if (~inspect(mesh,'tria3'))
+        mesh.tria3.index = [];
+        end
+        if (~inspect(next,'edge2'))
+        next.edge2.index = [];
+        end
+    %-------------------------------------- from 1-point
+        V = T & M(:,1) ;
+        mesh.tria3.index = [
+             mesh.tria3.index(:,:) ;
+             base.edge2.index(V,1) , ...
+             base.edge2.index(V,2) , ...
+        inew(base.edge2.index(V,1)), ...
+             base.edge2.index(V,3)
+            ] ;
+        next.edge2.index = [
+             next.edge2.index(:,:) ;
+        inew(base.edge2.index(V,1)), ...
+             base.edge2.index(V,2) , ...
+             base.edge2.index(V,3)
+            ] ;
+    %-------------------------------------- from 2-point
+        V = T & M(:,2) ;
+        mesh.tria3.index = [
+             mesh.tria3.index(:,:) ;
+             base.edge2.index(V,1) , ...
+             base.edge2.index(V,2) , ...
+        inew(base.edge2.index(V,2)), ...
+             base.edge2.index(V,3)
+            ] ;
+        next.edge2.index = [
+             next.edge2.index(:,:) ;
+             base.edge2.index(V,1) , ...
+        inew(base.edge2.index(V,2)), ...
+             base.edge2.index(V,3)
+            ] ;
+        end
+
+    end
 
     if (inspect(base,'tria3','index') && ...
            ~isempty(base.tria3.index) )
@@ -260,7 +352,7 @@ function [mesh,next] = ...
         end
 
         if (any(T))
-    %-------------------------- extrude into PYRA-5 elements
+    %-------------------------- extrude into TRIA-4 elements
         if (~inspect(mesh,'tria4'))
         mesh.tria4.index = [];
         end
@@ -320,13 +412,6 @@ function [mesh,next] = ...
             ] ;
         end
 
-    end
-
-    if (inspect(base,'edge2','index') && ...
-           ~isempty(base.edge2.index) )
-    %-------------------------- extrude from EDGE-2 elements
-        warning( ...
-        'EDGE-2 currently unsupported');
     end
 
     if (inspect(base,'quad4','index') && ...

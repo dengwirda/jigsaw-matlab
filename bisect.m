@@ -4,7 +4,7 @@ function [mesh] = bisect(mesh)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   01-Aug-2019
+%   08-Aug-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -197,13 +197,9 @@ function [mesh] = bisect(mesh)
     enew = [] ; qnew = [] ; hnew = [] ;
 
     if (~isempty(edge))
-    bias = .5 + ...
-        .05*(rand(size(edge,1),1)-.5) ;
-
-    emid = (0.+bias) .* ...
-        mesh.point.coord(edge(:,1),:) ...
-         + (1.-bias) .* ...
-        mesh.point.coord(edge(:,2),:) ;
+    emid = mesh.point.coord(edge(:,1),:) ...
+         + mesh.point.coord(edge(:,2),:) ;
+    emid = emid / +2. ;
 
     enew = [(1:size(emid,1))' + ...
         size(mesh.point.coord,1)] ;
@@ -253,7 +249,7 @@ function [mesh] = bisect(mesh)
              mesh.edge2.index(:,3)
         % 2nd sub-edge
         enew(emap.edge2.index(:,1)), ...
-             mesh.edge2.index(:,1) , ...
+             mesh.edge2.index(:,2) , ...
              mesh.edge2.index(:,3)
             ] ; 
     end
