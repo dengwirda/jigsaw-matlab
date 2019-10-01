@@ -155,7 +155,7 @@ function demo_A
     
 %------------------------------------ make mesh using JIGSAW
   
-    opts.hfun_hmax = 0.05 ;             % null HFUN limits
+    opts.hfun_hmax = 0.05 ;             % push HFUN limits
    
     opts.mesh_dims = +2 ;               % 2-dim. simplexes
     
@@ -259,7 +259,7 @@ function demo_B
     
 %------------------------------------ make mesh using JIGSAW 
   
-    opts.hfun_hmax = 0.05 ;             % null HFUN limits
+    opts.hfun_hmax = 0.05 ;             % push HFUN limits
     
     opts.mesh_dims = +2 ;               % 2-dim. simplexes
     
@@ -361,7 +361,7 @@ function demo_C
     ypos = linspace( ...
         min(geom.point.coord(:,2)), ...
         max(geom.point.coord(:,2)), ...
-                32 ) ;
+                16 ) ;
     
    [XPOS,YPOS] = meshgrid(xpos,ypos) ;
     
@@ -496,7 +496,7 @@ function demo_D
 
 %------------------------------------ make mesh using JIGSAW 
   
-    opts.hfun_hmax = 0.07 ;             % null HFUN limits
+    opts.hfun_hmax = 0.08 ;             % push HFUN limits
   
     opts.mesh_dims = +3 ;               % 3-dim. simplexes
    
@@ -600,7 +600,7 @@ function demo_E
 
 %------------------------------------ make mesh using JIGSAW 
   
-    opts.hfun_hmax = 0.10 ;             % null HFUN limits
+    opts.hfun_hmax = 0.10 ;             % push HFUN limits
     
     opts.mesh_dims = +3 ;               % 3-dim. simplexes
    
@@ -695,12 +695,12 @@ function demo_F
     ypos = linspace( ...
         min(geom.point.coord(:,2)), ...
         max(geom.point.coord(:,2)), ...
-                32 ) ;
+                16 ) ;
                 
     zpos = linspace( ...
         min(geom.point.coord(:,3)), ...
         max(geom.point.coord(:,3)), ...
-                32 ) ;
+                64 ) ;
     
    [XPOS,YPOS,ZPOS] = ...
         meshgrid(xpos,ypos,zpos) ;
@@ -744,7 +744,7 @@ function demo_F
     
     figure ; drawmesh(mesh,mask);
     view(-10,-110); axis image;
-    
+
 end
 
 function demo_2
@@ -1082,12 +1082,12 @@ function demo_5
     xpos = linspace( ...
         min(geom.point.coord(:,1)), ...
         max(geom.point.coord(:,1)), ...
-                32 ) ;
+                80 ) ;
                     
     ypos = linspace( ...
         min(geom.point.coord(:,2)), ...
         max(geom.point.coord(:,2)), ...
-                32 ) ;
+                40 ) ;
                 
    [XPOS,YPOS] = meshgrid(xpos,ypos) ;
     

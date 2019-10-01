@@ -1,11 +1,11 @@
-function [mesh] = bisect_sphere(opts,nlev)
-%BISECT-SPHERE generate a mesh via a "multi-level" strategy.
-%   MESH = BISECT-SPHERE(OPTS,NLEV) generates MESH via a 
-%   sequence of bisection/refinement/optimisation operations. 
-%   At each pass, the mesh from the preceeding level is 
-%   bisected uniformly, a "halo" of nodes associated with 
-%   "irregular" topology are removed and JIGSAW is called to 
-%   perform subsequent refinement/optimisation.
+function [mesh] = tetris(opts,nlev)
+%TETRIS generate a mesh using a "multi-level" strategy.
+%   MESH = TETRIS(OPTS,NLEV) generates MESH using a sequence 
+%   of bisection/refinement/optimisation operations. At each 
+%   pass, the mesh from the preceeding level is bisected 
+%   uniformly, a "halo" of nodes associated with "irregular" 
+%   topology is removed and JIGSAW is called to perform 
+%   subsequent refinement/optimisation.
 %   OPTS is the standard user-defined options struct. passed 
 %   to JIGSAW.
 %
@@ -14,7 +14,7 @@ function [mesh] = bisect_sphere(opts,nlev)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   09-Aug-2019
+%   30-Aug-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -76,39 +76,53 @@ function [mesh] = bisect_sphere(opts,nlev)
         opts.hfun_hmin * SCAL ;
         
         end
-        
-%---------------------------- create/write current MESH data 
+ 
         if (isfield(opts,'optm_qlim'))
-        if (nlev >= +1)
-            
-        OPTS.optm_qlim = ...
-        opts.optm_qlim * 0.900 ;
 
-        else
-    
-        OPTS.optm_qlim = ...
-        opts.optm_qlim * 1.000 ;
-            
-        end
-        else                % no QLIM specified!
-        if (nlev >= +1)
-            
-        OPTS.optm_qlim = .8625 ;
+%---------------------------- create/write current QLIM data            
+        FACT = max(0.50, ...
+            1.00 - sqrt(nlev) * 0.10);
 
-        else
-    
-        OPTS.optm_qlim = .9375 ;
+        OPTS.optm_qlim = ...
+        opts.optm_qlim * FACT ;
+
+        else                % no QLIM specified => defaults!
+
+        FACT = max(0.50, ...
+            1.00 - sqrt(nlev) * 0.10);
+
+        OPTS.optm_qlim = ...
+                +.9375 * FACT ;
             
-        end
         end
         
+        if (isfield(opts,'optm_qtol'))
+
+%---------------------------- create/write current QTOL data
+
+        OPTS.optm_qtol = ...
+        opts.optm_qtol *  (nlev + 1) ;
+
+        else                % no QTOL specified => defaults!
+
+        OPTS.optm_qtol = ...
+            +1.00E-004 *  (nlev + 1) ;
+
+        end
+
+        if (nlev >= +1)
+
 %---------------------------- call JIGSAW kernel at this lev
-        if (nlev >= +1)
-        mesh = jitter (OPTS, +8, +1) ;
-        else
-        mesh = jitter (OPTS, +2, +1) ;
-        end
+        mesh = jitter ( ...
+            OPTS, +2^(nlev + 1), +1) ;
         
+        else
+
+        mesh = jitter ( ...
+            OPTS, +2^(nlev + 1), +2) ;
+
+        end
+
         nlev = nlev - 1 ;
         SCAL = SCAL / 2.;
         
@@ -168,13 +182,6 @@ function [mesh] = attach(mesh)
 
     end
 
-    if (inspect(mesh,'quad4'))
-
-    mark = mesh.quad4.index(:,1:4);
-    mesh.point.coord(mark,end) = 2;
-
-    end
-
     if (inspect(mesh,'tria3'))
 
     mark = mesh.tria3.index(:,1:3);
@@ -191,80 +198,5 @@ function [mesh] = attach(mesh)
 
 end
 
-function [mesh] = jitter(opts,imax,ring)
-%JITTER call JIGSAW iteratively, trying to improve topology.
-
-    if (isfield(opts,'init_file'))
-        mesh = ...
-            loadmsh (opts.init_file) ;
-    else
-        mesh = [] ;
-    end
-
-    for iter = +1 : imax
-
-        if (~isempty(mesh))
-        
-        keep =  ...
-        true(size(mesh.point.coord, 1), 1) ;
-            
-%---------------------------------- setup initial conditions
-       [path,name,fext] = ...
-           fileparts(opts.mesh_file) ;
-            
-        if (~isempty(path))
-            path = [path, '/'] ;
-        end
-       
-        opts.init_file = ...
-            [path,name,'-INIT',fext] ;
-        
-        if (inspect(mesh,'tria3'))
-        
-%---------------------------------- mark any irregular nodes
-        vdeg = trideg2 ( ...
-            mesh.point.coord(:,1:end-1), ...
-                mesh.tria3.index(:,1:end-1)) ;
-        
-        keep(vdeg ~= +6) = false ;
-        
-        for iloc = +1:ring
-            
-        mark =~keep(mesh.tria3.index(:,1)) ...
-             |~keep(mesh.tria3.index(:,2)) ...
-             |~keep(mesh.tria3.index(:,3)) ;
-        
-        mark = ...
-        unique(mesh.tria3.index(mark,1:3)) ;
-    
-        keep =  ...
-        true(size(mesh.point.coord, 1), 1) ;
-        keep(mark) = false;
-        
-        if (inspect(mesh,'edge2'))
-       
-        keep(mesh.edge2.index(:,1:2)) = true ;
-            
-        end
-        
-        end
-        
-        end
-    
-%---------------------------------- keep nodes far from seam
-        init.mshID = 'euclidean-mesh';
-        init.point.coord = ...
-            mesh.point.coord(keep,:) ;
-        
-        savemsh(opts.init_file,init) ;
-        
-        end
-
-%---------------------------------- call JIGSAW with new ICs
-        mesh = jigsaw(opts) ;
-    
-    end
-    
-end
 
 

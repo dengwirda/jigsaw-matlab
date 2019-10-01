@@ -106,7 +106,7 @@ function [mesh] = loadmsh(name)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   09-Aug-2019
+%   20-Aug-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -220,6 +220,8 @@ function [mesh] = loadmsh(name)
         
                 idim = str2double(stag{1}) ;
                 cnum = str2double(stag{2}) ;
+
+                ndim = max(ndim,idim);
 
                 data = fscanf(ffid,'%f',cnum) ;
         
@@ -523,18 +525,24 @@ function [mesh] = loadmsh(name)
                     inspect(mesh,'point') )
 
                 if     (ndim == +2)
+
             %-- reshape data to 2-dim. array
                 mesh.value = reshape( ...
                     mesh.value, ...
                 length(mesh.point.coord{2}), ...
-                length(mesh.point.coord{1})) ;
+                length(mesh.point.coord{1}), ...
+                    [] ) ;
+
                 elseif (ndim == +3)
+
             %-- reshape data to 3-dim. array
                 mesh.value = reshape( ...
                     mesh.value, ...
                 length(mesh.point.coord{2}), ...            
                 length(mesh.point.coord{1}), ...
-                length(mesh.point.coord{3})) ;
+                length(mesh.point.coord{3}), ...
+                    [] ) ;
+
                 end
 
                 end
@@ -543,18 +551,24 @@ function [mesh] = loadmsh(name)
                     inspect(mesh,'point') )
 
                 if     (ndim == +2)
+
             %-- reshape data to 2-dim. array
                 mesh.slope = reshape( ...
                     mesh.slope, ...
                 length(mesh.point.coord{2}), ...
-                length(mesh.point.coord{1})) ;
+                length(mesh.point.coord{1}), ...
+                    [] ) ;
+
                 elseif (ndim == +3)
+
             %-- reshape data to 3-dim. array
                 mesh.slope = reshape( ...
                     mesh.slope, ...
                 length(mesh.point.coord{2}), ...            
                 length(mesh.point.coord{1}), ...
-                length(mesh.point.coord{3})) ;
+                length(mesh.point.coord{3}), ...
+                    [] ) ;
+
                 end
 
                 end

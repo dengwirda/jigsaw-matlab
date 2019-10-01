@@ -34,11 +34,14 @@ See `details.m` for a description of the various functions available.
     jigsaw.m    - an interface to JIGSAW's mesh generation + optimisation workflow.
     tripod.m    - an interface to JIGSAW's "restricted" Delaunay triangulation framework.
     marche.m    - an interface to JIGSAW's "fast-marching" Eikonal-type "gradient-limiters".
+    tetris.m    - an interface to JIGSAW's "multi-level" meshing strategy.
     
     loadmsh.m   - load *.msh files.
     savemsh.m   - save *.msh files.
     loadjig.m   - load *.jig files.
     savejig.m   - save *.jig files.
+
+    project.m   - apply cartographic projection operators to mesh obj.
 
     bisect.m    - refine a mesh obj. via bisection.
     extrude.m   - create a mesh obj. via extrusion.

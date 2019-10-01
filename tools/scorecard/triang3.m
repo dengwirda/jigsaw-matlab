@@ -68,7 +68,6 @@ function [dcos] = triang3(pp,t3)
     % 22,33 (2,4)
     % 33,44 (3,4)
     
-    dcos = zeros(size(t3,1),6);
     dcos(:,1) = sum(+fv11.*fv22,2);
     dcos(:,2) = sum(+fv11.*fv33,2);
     dcos(:,3) = sum(+fv11.*fv44,2);

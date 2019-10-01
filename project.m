@@ -8,17 +8,17 @@ function [pmsh] = project(mesh,proj,kind)
 %
 %   The following projection operators are supported:
 %
-%       PROJ.KIND = 'STEREOGRAPHIC'
-%       PROJ.RRAD = % sphere radii.
-%       PROJ.XMID = % central XLON.
-%       PROJ.YMID = % central YLAT.
+%       PROJ.PRJID = 'STEREOGRAPHIC'
+%       PROJ.RADII = % sphere radii.
+%       PROJ.XBASE = % central XLON.
+%       PROJ.YBASE = % central YLAT.
 %
 %   See also STEREO3
 
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   26-Jul-2019
+%   30-Aug-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -49,18 +49,18 @@ function [pmsh] = project(mesh,proj,kind)
         YPOS = mesh.point.coord(:, 2) ;
         
     %------------------------------- proj. geometry parts
-        switch (upper(proj.kind))
+        switch (upper(proj.prjID))
         case 'STEREOGRAPHIC'
         
            [XNEW,YNEW,SCAL] = stereo3( ...
-                proj.rrad, ...
-            XPOS,YPOS,proj.xmid,proj.ymid,kind) ;
+                proj.radii, ...
+            XPOS,YPOS,proj.xbase,proj.ybase,kind) ;
 
         case 'HAMMER-AITOFF'
         
            [XNEW,YNEW,SCAL] = hammer3( ...
-                proj.rrad, ...
-            XPOS,YPOS,proj.xmid,proj.ymid,kind) ;
+                proj.radii, ...
+            XPOS,YPOS,proj.xbase,proj.ybase,kind) ;
         
         otherwise
         
@@ -82,8 +82,8 @@ function [pmsh] = project(mesh,proj,kind)
         case 'INV'
         
         pmsh.mshID = 'ELLIPSOID-MESH' ;
-        pmsh.radii = proj.rrad(1) * ...
-                     ones (+3,+1) ;
+        pmsh.radii = proj.radii(1) * ...
+                     ones (+3, +1) ;
         
         otherwise
         
@@ -135,18 +135,18 @@ function [pmsh] = project(mesh,proj,kind)
         YPOS = YPOS(:);
         
     %------------------------------- proj. geometry parts
-        switch (upper(proj.kind))
+        switch (upper(proj.prjID))
         case 'STEREOGRAPHIC'
         
            [XNEW,YNEW,SCAL] = stereo3( ...
-                proj.rrad, ...
-            XPOS,YPOS,proj.xmid,proj.ymid,kind) ;
+                proj.radii, ...
+            XPOS,YPOS,proj.xbase,proj.ybase,kind) ;
 
         case 'HAMMER-AITOFF'
         
            [XNEW,YNEW,SCAL] = hammer3( ...
-                proj.rrad, ...
-            XPOS,YPOS,proj.xmid,proj.ymid,kind) ;
+                proj.radii, ...
+            XPOS,YPOS,proj.xbase,proj.ybase,kind) ;
         
         otherwise
         
@@ -168,8 +168,8 @@ function [pmsh] = project(mesh,proj,kind)
         case 'INV'
         
         pmsh.mshID = 'ELLIPSOID-MESH' ;
-        pmsh.radii = proj.rrad(1) * ...
-                     ones (+3,+1) ;
+        pmsh.radii = proj.radii(1) * ...
+                     ones (+3, +1) ;
         
         otherwise
         

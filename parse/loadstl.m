@@ -1,4 +1,4 @@
-function [mesh] = readstl(name)
+function [mesh] = loadstl(name)
 %LOADSTL read an *.STL file for JIGSAW.
 %
 %   MESH = LOADSTL(NAME);

@@ -107,7 +107,7 @@ function savemsh(name,mesh)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   26-Jul-2019
+%   20-Aug-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -190,7 +190,7 @@ function savemsh(name,mesh)
 end
         
 function save_mesh_format(ffid,nver,mesh,kind)
-%SAVE-EUCLIDEAN-MESH save mesh data in EUCLDIEAN-MESH format
+%SAVE-MESH-FORMAT save mesh data in unstructured-mesh format
   
     switch (upper(kind))
     case 'EUCLIDEAN-MESH'
@@ -595,8 +595,7 @@ function save_mesh_format(ffid,nver,mesh,kind)
 end
 
 function save_grid_format(ffid,nver,mesh,kind)
-%SAVE-MONOTONIC-GRID save mesh data in MONOTONIC-GRID format
-% ==> EUCLIDEAN-GRID, ELLIPSOID-GRID, etc...
+%SAVE-GRID-FORMAT save mesh class in rectilinear-grid format
     
     switch (upper(kind))
     case 'EUCLIDEAN-GRID'
@@ -646,7 +645,8 @@ function save_grid_format(ffid,nver,mesh,kind)
         
         ndim = length(mesh.point.coord);
         dims = zeros(1,ndim);
-        
+        iord = [2,1,+3:ndim];
+
         fprintf(ffid, ...
         ['NDIMS=%u \n'],length(mesh.point.coord));
         
@@ -657,7 +657,7 @@ function save_grid_format(ffid,nver,mesh,kind)
             error('Incorrect dimensions!') ;
         end
         
-        dims(ndim-idim+1) = ...
+        dims(iord(idim)) = ...
             length(mesh.point.coord{idim}) ;
         
         if (isa(mesh.point.coord{idim}, 'double')) 
@@ -667,7 +667,7 @@ function save_grid_format(ffid,nver,mesh,kind)
         end
         
         fprintf(ffid,...
-        'COORD=%u;%u\n',[idim,dims(ndim-idim+1)]);
+        'COORD=%u;%u\n', [idim,dims(iord(idim))]);
         
         fprintf(ffid,vstr,mesh.point.coord{idim});
         
@@ -774,7 +774,7 @@ function save_grid_format(ffid,nver,mesh,kind)
         fprintf(ffid,[vstr(+1:end-1),'\n'],vals');
 
     end
-    
+   
 end
 
 

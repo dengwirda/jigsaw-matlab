@@ -6,7 +6,7 @@ function [vol3] = trivol3(pp,t3)
 %   array of XY coordinates, and TRIA is a T-by-4 array of
 %   vertex indexing, where each row defines a triangle, such 
 %   that VERT(TRIA(II,1),:), VERT(TRIA(II,2),:), VERT(
-%   TRIA(II,3),:) and VERT(TRIA(II,1),:) are the coordinates 
+%   TRIA(II,3),:) and VERT(TRIA(II,4),:) are the coordinates 
 %   of the II-TH tetrahedron.
 %
 %   See also TRISCR3, TRIANG3, TRIBAL3

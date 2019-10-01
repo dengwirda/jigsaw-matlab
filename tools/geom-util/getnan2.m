@@ -56,6 +56,8 @@ function [node,edge] = getnan2(varargin)
     nvec = [nvec ; size(data,1) ] ;
     end
   
+    join = false ; %%!!
+    
     node = zeros(size(data,1), 2) ;
     edge = zeros(size(data,1), 2) ;
     
@@ -77,9 +79,15 @@ function [node,edge] = getnan2(varargin)
 %---------------------------------- push polygon onto output            
         nnew = size(pnew,1);
         
+        if (join)
         enew = [(1:nnew-1)', ...
                 (2:nnew-0)'; ...
                 nnew, +1 ] ;
+        else
+        enew = [(1:nnew-1)', ...
+                (2:nnew-0)'; ...
+               ] ;
+        end
         enew = enew+nout-1 ;
         
         mnew = size(enew,1);
