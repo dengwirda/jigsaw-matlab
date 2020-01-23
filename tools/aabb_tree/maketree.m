@@ -92,7 +92,7 @@ function [tr] = maketree(rp,varargin)
     %-- faster for OCTAVE with large tree block size; slower
     %-- loop execution...
     
-        NOBJ =  +256 ; 
+        NOBJ = +1024 ; 
         
     else
     
