@@ -1,6 +1,0 @@
-# eight.jig config. file; created by JIGSAW's MATLAB interface
-  GEOM_FILE=/home/dengwirda/Dev/jigsaw/jigsaw-matlab/files/eight.msh
-  HFUN_HMAX=0.03
-  MESH_DIMS=2
-  MESH_FILE=/home/dengwirda/Dev/jigsaw/jigsaw-matlab/cache/eight.msh
-  MESH_KERN=delfront

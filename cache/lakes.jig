@@ -1,9 +1,0 @@
-# lakes.jig config. file; created by JIGSAW's MATLAB interface
-  GEOM_FEAT=true
-  GEOM_FILE=/home/dengwirda/Dev/jigsaw/jigsaw-matlab/files/lakes.msh
-  HFUN_HMAX=0.02
-  MESH_DIMS=2
-  MESH_FILE=/home/dengwirda/Dev/jigsaw/jigsaw-matlab/cache/lakes.msh
-  MESH_KERN=delfront
-  MESH_TOP1=true
-  OPTM_ITER=0
