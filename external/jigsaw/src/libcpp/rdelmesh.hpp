@@ -73,7 +73,6 @@
 #   include "rdel_mesh/rdel_complex_2.hpp"
 #   include "rdel_mesh/rdel_complex_3.hpp"
 
-#   include "rdel_mesh/rdel_params.hpp"
 #   include "rdel_mesh/rdel_timers.hpp"
 
 #   include "rdel_mesh/rdel_filt_k.hpp"

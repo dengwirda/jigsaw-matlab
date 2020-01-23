@@ -14,7 +14,7 @@ function [mesh] = tetris(opts,nlev)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   30-Aug-2019
+%   30-Oct-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -109,7 +109,15 @@ function [mesh] = tetris(opts,nlev)
             +1.00E-004 *  (nlev + 1) ;
 
         end
+  
+        if (isfield(opts,'optm_dual'))
+           
+%---------------------------- create/write current DUAL flag
 
+        OPTS.optm_dual = (nlev == 0) ;
+            
+        end
+                
         if (nlev >= +1)
 
 %---------------------------- call JIGSAW kernel at this lev
@@ -119,7 +127,7 @@ function [mesh] = tetris(opts,nlev)
         else
 
         mesh = jitter ( ...
-            OPTS, +2^(nlev + 1), +2) ;
+            OPTS, +2^(nlev + 1), +1) ;
 
         end
 

@@ -4,7 +4,7 @@ function savejig(name,opts)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   15-Apr-2019
+%   29-Oct-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -83,13 +83,15 @@ function savejig(name,opts)
         pushreal(ffid,opts.hfun_hmax,'HFUN_HMAX');
         case 'hfun_hmin'
         pushreal(ffid,opts.hfun_hmin,'HFUN_HMIN');
-        
+    
+    %------------------------------------------ BNDS options    
+        case 'bnds_kern'
+        pushchar(ffid,opts.bnds_kern,'BNDS_KERN');
+
     %------------------------------------------ MESH options
         case 'mesh_file'
         pushchar(ffid,opts.mesh_file,'MESH_FILE');
         
-        case 'bnds_kern'
-        pushchar(ffid,opts.bnds_kern,'BNDS_KERN');
         case 'mesh_kern'
         pushchar(ffid,opts.mesh_kern,'MESH_KERN');
         
@@ -138,6 +140,9 @@ function savejig(name,opts)
         pushreal(ffid,opts.mesh_vol3,'MESH_VOL3');
         
     %------------------------------------------ OPTM options
+        case 'optm_kern'
+        pushchar(ffid,opts.optm_kern,'OPTM_KERN');
+
         case 'optm_iter'
         pushints(ffid,opts.optm_iter,'OPTM_ITER');
         

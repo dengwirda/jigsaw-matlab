@@ -164,6 +164,9 @@ function demo_A
     opts.mesh_top1 = true ;             % for sharp feat's
     opts.geom_feat = true ;
     
+   %opts.optm_iter = 512;
+   %opts.optm_kern = 'cvt+dqdx';
+    
     mesh = jigsaw  (opts) ;
  
     figure('color','w');
@@ -184,6 +187,8 @@ function demo_A
         'linewidth',1.5) ;
         
     drawcost(mesh) ;
+    
+   %error('blah');
     
 end
 

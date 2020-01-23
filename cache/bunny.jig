@@ -1,0 +1,6 @@
+# bunny.jig config. file; created by JIGSAW's MATLAB interface
+  GEOM_FILE=/home/dengwirda/Dev/jigsaw/jigsaw-matlab/files/bunny.msh
+  HFUN_HMAX=0.03
+  MESH_DIMS=3
+  MESH_FILE=/home/dengwirda/Dev/jigsaw/jigsaw-matlab/cache/bunny.msh
+  MESH_KERN=delfront

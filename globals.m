@@ -6,7 +6,7 @@ function globals
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   26-Jul-2019
+%   27-Nov-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -74,6 +74,7 @@ function globals
     global JIGSAW_HFUN_ABSOLUTE ;
     global JIGSAW_KERN_DELFRONT ;
     global JIGSAW_KERN_DELAUNAY ;
+    global JIGSAW_KERN_BISECTOR ;
     global JIGSAW_BNDS_TRIACELL ;
     global JIGSAW_BNDS_DUALCELL ;
 
@@ -82,9 +83,13 @@ function globals
         
     JIGSAW_KERN_DELFRONT    = +400 ;
     JIGSAW_KERN_DELAUNAY    = +401 ;
+    JIGSAW_KERN_BISECTOR    = +402 ;
 
     JIGSAW_BNDS_TRIACELL    = +402 ;
     JIGSAW_BNDS_DUALCELL    = +403 ;
+
+    JIGSAW_KERN_ODT_DQDX    = +404 ;
+    JIGSAW_KERN_CVT_DQDX    = +405 ;
 
 end
 

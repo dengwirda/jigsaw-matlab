@@ -31,9 +31,9 @@
      *
     --------------------------------------------------------
      *
-     * Last updated: 20 December, 2018
+     * Last updated: 27 November, 2019
      *
-     * Copyright 2013-2018
+     * Copyright 2013-2019
      * Darren Engwirda
      * darren.engwirda@columbia.edu
      * https://github.com/dengwirda
@@ -86,9 +86,13 @@
     
 #       define JIGSAW_KERN_DELFRONT  +400
 #       define JIGSAW_KERN_DELAUNAY  +401
+#       define JIGSAW_KERN_BISECTOR  +402
 
 #       define JIGSAW_BNDS_TRIACELL  +402
 #       define JIGSAW_BNDS_DUALCELL  +403
+
+#       define JIGSAW_KERN_ODT_DQDX  +404
+#       define JIGSAW_KERN_CVT_DQDX  +405
      
      
     

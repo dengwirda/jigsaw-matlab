@@ -172,6 +172,14 @@ function [varargout] = jigsaw(opts)
 %   OPTIONAL fields (OPTM):
 %   ----------------------
 %
+%   OPTS.OPTM_KERN - {default='odt+dqdx'} mesh optimisation 
+%       kernel, choice of an Optimal Delaunay Tessellation 
+%       strategy (KERN='odt+dqdx') or a Centroidal Voronoi
+%       Tessellation method (KERN='cvt+dqdx'). In both 
+%       cases a hybrid formulation is employed, using a 
+%       "blend" of the ODT/CVT updates, and gradients of a 
+%       "fall-back" mesh quality function Q.
+%
 %   OPTS.OPTM_ITER - {default=16} max. number of mesh optim-
 %       isation iterations. Set ITER=N to see progress after 
 %       N iterations. 
@@ -239,7 +247,7 @@ function [varargout] = jigsaw(opts)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   26-Jul-2019
+%   29-Oct-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %

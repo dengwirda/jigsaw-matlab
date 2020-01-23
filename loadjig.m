@@ -4,7 +4,7 @@ function [opts] = loadjig(name)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   15-Apr-2019
+%   29-Oct-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -86,13 +86,15 @@ function [opts] = loadjig(name)
             opts .hfun_hmax = str2double(tstr{2});
             case 'hfun_hmin'
             opts .hfun_hmin = str2double(tstr{2});
-            
+        
+        %-------------------------------------- BNDS options    
+            case 'bnds_kern'
+            opts .bnds_kern = strtrim(tstr{2});
+
         %-------------------------------------- MESH options
             case 'mesh_file'
             opts .mesh_file = strtrim(tstr{2});
             
-            case 'bnds_kern'
-            opts .bnds_kern = strtrim(tstr{2});
             case 'mesh_kern'
             opts .mesh_kern = strtrim(tstr{2});
             
@@ -143,6 +145,9 @@ function [opts] = loadjig(name)
             opts .mesh_vol3 = str2double(tstr{2});
             
         %-------------------------------------- OPTM options
+            case 'optm_kern'
+            opts .optm_kern = strtrim(tstr{2});
+
             case 'optm_iter'
             opts .optm_iter = str2double(tstr{2});
             

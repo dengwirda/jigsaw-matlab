@@ -6,7 +6,7 @@ function [mesh] = jitter(opts,imax,ibad)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   25-Aug-2019
+%   01-Nov-2019
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -41,17 +41,18 @@ function [mesh] = jitter(opts,imax,ibad)
         if (inspect(mesh,'tria3'))
         
 %---------------------------------- mark any irregular nodes
+        
         vdeg = trideg2 ( ...
             mesh.point.coord(:,1:end-1), ...
                 mesh.tria3.index(:,1:end-1)) ;
-        
+            
         ierr = abs(vdeg - 6) ;    % error wrt. topol. degree
        
         M = sum(ierr( ...
         mesh.tria3.index(:,1:3)), 2) >= ibad ;
         
         keep(mesh.tria3.index(M,1:3)) = false;
-        
+            
         end
     
         if (inspect(mesh,'edge2'))
@@ -60,6 +61,13 @@ function [mesh] = jitter(opts,imax,ibad)
             
         end
 
+        if (sum(double(keep)) < 8)
+
+%---------------------------------- don't delete everything!
+        keep = true (size(keep)) ;
+            
+        end
+        
 %---------------------------------- keep nodes far from seam
         init.mshID = 'euclidean-mesh';
         init.point.coord = ...

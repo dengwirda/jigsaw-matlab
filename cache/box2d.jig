@@ -1,0 +1,8 @@
+# box2d.jig config. file; created by JIGSAW's MATLAB interface
+  GEOM_FEAT=true
+  GEOM_FILE=/home/dengwirda/Dev/jigsaw/jigsaw-matlab/cache/box2d-geom.msh
+  HFUN_HMAX=0.05
+  MESH_DIMS=2
+  MESH_FILE=/home/dengwirda/Dev/jigsaw/jigsaw-matlab/cache/box2d-mesh.msh
+  MESH_TOP1=true
+  OPTM_QLIM=0.95
