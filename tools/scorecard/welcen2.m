@@ -12,14 +12,14 @@ function [ok] = welcen2(pp,pw,t2)
 %   Email           : de2363@columbia.edu
 %   Last updated    : 19/03/2018
 
-%---------------------------------------------- basic checks    
+%---------------------------------------------- basic checks
     if ( ~isnumeric(pp) || ...
          ~isnumeric(pw) || ...
          ~isnumeric(t2) )
         error('welcen2:incorrectInputClass' , ...
             'Incorrect input class.');
     end
-    
+
 %---------------------------------------------- basic checks
     if (ndims(pp) ~= +2 || ...
         ndims(pw) ~= +2 || ...
@@ -27,7 +27,7 @@ function [ok] = welcen2(pp,pw,t2)
         error('welcen2:incorrectDimensions' , ...
             'Incorrect input dimensions.');
     end
-    
+
     if (size(pp,2) < +2 || ...
             size(pp,1)~= size(pw,1) || ...
                 size(t2,2) < +3 )
@@ -41,17 +41,17 @@ function [ok] = welcen2(pp,pw,t2)
 %------------------------------------- signed areas to vert.
     a1 = orient1( ...
         pp(t2(:,1),:),pp(t2(:,2),:),cc(:,1:2));
-        
+
     a2 = orient1( ...
         pp(t2(:,2),:),pp(t2(:,3),:),cc(:,1:2));
-    
+
     a3 = orient1( ...
         pp(t2(:,3),:),pp(t2(:,1),:),cc(:,1:2));
 
 %------------------------------------- interior if same sign
     ok = a1 .* a2 >= +0.E+0 ...
        & a2 .* a3 >= +0.E+0 ;
-   
+
 end
 
 

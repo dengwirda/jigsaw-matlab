@@ -6,26 +6,26 @@ function savewav(name,mesh)
 %   The following entities are optionally saved to the file
 %   "NAME.OBJ":
 %
-%   MESH.POINT.COORD - [NPxND+1] array of point coordinates, 
+%   MESH.POINT.COORD - [NPxND+1] array of point coordinates,
 %       where ND is the number of spatial dimenions.
 %
-%   MESH.EDGE2.INDEX - [N2x 3] array of indexing for EDGE-2 
-%       elements, where INDEX(K,1:2) is an array of "points" 
-%       associated with the K-TH edge, and INDEX(K,3) is an 
+%   MESH.EDGE2.INDEX - [N2x 3] array of indexing for EDGE-2
+%       elements, where INDEX(K,1:2) is an array of "points"
+%       associated with the K-TH edge, and INDEX(K,3) is an
 %       associated ID tag.
 %
-%   MESH.TRIA3.INDEX - [N3x 4] array of indexing for TRIA-3 
-%       elements, where INDEX(K,1:3) is an array of "points" 
-%       associated with the K-TH tria, and INDEX(K,4) is an 
+%   MESH.TRIA3.INDEX - [N3x 4] array of indexing for TRIA-3
+%       elements, where INDEX(K,1:3) is an array of "points"
+%       associated with the K-TH tria, and INDEX(K,4) is an
 %       associated ID tag.
 %
-%   MESH.QUAD4.INDEX - [N3x 5] array of indexing for QUAD-4 
-%       elements, where INDEX(K,1:4) is an array of "points" 
-%       associated with the K-TH quad, and INDEX(K,5) is an 
+%   MESH.QUAD4.INDEX - [N3x 5] array of indexing for QUAD-4
+%       elements, where INDEX(K,1:4) is an array of "points"
+%       associated with the K-TH quad, and INDEX(K,5) is an
 %       associated ID tag.
 %
 %   See also SAVEMSH, LOADMSH
-%            
+%
 
 %-----------------------------------------------------------
 %   Darren Engwirda
@@ -43,16 +43,16 @@ function savewav(name,mesh)
     if (~isstruct(mesh))
         error('MESH must be a valid structure!') ;
     end
-    
+
    [path,file,fext] = fileparts(name);
-   
+
     if(~strcmp(lower(fext),'.obj'))
         name = [name,'.obj'] ;
     end
- 
+
     try
 %-- try to write data to file
-    
+
     ffid = fopen(name , 'w') ;
 
     fprintf(ffid, ...
@@ -64,14 +64,14 @@ function savewav(name,mesh)
         case +2
         coord = mesh.point.coord(:,1:1);
         coord = [coord,zeros(size(coord,1),2)] ;
-        
+
         case +3
         coord = mesh.point.coord(:,1:2);
         coord = [coord,zeros(size(coord,1),1)] ;
-            
+
         case +4
         coord = mesh.point.coord(:,1:3);
-            
+
         otherwise
         error('Unsupported dimensionality!') ;
     end
@@ -100,32 +100,32 @@ function savewav(name,mesh)
 %-- write "TRIA4" data
     warning('TRIA4 elements not supported!') ;
     end
-    
+
     if (inspect(mesh,'hexa8'))
 %-- write "HEXA8" data
     warning('HEXA8 elements not supported!') ;
     end
-    
+
     if (inspect(mesh,'wedg6'))
 %-- write "WEDG6" data
     warning('WEDG6 elements not supported!') ;
     end
-    
+
     if (inspect(mesh,'pyra5'))
 %-- write "PYRA5" data
     warning('PYRA5 elements not supported!') ;
     end
 
     fclose(ffid) ;
-    
+
     catch err
-    
+
 %-- ensure that we close the file regardless!
     if (ffid>-1)
     fclose(ffid) ;
     end
     rethrow(err) ;
-        
+
     end
 
 end

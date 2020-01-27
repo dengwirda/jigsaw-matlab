@@ -1,12 +1,12 @@
 function [vdeg] = trideg3(pp,t3)
 %TRIDEG3 calc. topological degree for vertices in a 3-simpl-
 %ex triangulation.
-%   [VDEG] = TRIDEG3(VERT,TRIA) returns the no. of triangles 
+%   [VDEG] = TRIDEG3(VERT,TRIA) returns the no. of triangles
 %   incident to each vertex. VDEG is a V-by-1 array of vert-
-%   ex degrees, VERT is a V-by-D array of XY coordinates, 
-%   and TRIA is a T-by-4 array of vertex indexing, where 
-%   each row defines a triangle, such that 
-%   VERT(TRIA(II,1),:), VERT(TRIA(II,2),:), 
+%   ex degrees, VERT is a V-by-D array of XY coordinates,
+%   and TRIA is a T-by-4 array of vertex indexing, where
+%   each row defines a triangle, such that
+%   VERT(TRIA(II,1),:), VERT(TRIA(II,2),:),
 %   VERT(TRIA(II,2),:), VERT(TRIA(II,3),:) are the coordina-
 %   tes of the II-TH tetrahedron.
 %
@@ -16,12 +16,12 @@ function [vdeg] = trideg3(pp,t3)
 %   Email           : de2363@columbia.edu
 %   Last updated    : 29/07/2018
 
-%---------------------------------------------- basic checks    
+%---------------------------------------------- basic checks
     if (~isnumeric(pp) || ~isnumeric(t3) )
         error('trideg3:incorrectInputClass' , ...
             'Incorrect input class.') ;
     end
-    
+
 %---------------------------------------------- basic checks
     if (ndims(pp) ~= +2 || ndims(t3) ~= +2 )
         error('trideg3:incorrectDimensions' , ...
@@ -46,9 +46,9 @@ function [vdeg] = trideg3(pp,t3)
     vdeg = sum(sparse( ...
         t3(:,1:4),repmat( ...
             (1:ntri)',1,4),+1,nvrt,ntri),2) ;
-            
+
     vdeg = full(vdeg);
-    
+
 end
 
 

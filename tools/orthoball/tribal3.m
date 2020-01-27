@@ -2,7 +2,7 @@ function [bb] = tribal3(pp,tt)
 %TRIBAL3 compute the circumballs associated with a 3-simplex
 %triangulation embedded in R^3.
 %   [BB] = TRIBAL3(PP,TT) returns the circumscribing balls
-%   associated with the triangles in [PP,TT], such that BB = 
+%   associated with the triangles in [PP,TT], such that BB =
 %   [XC,YC,ZC,RC.^2].
 
 %   Darren Engwirda : 2017 --

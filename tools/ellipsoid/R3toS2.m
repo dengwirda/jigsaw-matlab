@@ -8,12 +8,12 @@ function [S2] = R3toS2(radii,E3)
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
-    
+
     if (~isnumeric(radii) || ~isnumeric(E3))
         error('R3toS2:incorrectInputClass' , ...
             'Incorrect input class.') ;
     end
-    
+
     if (numel(radii) ~= +3 )
         error('R3toS2:incorrectDimensions' , ...
             'Incorrect input dimensions.') ;
@@ -39,7 +39,7 @@ function [S2] = R3toS2(radii,E3)
 
     S2(:,2) = asin (zr) ;
     S2(:,1) = atan2(ym, xm) ;
-    
+
 end
 
 

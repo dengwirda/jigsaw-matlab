@@ -1,8 +1,8 @@
 function drawtria_4(pp,t4,varargin)
-%DRAWTRIA-4 draw TRIA-4 elements defined by [PP,T4]. 
-%   DRAWTRIA_4(PP,T4) draws elements onto the current axes, 
-%   where PP is an NP-by-ND array of vertex positions and 
-%   T4 is an NT-by-4 array of cell-indexing. Additional 
+%DRAWTRIA-4 draw TRIA-4 elements defined by [PP,T4].
+%   DRAWTRIA_4(PP,T4) draws elements onto the current axes,
+%   where PP is an NP-by-ND array of vertex positions and
+%   T4 is an NT-by-4 array of cell-indexing. Additional
 %   plotting arguments can be passed as name / value pairs.
 %
 %   See also DRAWMESH
@@ -14,7 +14,7 @@ function drawtria_4(pp,t4,varargin)
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
-    
+
     if (isempty(t4)), return; end
 
     ec = [.20,.20,.20] ;
@@ -24,25 +24,25 @@ function drawtria_4(pp,t4,varargin)
 
     if (nargin >= 3)
 %-- extract users R^3 splitting plane
-        ti = varargin{+1} ; 
+        ti = varargin{+1} ;
     else
-%-- calc. default R^3 splitting plane   
-        if (size(t4,1) > 1) 
-    
+%-- calc. default R^3 splitting plane
+        if (size(t4,1) > 1)
+
         dc = max(pp( :,:),[],1) - ...
              min(pp( :,:),[],1) ;
        [dd,id] = max( dc) ;
-         
+
         ok = pp( :,id) < ...
           median(pp( :,id))+ .10*dd ;
-            
+
         ti = all(ok(t4),2);
 
         else
 
         ti = true (size(t4,1),1);
 
-        end  
+        end
     end
 
     if (all(ti) || all(~ti))                % a single part
@@ -60,12 +60,12 @@ function drawtria_4(pp,t4,varargin)
 
     f1 = build_surf_4(t4( ti,:));
     f2 = build_surf_4(t4(~ti,:));
-    
+
     c1 = ismember(sort(f1,2), ...
                   sort(f2,2),'rows');       % common facets
     c2 = ismember(sort(f2,2), ...
                   sort(f1,2),'rows');
-    
+
 %-- draw external surface
     patch('faces',f1(~c1,:),'vertices',pp,...
         'facecolor',fe,...
@@ -86,7 +86,7 @@ function drawtria_4(pp,t4,varargin)
         'facealpha',0.20) ;
 
     end
-  
+
 end
 
 function [fe] = build_surf_4(t4)
@@ -96,14 +96,14 @@ function [fe] = build_surf_4(t4)
           t4(:,[1,4,2]);
           t4(:,[2,4,3]);
           t4(:,[3,4,1])] ;
-      
+
    [fj,ii,jj] = unique (sort(ff,2),'rows');
-    
+
     ff = ff(ii,:);
-    
+
     ss = accumarray(jj, ...
         ones(size(jj)),[size(ff,1),1]) ;
-    
+
     fe = ff(ss==+1,:);  % external faces
    %fi = ff(ss~=+1,:);  % internal faces
 

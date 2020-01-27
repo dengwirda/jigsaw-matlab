@@ -1,5 +1,5 @@
 function [fval] = trifun2(test,vert,tria,tree,ftri)
-%TRIFUN2 evaluate a discrete function defined on a 2-simplex 
+%TRIFUN2 evaluate a discrete function defined on a 2-simplex
 %triangulation embedded in R^2.
 %   [FVAL] = TRIFUN2(TEST,VERT,TRIA,TREE,FTRI) returns an
 %   interpolation of the triangle-based function FTRI to the
@@ -8,8 +8,8 @@ function [fval] = trifun2(test,vert,tria,tree,ftri)
 %   tes TEST. {VERT,TRIA,FTRI} is a discrete triangle-based
 %   function, where VERT is a V-by-2 array of XY coordinates
 %   TRIA is a T-by-3 array of triangles and FTRI is a V-by-1
-%   array of mesh-size values. Each row of TRIA defines a 
-%   triangle, such that VERT(TRIA(II,1),:), 
+%   array of mesh-size values. Each row of TRIA defines a
+%   triangle, such that VERT(TRIA(II,1),:),
 %   VERT(TRIA(II,2),:) and VERT(TRIA(II,3),:) are the coord-
 %   inates of the II-TH triangle. TREE is a spatial indexing
 %   structure for {VERT,TRIA}, as returned by IDXTRI2.
@@ -20,7 +20,7 @@ function [fval] = trifun2(test,vert,tria,tree,ftri)
 %   Email           : de2363@columbia.edu
 %   Last updated    : 25/07/2018
 
-%---------------------------------------------- basic checks    
+%---------------------------------------------- basic checks
     if ( ~isnumeric(test) || ...
          ~isnumeric(vert) || ...
          ~isnumeric(tria) || ...
@@ -29,7 +29,7 @@ function [fval] = trifun2(test,vert,tria,tree,ftri)
         error('trifun2:incorrectInputClass' , ...
             'Incorrect input class.') ;
     end
-    
+
 %---------------------------------------------- basic checks
     if (ndims(test) ~= +2 || ...
         ndims(vert) ~= +2 || ...
@@ -59,7 +59,7 @@ function [fval] = trifun2(test,vert,tria,tree,ftri)
 %-------------------------------------- test-to-tria queries
    [tp,tj] = ...
     findtria (vert,tria,test,tree);
-   
+
     if (isempty(tp))
         in = false(size(test,1),1);
         ti = [];
@@ -68,7 +68,7 @@ function [fval] = trifun2(test,vert,tria,tree,ftri)
         ti = tj(tp(in,+1));
     end
 
-%-------------------------------------- calc. linear interp.    
+%-------------------------------------- calc. linear interp.
     fval = +inf * ones(size(test,1),1) ;
 
     if (any(in))
@@ -76,19 +76,19 @@ function [fval] = trifun2(test,vert,tria,tree,ftri)
     a1 = orient1(vert(tria(ti,2),:),...
                  vert(tria(ti,3),:),...
                  test(in,:)) ;
-                 
+
     a2 = orient1(vert(tria(ti,3),:),...
                  vert(tria(ti,1),:),...
                  test(in,:)) ;
-                 
+
     a3 = orient1(vert(tria(ti,1),:),...
                  vert(tria(ti,2),:),...
                  test(in,:)) ;
-    
+
     fval(in) = a1.*ftri(tria(ti,1)) ...
              + a2.*ftri(tria(ti,2)) ...
              + a3.*ftri(tria(ti,3)) ;
-    
+
     fval(in) = fval(in)./(a1+a2+a3) ;
 
     end

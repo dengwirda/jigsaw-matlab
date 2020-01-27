@@ -15,7 +15,7 @@ function drawmesh(mesh,varargin)
     if (nargin>=+3), cuts = varargin{2}; end
 
     if (isfield(mesh,'mshID'))
-        mshID =  mesh.mshID ;  
+        mshID =  mesh.mshID ;
     else
         mshID = 'EUCLIDEAN-MESH' ;
     end
@@ -23,7 +23,7 @@ function drawmesh(mesh,varargin)
    [pass] = certify(mesh) ;
 
     if (isempty(mask))
- 
+
  %-- draw all by default
     if (inspect(mesh,'edge2'))
         mask.edge2 = ...
@@ -57,10 +57,10 @@ function drawmesh(mesh,varargin)
         mask.value = ...
         true(size(mesh.value      ,1),1) ;
     end
-    
+
     else
- 
-%-- draw nil by default 
+
+%-- draw nil by default
     if (inspect(mesh,'edge2') && ...
        ~isfield(mask,'edge2') )
         mask.edge2 = ...
@@ -101,17 +101,17 @@ function drawmesh(mesh,varargin)
         mask.value = ...
        false(size(mesh.value.index,1),1) ;
     end
-    
+
     end
 
     switch (upper(mshID))
-    
+
     case 'EUCLIDEAN-MESH'
         draw_euclidean_mesh(mesh,mask,cuts) ;
-    
+
     otherwise
         error('Invalid mshID!' )  ;
-    
+
     end
 
 end
@@ -124,7 +124,7 @@ function draw_euclidean_mesh(mesh,mask,cuts)
     ndim = size(mesh.point.coord,2) - 1 ;
 
     switch (ndim)
-    
+
     case +2
 %-- draw mesh obj. in R^2
 
@@ -146,7 +146,7 @@ function draw_euclidean_mesh(mesh,mask,cuts)
         set(gca,'clipping','off') ;
     end
     end
-        
+
     if (inspect(mesh,'tria3'))
     %-- draw TRIA3 mesh obj.
     if (inspect(mesh,'value'))
@@ -167,7 +167,7 @@ function draw_euclidean_mesh(mesh,mask,cuts)
         set(gca,'clipping','off') ;
     end
     end
-    
+
     if (inspect(mesh,'quad4'))
     %-- draw QUAD4 mesh obj.
     if (inspect(mesh,'value'))
@@ -188,7 +188,7 @@ function draw_euclidean_mesh(mesh,mask,cuts)
         set(gca,'clipping','off') ;
     end
     end
-        
+
     case +3
 %-- draw mesh obj. in R^3
 
@@ -210,7 +210,7 @@ function draw_euclidean_mesh(mesh,mask,cuts)
         set(gca,'clipping','off') ;
     end
     end
-        
+
     if (inspect(mesh,'tria3'))
     %-- draw TRIA3 mesh obj.
     if (inspect(mesh,'value'))
@@ -228,10 +228,10 @@ function draw_euclidean_mesh(mesh,mask,cuts)
                    mesh.tria3.index(m,1:3)) ;
         axis image off ; hold on;
         set(gcf,'color','w') ;
-        set(gca,'clipping','off') ;      
+        set(gca,'clipping','off') ;
     end
     end
-    
+
     if (inspect(mesh,'quad4'))
     %-- draw QUAD4 mesh obj.
     if (inspect(mesh,'value'))
@@ -252,7 +252,7 @@ function draw_euclidean_mesh(mesh,mask,cuts)
         set(gca,'clipping','off') ;
     end
     end
-    
+
     if (inspect(mesh,'tria4'))
     %-- draw TRIA4 mesh obj.
     if (inspect(mesh,'value'))
@@ -294,7 +294,7 @@ function draw_euclidean_mesh(mesh,mask,cuts)
         set(gca,'clipping','off') ;
     end
     end
-    
+
     if (inspect(mesh,'wedg6'))
     %-- draw WEDG6 mesh obj.
     if (inspect(mesh,'value'))
@@ -336,12 +336,12 @@ function draw_euclidean_mesh(mesh,mask,cuts)
         set(gca,'clipping','off') ;
     end
     end
-    
+
     otherwise
     error('DRAWMESH: unsupported inputs.');
-        
+
     end
-    
+
 end
 
 

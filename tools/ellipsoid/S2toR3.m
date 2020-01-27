@@ -8,12 +8,12 @@ function [E3] = S2toR3(radii,S2)
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
-    
+
     if (~isnumeric(radii) || ~isnumeric(S2))
         error('S2toR3:incorrectInputClass' , ...
             'Incorrect input class.') ;
     end
-    
+
     if (numel(radii) ~= +3 )
         error('S2toR3:incorrectDimensions' , ...
             'Incorrect input dimensions.') ;
@@ -36,7 +36,7 @@ function [E3] = S2toR3(radii,S2)
 
     E3(:,2) = radii(2) * sin(S2(:,1)) ...
                       .* cos(S2(:,2)) ;
-    
+
     E3(:,3) = radii(3) * sin(S2(:,2)) ;
 
 end

@@ -1,5 +1,5 @@
 function globals
-%GLOBALS a helper function to load global const. for JIGSAW. 
+%GLOBALS a helper function to load global const. for JIGSAW.
 %
 %   See also EXAMPLE, DETAILS
 
@@ -12,11 +12,11 @@ function globals
 %
 
 %------------------------------------ define JIGSAW's const.
-  
+
 %-- return id for JIGSAW
- 
+
     global JIGSAW_UNKNOWN_ERROR ;
-    
+
     JIGSAW_UNKNOWN_ERROR    = -1 ;
 
     global JIGSAW_NO_ERROR ;
@@ -32,9 +32,9 @@ function globals
     JIGSAW_INVALID_ARGUMENT = +4 ;
 
 %-- constants for JIGSAW
-    
+
     global JIGSAW_NULL_FLAG ;
-    
+
     JIGSAW_NULL_FLAG        = -100 ;
 
     global JIGSAW_EUCLIDEAN_MESH ;
@@ -47,7 +47,7 @@ function globals
     JIGSAW_EUCLIDEAN_MESH   = +100 ;
     JIGSAW_EUCLIDEAN_GRID   = +101 ;
     JIGSAW_EUCLIDEAN_DUAL   = +102 ;
-    
+
     JIGSAW_ELLIPSOID_MESH   = +200 ;
     JIGSAW_ELLIPSOID_GRID   = +201 ;
     JIGSAW_ELLIPSOID_DUAL   = +202 ;
@@ -80,7 +80,7 @@ function globals
 
     JIGSAW_HFUN_RELATIVE    = +300 ;
     JIGSAW_HFUN_ABSOLUTE    = +301 ;
-        
+
     JIGSAW_KERN_DELFRONT    = +400 ;
     JIGSAW_KERN_DELAUNAY    = +401 ;
     JIGSAW_KERN_BISECTOR    = +402 ;

@@ -3,13 +3,13 @@ function compile
 %
 %   COMPILE tries to compile JIGSAW from the c++ source code
 %   available in ../external/jigsaw. The cmake utility and a
-%   c++ compiler must be available on the system path. 
+%   c++ compiler must be available on the system path.
 %
 %   On success, JIGSAW is installed in ../external/jigsaw.
 %
 %   The cmake workflow has been tested on various Linux, Mac
 %   and Windows-based systems, using the gcc, clang and msvc
-%   compilers. 
+%   compilers.
 %
 %   See also EXAMPLE, DETAILS
 

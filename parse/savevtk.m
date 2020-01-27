@@ -10,42 +10,42 @@ function savevtk(name,mesh)
 %   .IF. MESH.MSHID == 'ELLIPSOID-MESH':
 %   -----------------------------------
 %
-%   MESH.POINT.COORD - [NPxND+1] array of point coordinates, 
+%   MESH.POINT.COORD - [NPxND+1] array of point coordinates,
 %       where ND is the number of spatial dimenions.
 %
-%   MESH.EDGE2.INDEX - [N2x 4] array of indexing for EDGE-2 
-%       elements, where INDEX(K,1:2) is an array of "points" 
-%       associated with the K-TH edge, and INDEX(K,3) is an 
+%   MESH.EDGE2.INDEX - [N2x 4] array of indexing for EDGE-2
+%       elements, where INDEX(K,1:2) is an array of "points"
+%       associated with the K-TH edge, and INDEX(K,3) is an
 %       associated ID tag.
 %
-%   MESH.TRIA3.INDEX - [N3x 4] array of indexing for TRIA-3 
-%       elements, where INDEX(K,1:3) is an array of "points" 
-%       associated with the K-TH tria, and INDEX(K,4) is an 
+%   MESH.TRIA3.INDEX - [N3x 4] array of indexing for TRIA-3
+%       elements, where INDEX(K,1:3) is an array of "points"
+%       associated with the K-TH tria, and INDEX(K,4) is an
 %       associated ID tag.
 %
-%   MESH.QUAD4.INDEX - [N3x 5] array of indexing for QUAD-4 
-%       elements, where INDEX(K,1:4) is an array of "points" 
-%       associated with the K-TH quad, and INDEX(K,5) is an 
+%   MESH.QUAD4.INDEX - [N3x 5] array of indexing for QUAD-4
+%       elements, where INDEX(K,1:4) is an array of "points"
+%       associated with the K-TH quad, and INDEX(K,5) is an
 %       associated ID tag.
 %
-%   MESH.TRIA4.INDEX - [N4x 5] array of indexing for TRIA-4 
-%       elements, where INDEX(K,1:4) is an array of "points" 
-%       associated with the K-TH tria, and INDEX(K,5) is an 
+%   MESH.TRIA4.INDEX - [N4x 5] array of indexing for TRIA-4
+%       elements, where INDEX(K,1:4) is an array of "points"
+%       associated with the K-TH tria, and INDEX(K,5) is an
 %       associated ID tag.
 %
-%   MESH.HEXA8.INDEX - [N8x 9] array of indexing for HEXA-8 
-%       elements, where INDEX(K,1:8) is an array of "points" 
-%       associated with the K-TH elem, and INDEX(K,9) is an 
+%   MESH.HEXA8.INDEX - [N8x 9] array of indexing for HEXA-8
+%       elements, where INDEX(K,1:8) is an array of "points"
+%       associated with the K-TH elem, and INDEX(K,9) is an
 %       associated ID tag.
 %
-%   MESH.WEDG6.INDEX - [N6x 7] array of indexing for WEDG-6 
-%       elements, where INDEX(K,1:6) is an array of "points" 
-%       associated with the K-TH elem, and INDEX(K,7) is an 
+%   MESH.WEDG6.INDEX - [N6x 7] array of indexing for WEDG-6
+%       elements, where INDEX(K,1:6) is an array of "points"
+%       associated with the K-TH elem, and INDEX(K,7) is an
 %       associated ID tag.
 %
-%   MESH.PYRA5.INDEX - [N5x 6] array of indexing for PYRA-5 
-%       elements, where INDEX(K,1:6) is an array of "points" 
-%       associated with the K-TH elem, and INDEX(K,6) is an 
+%   MESH.PYRA5.INDEX - [N5x 6] array of indexing for PYRA-5
+%       elements, where INDEX(K,1:6) is an array of "points"
+%       associated with the K-TH elem, and INDEX(K,6) is an
 %       associated ID tag.
 %
 %   MESH.VALUE - [NPxNV] array of "values" associated with
@@ -61,24 +61,24 @@ function savevtk(name,mesh)
 %   .OR. MESH.MSHID == 'ELLIPSOID-GRID':
 %   -----------------------------------
 %
-%   MESH.POINT.COORD - [NDx1] cell array of grid coordinates 
+%   MESH.POINT.COORD - [NDx1] cell array of grid coordinates
 %       where ND is the number of spatial dimenions. Each
 %       array COORD{ID} should be a vector of grid coord.'s,
 %       increasing or decreasing monotonically.
 %
-%   MESH.VALUE - [NMxNV] array of "values" associated with 
+%   MESH.VALUE - [NMxNV] array of "values" associated with
 %       the vertices of the grid, where NM is the product of
-%       the dimensions of the grid. NV values are associated 
+%       the dimensions of the grid. NV values are associated
 %       with each vertex.
 %
 %   MESH.SLOPE - [NMx 1] array of "slopes" associated with
 %       the vertices of the grid, where NM is the product of
 %       the dimensions of the grid. Slope values define the
-%       gradient-limits ||dh/dx|| used by the Eikonal solver 
+%       gradient-limits ||dh/dx|| used by the Eikonal solver
 %       MARCHE.
 %
 %   See also SAVEMSH, LOADMSH
-%            
+%
 
 %-----------------------------------------------------------
 %   Darren Engwirda
@@ -98,59 +98,59 @@ function savevtk(name,mesh)
     end
 
     [path,file,fext] = fileparts(name);
-   
+
     if(~strcmp(lower(fext),'.vtk'))
         name = [name,'.vtk'];
     end
- 
+
     try
 %-- try to write data to file
-    
+
     ffid = fopen(name, 'w') ;
 
     if (isfield(mesh,'mshID'))
-        mshID =  mesh.mshID ;  
+        mshID =  mesh.mshID ;
     else
         mshID = 'EUCLIDEAN-MESH';
     end
- 
+
     switch (upper(mshID))
-    
+
     case 'EUCLIDEAN-MESH'
         save_mesh_format( ...
-            ffid,file,mesh,'EUCLIDEAN-MESH') ;     
+            ffid,file,mesh,'EUCLIDEAN-MESH') ;
     case 'EUCLIDEAN-GRID'
         save_grid_format( ...
             ffid,file,mesh,'EUCLIDEAN-GRID') ;
     case 'EUCLIDEAN-DUAL'
        %save_dual_format( ...
        %    ffid,file,mesh,'EUCLIDEAN-DUAL') ;
-    
+
     case 'ELLIPSOID-MESH'
         save_mesh_format( ...
-            ffid,file,mesh,'ELLIPSOID-MESH') ;     
+            ffid,file,mesh,'ELLIPSOID-MESH') ;
     case 'ELLIPSOID-GRID'
         save_grid_format( ...
             ffid,file,mesh,'ELLIPSOID-GRID') ;
     case 'ELLIPSOID-DUAL'
        %save_dual_format( ...
        %    ffid,file,mesh,'ELLIPSOID-DUAL') ;
-    
+
     otherwise
         error('Invalid mshID!') ;
-    
+
     end
 
     fclose(ffid) ;
-    
+
     catch err
-    
+
 %-- ensure that we close the file regardless!
     if (ffid>-1)
     fclose(ffid) ;
     end
     rethrow(err) ;
-        
+
     end
 
 end
@@ -160,7 +160,7 @@ function save_mesh_format(ffid,file,mesh,kind)
 
     npoint = 0; nedge2 = 0; ntria3 = 0; ntria4 = 0;
     nquad4 = 0; nhexa8 = 0; nwedg6 = 0; npyra5 = 0;
-    
+
     if (inspect(mesh,'point'))
         npoint = size(mesh.point.coord,1);
     end
@@ -185,20 +185,20 @@ function save_mesh_format(ffid,file,mesh,kind)
     if (inspect(mesh,'pyra5'))
         npyra5 = size(mesh.pyra5.index,1);
     end
-    
+
     fprintf(ffid,['# vtk DataFile Version 3.0\n']);
     fprintf(ffid,[file,'\n']);
-    fprintf(ffid,['ASCII','\n']);    
+    fprintf(ffid,['ASCII','\n']);
     fprintf(ffid,['DATASET UNSTRUCTURED_GRID \n']);
-    
+
     fprintf(ffid,['POINTS %u double','\n'],npoint);
-    
+
     if (inspect(mesh,'point'))
 %-- write "POINT" data
     switch (size(mesh.point.coord,2))
         case +3
         data = zeros(size( ...
-            mesh.point.coord,1), 3) ;    
+            mesh.point.coord,1), 3) ;
         data(:,1:2) = ...
             mesh.point.coord(:,1:2) ;
 
@@ -207,7 +207,7 @@ function save_mesh_format(ffid,file,mesh,kind)
 
         case +4
         data = zeros(size( ...
-            mesh.point.coord,1), 3) ;    
+            mesh.point.coord,1), 3) ;
         data(:,1:3) = ...
             mesh.point.coord(:,1:3) ;
 
@@ -218,19 +218,19 @@ function save_mesh_format(ffid,file,mesh,kind)
         error('Unsupported dimensions!') ;
     end
     end
-    
+
     nline = nedge2 * 1 + ntria3 * 1 ...
           + ntria4 * 1 + nquad4 * 1 ...
           + nhexa8 * 1 + nwedg6 * 1 ...
           + npyra5 * 1 ;
 
-    nints = nedge2 * 3 + ntria3 * 4 ... 
+    nints = nedge2 * 3 + ntria3 * 4 ...
           + ntria4 * 5 + nquad4 * 5 ...
           + nhexa8 * 9 + nwedg6 * 7 ...
           + npyra5 * 6 ;
-    
+
     fprintf(ffid,['CELLS %u %u\n'],[nline,nints]) ;
-    
+
     if (inspect(mesh,'edge2'))
 %-- write "EDGE2" data
     fprintf(ffid,['2 ',repmat('%u ',1,2),'\n'], ...
@@ -266,9 +266,9 @@ function save_mesh_format(ffid,file,mesh,kind)
     fprintf(ffid,['5 ',repmat('%u ',1,5),'\n'], ...
         mesh.pyra5.index(:,1:5)'-1);
     end
-    
+
     fprintf(ffid,['CELL_TYPES %u','\n'],nline);
-    
+
     vtk_edge2 = + 3 ;
     vtk_tria3 = + 5 ;
     vtk_quad4 = + 9 ;
@@ -276,7 +276,7 @@ function save_mesh_format(ffid,file,mesh,kind)
     vtk_hexa8 = +12 ;
     vtk_wedg6 = +13 ;
     vtk_pyra5 = +14 ;
-    
+
     if (inspect(mesh,'edge2'))
 %-- write "EDGE2" type
     fprintf(ffid,[ ...
@@ -367,7 +367,7 @@ function save_grid_format(ffid,file,mesh,kind)
 
     fprintf(ffid,['# vtk DataFile Version 3.0\n']);
     fprintf(ffid,[file,'\n']);
-    fprintf(ffid,['ASCII','\n']);    
+    fprintf(ffid,['ASCII','\n']);
     fprintf(ffid,['DATASET RECTILINEAR_GRID  \n']);
     fprintf(ffid,['DIMENSIONS %u %u %u\n'],ncoord);
 

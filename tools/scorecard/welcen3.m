@@ -12,14 +12,14 @@ function [ok] = welcen3(pp,pw,tt)
 %   Email           : de2363@columbia.edu
 %   Last updated    : 10/07/2018
 
-%---------------------------------------------- basic checks    
+%---------------------------------------------- basic checks
     if ( ~isnumeric(pp) || ...
          ~isnumeric(pw) || ...
          ~isnumeric(t3) )
         error('welcen3:incorrectInputClass' , ...
             'Incorrect input class.');
     end
-    
+
 %---------------------------------------------- basic checks
     if (ndims(pp) ~= +2 || ...
         ndims(pw) ~= +2 || ...
@@ -27,7 +27,7 @@ function [ok] = welcen3(pp,pw,tt)
         error('welcen3:incorrectDimensions' , ...
             'Incorrect input dimensions.');
     end
-    
+
     if (size(pp,2) < +3 || ...
             size(pp,1)~= size(pw,1) || ...
                 size(t3,2) < +4 )
@@ -41,13 +41,13 @@ function [ok] = welcen3(pp,pw,tt)
 %------------------------------------- signed vol.'s to dual
     v1 = orient2(pp(t3(:,1),:), ...
         pp(t3(:,2),:),pp(t3(:,3),:),cc(:,1:3));
-    
+
     v2 = orient2(pp(t3(:,1),:), ...
         pp(t3(:,4),:),pp(t3(:,2),:),cc(:,1:3));
-    
+
     v3 = orient2(pp(t3(:,2),:), ...
         pp(t3(:,4),:),pp(t3(:,3),:),cc(:,1:3));
-    
+
     v4 = orient2(pp(t3(:,3),:), ...
         pp(t3(:,4),:),pp(t3(:,1),:),cc(:,1:3));
 
@@ -55,7 +55,7 @@ function [ok] = welcen3(pp,pw,tt)
     ok = v1 .* v2 >= +0.E+0 ...
        & v2 .* v3 >= +0.E+0 ...
        & v3 .* v4 >= +0.E+0 ;
-   
+
 end
 
 

@@ -1,10 +1,10 @@
 function [area] = trivol2(pp,t2)
-%TRIVOL2 calc. triangle areas for a 2-simplex triangulation 
+%TRIVOL2 calc. triangle areas for a 2-simplex triangulation
 %embedded in euclidean space.
 %   [AREA] = TRIVOL2(VERT,TRIA) returns the signed triangle
-%   areas, where AREA is a T-by-1 vector, VERT is a V-by-2 
+%   areas, where AREA is a T-by-1 vector, VERT is a V-by-2
 %   array of XY coordinates, and TRIA is a T-by-3 array of
-%   vertex indexing, where each row defines a triangle, such 
+%   vertex indexing, where each row defines a triangle, such
 %   that VERT(TRIA(II,1),:), VERT(TRIA(II,2),:) and VERT(
 %   TRIA(II,3),:) are the coordinates of the II-TH triangle.
 %
@@ -14,12 +14,12 @@ function [area] = trivol2(pp,t2)
 %   Email           : de2363@columbia.edu
 %   Last updated    : 03/05/2018
 
-%---------------------------------------------- basic checks    
+%---------------------------------------------- basic checks
     if (~isnumeric(pp) || ~isnumeric(t2) )
         error('trivol2:incorrectInputClass' , ...
             'Incorrect input class.') ;
     end
-    
+
 %---------------------------------------------- basic checks
     if (ndims(pp) ~= +2 || ndims(t2) ~= +2 )
         error('trivol2:incorrectDimensions' , ...
@@ -45,20 +45,20 @@ function [area] = trivol2(pp,t2)
 
     switch (size(pp,2))
         case +2
-           
+
         area = ev12(:,1).*ev13(:,2) ...
              - ev12(:,2).*ev13(:,1) ;
         area = 0.5 * area;
-            
+
         case +3
-            
+
         avec = cross(ev12,ev13);
         area = sqrt(sum(avec.^2,2)) ;
-        area = 0.5 * area;    
-        
+        area = 0.5 * area;
+
         otherwise
         error('Unsupported dimension.') ;
-        
+
     end
 
 end

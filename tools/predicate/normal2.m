@@ -6,8 +6,8 @@ function [nvec] = normal2(pp,t2)
 %   triangulation described by {VERT,TRIA}. Here, VERT is a
 %   V-by-D array of XY coordinates, and TRIA is a T-by-3
 %   array of triangle indicies, where each row defines a tr-
-%   iangle, such that VERT(TRIA(II,1),:), VERT(TRIA(II,2),:) 
-%   and VERT(TRIA(II,3),:) are the coordinates of the II-TH 
+%   iangle, such that VERT(TRIA(II,1),:), VERT(TRIA(II,2),:)
+%   and VERT(TRIA(II,3),:) are the coordinates of the II-TH
 %   triangle.
 %
 %   See also TRIVOL2, TRIVOL3
@@ -16,12 +16,12 @@ function [nvec] = normal2(pp,t2)
 %   Email           : de2363@columbia.edu
 %   Last updated    : 10/07/2018
 
-%---------------------------------------------- basic checks    
+%---------------------------------------------- basic checks
     if (~isnumeric(pp) || ~isnumeric(t2) )
         error('normal2:incorrectInputClass' , ...
             'Incorrect input class.') ;
     end
-    
+
 %---------------------------------------------- basic checks
     if (ndims(pp) ~= +2 || ndims(t2) ~= +2 )
         error('normal2:incorrectDimensions' , ...

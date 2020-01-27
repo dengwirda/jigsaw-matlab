@@ -1,6 +1,6 @@
 function initjig
 %INITJIG a helper function to set-up MATLAB's path statement
-%and load global constants for JIGSAW. 
+%and load global constants for JIGSAW.
 %
 %   See also EXAMPLE, DETAILS
 
@@ -13,10 +13,10 @@ function initjig
 %
 
 %------------------------------------ push path to utilities
-    
+
     filename = mfilename('fullpath') ;
     filepath = fileparts( filename ) ;
- 
+
     addpath( ...
     genpath( [filepath, '/tools'] )) ;
 

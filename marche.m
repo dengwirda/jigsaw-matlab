@@ -3,14 +3,14 @@ function [varargout] = marche(opts)
 %
 %   HFUN = MARCHE(OPTS);
 %
-%   Call the "fast-marching" solver MARCHE using the config. 
+%   Call the "fast-marching" solver MARCHE using the config.
 %   options specified in the OPTS structure. MARCHE solves
 %   the Eikonal equations
 %
-%   MAX(|dh/dx|, g) = g, 
+%   MAX(|dh/dx|, g) = g,
 %
-%   where g = g(x) is a gradient threshold applied to h. See 
-%   the SAVEMSH/LOADMSH functions for a description of the 
+%   where g = g(x) is a gradient threshold applied to h. See
+%   the SAVEMSH/LOADMSH functions for a description of the
 %   HFUN output structure.
 %
 %   OPTS is a user-defined set of meshing options:
@@ -18,12 +18,12 @@ function [varargout] = marche(opts)
 %   REQUIRED fields:
 %   ---------------
 %
-%   OPTS.HFUN_FILE - 'HFUNNAME.MSH', a string containing the 
+%   OPTS.HFUN_FILE - 'HFUNNAME.MSH', a string containing the
 %       name of the file defining h(x). Data is overwritten
 %       *in-place*. See SAVEMSH for additional details regar-
 %       ding the creation of *.MSH files.
 %
-%   OPTS.JCFG_FILE - 'JCFGNAME.JIG', a string containing the 
+%   OPTS.JCFG_FILE - 'JCFGNAME.JIG', a string containing the
 %       name of the cofig. file (will be created on output).
 %
 %   OPTIONAL fields (MISC):
@@ -48,16 +48,16 @@ function [varargout] = marche(opts)
     if ( isempty(opts))
         error('MARCHE: insufficient inputs!!') ;
     end
-    
+
     if (~isempty(opts) && ~isstruct(opts))
         error('MARCHE: invalid input types!!') ;
     end
-        
+
     savejig(opts.jcfg_file,opts);
 
 %---------------------------- set-up path for "local" binary
     if (strcmp(jexename,''))
-    
+
     filename = ...
             mfilename('fullpath') ;
     filepath = ...
@@ -74,7 +74,7 @@ function [varargout] = marche(opts)
     '/external/jigsaw/bin/marche'];
     end
     end
-  
+
     if (exist(jexename,'file')~=2), jexename=''; end
 
 %---------------------------- search machine path for binary
@@ -87,20 +87,20 @@ function [varargout] = marche(opts)
         jexename =       'marche' ;
     end
     end
-  
+
     if (exist(jexename,'file')~=2), jexename=''; end
 
 %---------------------------- call MARCHE and capture stdout
     if (exist(jexename,'file')==2)
- 
+
    [status, result] = system( ...
         [jexename,' ',opts.jcfg_file], '-echo');
-   
+
 %---------------------------- OCTAVE doesn't handle '-echo'!
     if (exist('OCTAVE_VERSION', 'builtin') > 0)
         fprintf(1, '%s', result) ;
     end
-    
+
     else
 %---------------------------- couldn't find JIGSAW's backend
         error([ ...

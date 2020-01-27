@@ -1,12 +1,12 @@
 function [mesh] = tetris(opts,nlev)
 %TETRIS generate a mesh using a "multi-level" strategy.
-%   MESH = TETRIS(OPTS,NLEV) generates MESH using a sequence 
-%   of bisection/refinement/optimisation operations. At each 
-%   pass, the mesh from the preceeding level is bisected 
-%   uniformly, a "halo" of nodes associated with "irregular" 
-%   topology is removed and JIGSAW is called to perform 
+%   MESH = TETRIS(OPTS,NLEV) generates MESH using a sequence
+%   of bisection/refinement/optimisation operations. At each
+%   pass, the mesh from the preceeding level is bisected
+%   uniformly, a "halo" of nodes associated with "irregular"
+%   topology is removed and JIGSAW is called to perform
 %   subsequent refinement/optimisation.
-%   OPTS is the standard user-defined options struct. passed 
+%   OPTS is the standard user-defined options struct. passed
 %   to JIGSAW.
 %
 %   See also JIGSAW
@@ -14,7 +14,7 @@ function [mesh] = tetris(opts,nlev)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   30-Oct-2019
+%   25-Jan-2020
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -25,159 +25,126 @@ function [mesh] = tetris(opts,nlev)
     if ( isempty(nlev))
         error('JIGSAW: insufficient inputs.');
     end
-    
+
     if (~isempty(opts) && ~isstruct (opts))
         error('JIGSAW: invalid input types.');
     end
     if (~isempty(nlev) && ~isnumeric(nlev))
         error('JIGSAW: invalid input types.');
     end
-    
+
 %---------------------------- call JIGSAW via inc. bisection
     SCAL = +2. ^ nlev;
 
     OPTS = opts ;
 
     while (nlev >= +0)
-    
+
         if (isfield(opts,'hfun_file'))
 
-%---------------------------- create/write current HFUN data     
+%---------------------------- create/write current HFUN data
        [path,name,fext] = ...
             fileparts(opts.hfun_file) ;
-    
+
         if (~isempty(path))
-            path = [path, '/']; 
+            path = [path, '/'];
         end
-    
+
         OPTS.hfun_file = ...
             [path,name,'-ITER', fext] ;
-        
+
        [HFUN]=loadmsh(opts.hfun_file) ;
-        
+
         HFUN.value = HFUN.value*SCAL;
 
         savemsh (OPTS.hfun_file,HFUN) ;
-        
+
         end
-        
+
         if (isfield(opts,'hfun_hmax'))
-        
-%---------------------------- create/write current HMAX data 
+
+%---------------------------- create/write current HMAX data
         OPTS.hfun_hmax = ...
         opts.hfun_hmax * SCAL ;
-        
+
         end
-        
+
         if (isfield(opts,'hfun_hmin'))
-        
-%---------------------------- create/write current HMIN data 
+
+%---------------------------- create/write current HMIN data
         OPTS.hfun_hmin = ...
         opts.hfun_hmin * SCAL ;
-        
-        end
- 
-        if (isfield(opts,'optm_qlim'))
-
-%---------------------------- create/write current QLIM data            
-        FACT = max(0.50, ...
-            1.00 - sqrt(nlev) * 0.10);
-
-        OPTS.optm_qlim = ...
-        opts.optm_qlim * FACT ;
-
-        else                % no QLIM specified => defaults!
-
-        FACT = max(0.50, ...
-            1.00 - sqrt(nlev) * 0.10);
-
-        OPTS.optm_qlim = ...
-                +.9375 * FACT ;
-            
-        end
-        
-        if (isfield(opts,'optm_qtol'))
-
-%---------------------------- create/write current QTOL data
-
-        OPTS.optm_qtol = ...
-        opts.optm_qtol *  (nlev + 1) ;
-
-        else                % no QTOL specified => defaults!
-
-        OPTS.optm_qtol = ...
-            +1.00E-004 *  (nlev + 1) ;
 
         end
-  
+
         if (isfield(opts,'optm_dual'))
-           
+
 %---------------------------- create/write current DUAL flag
 
-        OPTS.optm_dual = (nlev == 0) ;
-            
+        OPTS.optm_dual = (nlev == +0) ;
+
         end
-                
+
         if (nlev >= +1)
 
 %---------------------------- call JIGSAW kernel at this lev
-        mesh = jitter ( ...
-            OPTS, +2^(nlev + 1), +1) ;
-        
+        mesh = jitter (OPTS,round( ...
+            +3*(nlev+1)^(5./4.)), +1) ;
+
         else
 
-        mesh = jitter ( ...
-            OPTS, +2^(nlev + 1), +1) ;
+        mesh = jitter (OPTS,round( ...
+            +3*(nlev+1)^(5./4.)), +1) ;
 
         end
 
         nlev = nlev - 1 ;
         SCAL = SCAL / 2.;
-        
-        if (nlev >= +0)           
+
+        if (nlev >= +0)
         if (isfield(opts,'init_file'))
 
-%---------------------------- create/write current INIT data         
+%---------------------------- create/write current INIT data
        [path,name,fext] = ...
             fileparts(opts.init_file) ;
-  
+
         if (~isempty(path))
-            path = [path, '/']; 
+            path = [path, '/'];
         end
-  
+
         OPTS.init_file = ...
             [path,name,'-ITER', fext] ;
-        
-        mesh =   bisect (mesh);
- 
-        mesh =   attach (mesh);
-        
-        savemsh (OPTS.init_file,mesh) ;
-        
-        else
-        
-%---------------------------- create/write current INIT data 
-        [path,name,fext] = ...
-            fileparts(opts.mesh_file) ;
-    
-        if (~isempty(path))
-            path = [path, '/']; 
-        end
-    
-        OPTS.init_file = ...
-            [path,name,'-ITER', fext] ;
-        
+
         mesh =   bisect (mesh);
 
         mesh =   attach (mesh);
-        
+
         savemsh (OPTS.init_file,mesh) ;
-        
+
+        else
+
+%---------------------------- create/write current INIT data
+        [path,name,fext] = ...
+            fileparts(opts.mesh_file) ;
+
+        if (~isempty(path))
+            path = [path, '/'];
+        end
+
+        OPTS.init_file = ...
+            [path,name,'-ITER', fext] ;
+
+        mesh =   bisect (mesh);
+
+        mesh =   attach (mesh);
+
+        savemsh (OPTS.init_file,mesh) ;
+
         end
         end
-    
-    end    
-    
+
+    end
+
 end
 
 function [mesh] = attach(mesh)

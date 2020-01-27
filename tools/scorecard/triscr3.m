@@ -2,10 +2,10 @@ function [tscr] = triscr3(pp,t3)
 %TRISCR3 calc. vol.-len. ratios for triangles in a 3-simplex
 %triangulation in euclidean space.
 %   [SCR3] = TRISCR3(VERT,TRIA) returns the vol.-len. ratios
-%   where SCR3 is a T-by-1 vector, VERT is a V-by-D array of 
+%   where SCR3 is a T-by-1 vector, VERT is a V-by-D array of
 %   XY coordinates, and TRIA is a T-by-4 array of
-%   vertex indexing, where each row defines a triangle, such 
-%   that VERT(TRIA(II,1),:), VERT(TRIA(II,2),:), 
+%   vertex indexing, where each row defines a triangle, such
+%   that VERT(TRIA(II,1),:), VERT(TRIA(II,2),:),
 %   VERT(TRIA(II,3),:) and VERT(TRIA(II,4),:) are the coord-
 %   inates of the II-TH triangle.
 %

@@ -6,7 +6,7 @@ function [mesh] = extrude( ...
 %   at the levels defined in LEVS. The extrusion is done
 %   along the axis-aligned direction IDIR, with +ve or -ve
 %   values indicating sign. NEAR is a minimum bound on layer
-%   thickness, with vertices snapped from above/below to 
+%   thickness, with vertices snapped from above/below to
 %   prevent the formation of cells with thickness < NEAR.
 %
 %   See also BISECT
@@ -22,7 +22,7 @@ function [mesh] = extrude( ...
     if(~inspect(mesh,'point')), return; end
 
     if (isfield(mesh,'mshID'))
-        mshID =  mesh.mshID ;  
+        mshID =  mesh.mshID ;
     else
         mshID = 'EUCLIDEAN-MESH' ;
     end
@@ -51,7 +51,7 @@ function [mesh] = extrude( ...
 
     idim = abs (idir) ;
     ndim = size(mesh.point.coord,2)-1 ;
-    
+
     if (idim < +1 || idim > ndim)
     error('extrude:incorrectArgument', ...
         'Invalid extrusion direction') ;
@@ -62,7 +62,7 @@ function [mesh] = extrude( ...
     for ilev = +1 : length (levs)
 
         switch (upper(mshID))
-    
+
         case 'EUCLIDEAN-MESH'
 
        [mesh,base] = ...
@@ -71,7 +71,7 @@ function [mesh] = extrude( ...
 
         otherwise
         error('Invalid mshID!') ;
-    
+
         end
 
     end
@@ -124,15 +124,15 @@ function [mesh,next] = ...
 
     inew = zeros( ...
         size(mesh.point.coord,1),1) ;
-    
+
     inew( mark) = 1 ;
-    
+
     inew = cumsum(inew) + ...
         size(mesh.point.coord,1) ;
-    
-    mesh.point.coord = [ 
+
+    mesh.point.coord = [
         mesh.point.coord ; pnew] ;
-    
+
 %------------------------------ new ELEMENT to extrude level
     next = struct () ;
 
@@ -145,7 +145,7 @@ function [mesh,next] = ...
         mark(base.edge2.index(:,1));
         M(:,2) = ...
         mark(base.edge2.index(:,2));
-        
+
         Q = sum(int32(M),2) == +2 ;
         T = sum(int32(M),2) == +1 ;
         N = sum(int32(M),2) == +0 ;
@@ -240,7 +240,7 @@ function [mesh,next] = ...
         mark(base.tria3.index(:,2));
         M(:,3) = ...
         mark(base.tria3.index(:,3));
-        
+
         W = sum(int32(M),2) == +3 ;
         P = sum(int32(M),2) == +2 ;
         T = sum(int32(M),2) == +1 ;

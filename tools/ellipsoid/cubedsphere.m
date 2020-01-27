@@ -16,7 +16,7 @@ function [mesh] = cubedsphere(geom)
     mesh.point.coord = ...
         S2toR3(geom.radii,apos);
     mesh.point.coord(:,4) = +0 ;
-    
+
     mesh.quad4.index = [
         1, 2, 3, 4, 0
         1, 2, 6, 5, 0

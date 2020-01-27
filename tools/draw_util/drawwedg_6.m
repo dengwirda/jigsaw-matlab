@@ -1,8 +1,8 @@
 function drawwedg_6(pp,w6,varargin)
-%DRAWWEDG-6 draw WEDG-6 elements defined by [PP,W6]. 
-%   DRAWWEDG_6(PP,W6) draws elements onto the current axes, 
-%   where PP is an NP-by-ND array of vertex positions and 
-%   W6 is an NW-by-6 array of cell-indexing. Additional 
+%DRAWWEDG-6 draw WEDG-6 elements defined by [PP,W6].
+%   DRAWWEDG_6(PP,W6) draws elements onto the current axes,
+%   where PP is an NP-by-ND array of vertex positions and
+%   W6 is an NW-by-6 array of cell-indexing. Additional
 %   plotting arguments can be passed as name / value pairs.
 %
 %   See also DRAWMESH
@@ -14,7 +14,7 @@ function drawwedg_6(pp,w6,varargin)
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
-    
+
     if (isempty(w6)), return; end
 
     ec = [.20,.20,.20] ;
@@ -24,25 +24,25 @@ function drawwedg_6(pp,w6,varargin)
 
     if (nargin >= 3)
 %-- extract users R^3 splitting plane
-        ti = varargin{+1} ; 
+        ti = varargin{+1} ;
     else
-%-- calc. default R^3 splitting plane   
-        if (size(w6,1) > 1) 
-    
+%-- calc. default R^3 splitting plane
+        if (size(w6,1) > 1)
+
         dc = max(pp( :,:),[],1) - ...
              min(pp( :,:),[],1) ;
        [dd,id] = max( dc) ;
-         
+
         ok = pp( :,id) < ...
           median(pp( :,id))+ .10*dd ;
-            
+
         ti = all(ok(w6),2);
 
         else
 
         ti = true (size(w6,1),1);
 
-        end  
+        end
     end
 
     if (all(ti) || all(~ti))                % a single part
@@ -65,7 +65,7 @@ function drawwedg_6(pp,w6,varargin)
 
    [t1,q1] = build_surf_6(w6( ti,:));
    [t2,q2] = build_surf_6(w6(~ti,:));
-    
+
     c1 = ismember(sort(t1,2), ...
                   sort(t2,2),'rows');       % common facets
     c2 = ismember(sort(t2,2), ...
@@ -75,7 +75,7 @@ function drawwedg_6(pp,w6,varargin)
                   sort(q2,2),'rows');
     c4 = ismember(sort(q2,2), ...
                   sort(q1,2),'rows');
-    
+
 %-- draw external surface
     patch('faces',t1(~c1,:),'vertices',pp,...
         'facecolor',fe,...
@@ -111,7 +111,7 @@ function drawwedg_6(pp,w6,varargin)
         'facealpha',0.20) ;
 
     end
-  
+
 end
 
 function [te,qe] = build_surf_6(w6)
@@ -120,14 +120,14 @@ function [te,qe] = build_surf_6(w6)
     tt = [w6(:,[1,2,3]);
           w6(:,[4,5,6]);
          ] ;
-      
+
    [tj,ii,jj] = unique (sort(tt,2),'rows');
-    
+
     tt = tt(ii,:);
-    
+
     ss = accumarray(jj, ...
         ones(size(jj)),[size(tt,1),1]) ;
-    
+
     te = tt(ss==+1,:);  % external faces
    %ti = tt(ss~=+1,:);  % internal faces
 
@@ -135,14 +135,14 @@ function [te,qe] = build_surf_6(w6)
           w6(:,[2,3,6,5]);
           w6(:,[3,1,4,6]);
          ] ;
-      
+
    [qj,ii,jj] = unique (sort(qq,2),'rows');
-    
+
     qq = qq(ii,:);
-    
+
     ss = accumarray(jj, ...
         ones(size(jj)),[size(qq,1),1]) ;
-    
+
     qe = qq(ss==+1,:);  % external faces
    %qi = qq(ss~=+1,:);  % internal faces
 

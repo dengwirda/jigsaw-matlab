@@ -1,5 +1,5 @@
 function [mesh] = bisect(mesh)
-%BISECT bisect cells in a mesh object. 
+%BISECT bisect cells in a mesh object.
 
 %-----------------------------------------------------------
 %   Darren Engwirda
@@ -14,19 +14,19 @@ function [mesh] = bisect(mesh)
     end
 
 %------------------------------ map elements to unique edges
-    hexa = [] ; quad = [] ; edge = [] ; 
+    hexa = [] ; quad = [] ; edge = [] ;
     hmap = [] ; qmap = [] ; emap = [] ;
-    
+
     if (inspect(mesh,'edge2','index') && ...
            ~isempty(mesh.edge2.index) )
     %-------------------------- map EDGE2's onto JOIN arrays
         nedg = size(edge,1) ;
         ncel = size(mesh.edge2.index,1);
 
-        edge = [edge; 
+        edge = [edge;
         mesh.edge2.index(:,[1,2])
             ] ;
-       
+
         emap.edge2.index =zeros(ncel,1);
         emap.edge2.index(:, 1 ) = ...
         (1:ncel)' + ncel*0 + nedg ;
@@ -38,12 +38,12 @@ function [mesh] = bisect(mesh)
         nedg = size(edge,1) ;
         ncel = size(mesh.tria3.index,1);
 
-        edge = [edge; 
+        edge = [edge;
         mesh.tria3.index(:,[1,2])
         mesh.tria3.index(:,[2,3])
         mesh.tria3.index(:,[3,1])
             ] ;
-       
+
         emap.tria3.index =zeros(ncel,3);
         emap.tria3.index(:, 1 ) = ...
         (1:ncel)' + ncel*0 + nedg ;
@@ -52,25 +52,25 @@ function [mesh] = bisect(mesh)
         emap.tria3.index(:, 3 ) = ...
         (1:ncel)' + ncel*2 + nedg ;
     end
-    
+
     if (inspect(mesh,'quad4','index') && ...
            ~isempty(mesh.quad4.index) )
     %-------------------------- map QUAD4's onto JOIN arrays
         nedg = size(edge,1) ;
-        nfac = size(quad,1) ;        
+        nfac = size(quad,1) ;
         ncel = size(mesh.quad4.index,1);
 
         quad = [quad;
         mesh.quad4.index(:, 1:4 )
             ] ;
 
-        edge = [edge; 
+        edge = [edge;
         mesh.quad4.index(:,[1,2])
         mesh.quad4.index(:,[2,3])
         mesh.quad4.index(:,[3,4])
         mesh.quad4.index(:,[4,1])
             ] ;
-    
+
         qmap.quad4.index =zeros(ncel,1);
         qmap.quad4.index(:, 1 ) = ...
         (1:ncel)' + ncel*0 + nfac ;
@@ -83,7 +83,7 @@ function [mesh] = bisect(mesh)
         emap.quad4.index(:, 3 ) = ...
         (1:ncel)' + ncel*2 + nedg ;
         emap.quad4.index(:, 4 ) = ...
-        (1:ncel)' + ncel*3 + nedg ;    
+        (1:ncel)' + ncel*3 + nedg ;
     end
 
     if (inspect(mesh,'tria4','index') && ...
@@ -92,7 +92,7 @@ function [mesh] = bisect(mesh)
         nedg = size(edge,1) ;
         ncel = size(mesh.tria4.index,1);
 
-        edge = [edge; 
+        edge = [edge;
         mesh.tria4.index(:,[1,2])
         mesh.tria4.index(:,[2,3])
         mesh.tria4.index(:,[3,1])
@@ -100,7 +100,7 @@ function [mesh] = bisect(mesh)
         mesh.tria4.index(:,[2,4])
         mesh.tria4.index(:,[3,4])
             ] ;
-       
+
         emap.tria4.index =zeros(ncel,6);
         emap.tria4.index(:, 1 ) = ...
         (1:ncel)' + ncel*0 + nedg ;
@@ -144,7 +144,7 @@ function [mesh] = bisect(mesh)
         unique(sort(quad, 2), 'rows');
    [ ~ , hfwd, hrev] = ...
         unique(sort(hexa, 2), 'rows');
-   
+
     edge = edge(efwd,:) ;
     quad = quad(qfwd,:) ;
     hexa = hexa(hfwd,:) ;
@@ -154,24 +154,24 @@ function [mesh] = bisect(mesh)
         emap.edge2.index(:,1) = erev( ...
         emap.edge2.index(:,1)) ;
     end
-    
+
     if (inspect(mesh,'tria3','index'))
         emap.tria3.index(:,1) = erev( ...
         emap.tria3.index(:,1)) ;
         emap.tria3.index(:,2) = erev( ...
-        emap.tria3.index(:,2)) ;    
+        emap.tria3.index(:,2)) ;
         emap.tria3.index(:,3) = erev( ...
         emap.tria3.index(:,3)) ;
-    end    
-    
+    end
+
     if (inspect(mesh,'quad4','index'))
         qmap.quad4.index(:,1) = qrev( ...
-        qmap.quad4.index(:,1)) ;   
-     
+        qmap.quad4.index(:,1)) ;
+
         emap.quad4.index(:,1) = erev( ...
         emap.quad4.index(:,1)) ;
         emap.quad4.index(:,2) = erev( ...
-        emap.quad4.index(:,2)) ;    
+        emap.quad4.index(:,2)) ;
         emap.quad4.index(:,3) = erev( ...
         emap.quad4.index(:,3)) ;
         emap.quad4.index(:,4) = erev( ...
@@ -182,7 +182,7 @@ function [mesh] = bisect(mesh)
         emap.tria4.index(:,1) = erev( ...
         emap.tria4.index(:,1)) ;
         emap.tria4.index(:,2) = erev( ...
-        emap.tria4.index(:,2)) ;    
+        emap.tria4.index(:,2)) ;
         emap.tria4.index(:,3) = erev( ...
         emap.tria4.index(:,3)) ;
         emap.tria4.index(:,4) = erev( ...
@@ -251,9 +251,9 @@ function [mesh] = bisect(mesh)
         enew(emap.edge2.index(:,1)), ...
              mesh.edge2.index(:,2) , ...
              mesh.edge2.index(:,3)
-            ] ; 
+            ] ;
     end
-        
+
     if (inspect(mesh,'tria3','index'))
 %------------------------------ create new indexes for TRIA3
         mesh.tria3.index = [
@@ -277,7 +277,7 @@ function [mesh] = bisect(mesh)
         enew(emap.tria3.index(:,2)), ...
         enew(emap.tria3.index(:,3)), ...
              mesh.tria3.index(:,4)
-            ] ; 
+            ] ;
     end
 
     if (inspect(mesh,'quad4','index'))
@@ -307,9 +307,9 @@ function [mesh] = bisect(mesh)
         qnew(qmap.quad4.index(:,1)), ...
         enew(emap.quad4.index(:,3)), ...
              mesh.quad4.index(:,5)
-            ] ; 
+            ] ;
     end
-    
+
     if (inspect(mesh,'tria4','index'))
 %------------------------------ create new indexes for TRIA4
 
@@ -496,9 +496,9 @@ function [mesh] = bisect(mesh)
              triaJ(index(:,3)==3,:)
              triaK(index(:,3)==3,:)
              triaL(index(:,3)==3,:)
-            ] ; 
+            ] ;
     end
-    
+
 end
 
 
