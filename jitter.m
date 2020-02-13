@@ -6,7 +6,7 @@ function [mesh] = jitter(opts,imax,ibad)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   25-Jan-2020
+%   12-Feb-2020
 %   darren.engwirda@columbia.edu
 %-----------------------------------------------------------
 %
@@ -47,6 +47,8 @@ function [mesh] = jitter(opts,imax,ibad)
                 mesh.tria3.index(:,1:end-1)) ;
 
         ierr = abs(vdeg - 6) ;    % error wrt. topol. degree
+
+        ierr(vdeg > 6) = ierr(vdeg > 6) * +2 ;
 
         M = sum(ierr( ...
         mesh.tria3.index(:,1:3)), 2) >= ibad ;
