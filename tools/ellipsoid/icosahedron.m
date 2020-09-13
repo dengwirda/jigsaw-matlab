@@ -1,6 +1,6 @@
 function [mesh] = icosahedron(opts,nlev)
 %ICOSAHEDRON an Nth-level icosahedral mesh of the ellipsoid
-%defined by GEOM.RADII. 
+%defined by GEOM.RADII.
 %
 %   See also JIGSAW
 %
@@ -58,7 +58,7 @@ function [mesh] = icosahedron(opts,nlev)
     mesh.tria3.index = [
         1,  4,  6,  0
         1,  6,  8,  0
-        1,  8, 10,  0 
+        1,  8, 10,  0
         1, 10, 12,  0
         1, 12,  4,  0
         2,  3,  5,  0
@@ -82,9 +82,9 @@ function [mesh] = icosahedron(opts,nlev)
     opts.init_file = opts.mesh_file;
 
     savemsh(opts.init_file,mesh);
-    
+
     mesh = refine(opts,nlev) ;
-    
+
 end
 
 function [mesh] = refine (opts,nlev)
@@ -108,7 +108,7 @@ function [mesh] = refine (opts,nlev)
         mesh = jigsaw(opts) ;
 
         if (ilev >= +1)
-        
+
 %---------------------------- create/write current INIT data
         [path,name,fext] = ...
             fileparts(opts.mesh_file) ;

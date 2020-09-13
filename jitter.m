@@ -107,6 +107,8 @@ function [cnrm] = metric(mesh)
 
     cost = [] ; cnrm = +0.0 ;
 
+    if (isempty(mesh)), return ; end
+
     if (inspect(mesh,'tria3'))
 %--------------------------------------- append TRIA3 scores
         COST = triscr2( ...

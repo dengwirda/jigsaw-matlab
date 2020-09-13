@@ -1,6 +1,6 @@
 function [mesh] = cubedsphere(opts,nlev)
 %CUBEDSPHERE an Nth-level cubedsphere mesh of the ellipsoid
-%defined by GEOM.RADII. 
+%defined by GEOM.RADII.
 %
 %   See also JIGSAW
 %
@@ -65,7 +65,7 @@ function [mesh] = cubedsphere(opts,nlev)
     savemsh(opts.init_file,mesh);
 
     mesh = refine(opts,nlev) ;
-    
+
 end
 
 function [mesh] = refine (opts,nlev)
@@ -89,7 +89,7 @@ function [mesh] = refine (opts,nlev)
         mesh = jigsaw(opts) ;
 
         if (ilev >= +1)
-        
+
 %---------------------------- create/write current INIT data
         [path,name,fext] = ...
             fileparts(opts.mesh_file) ;

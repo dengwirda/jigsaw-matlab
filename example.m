@@ -80,33 +80,6 @@ function demo_0
 %   construction of geometry + user-defined mesh-size const-
 %   raints.
 
-    %{
-    SEEDS=N
-    X;Y;Z;PART
-    
-    after rdel, before optm
-    project onto IDIM geometry closest feature
-    find intersecting cell, if any
-    bfs to all d-1 connected cells, stop at d-1 face that's a boundary
-    or external
-    
-    If there's no IDIM=k, just return the full k-DEL as now?
-        
-    Maybe we can worry about using this within rdel-mesh later?
-    
-    Are SEEDS part of the geometry definition? I think so...
-    
-    Build an aabb-tree for the mesh to facilitate the scan?
-
-    Will TRIPOD do this too? Probably?
-
-    What happens if you only pass input for optm? Prune the mesh passed?
-    Yes, I guess so.
-    So this is not so different from the mesh_func infrastructure...
-    Steal this and put somewhere common?
-    %}
-
-
     demo_A();
     demo_B();
     demo_C();
@@ -187,86 +160,12 @@ function demo_A
     opts.mesh_dims = +2 ;               % 2-dim. simplexes
 
     opts.optm_qlim = +.95 ;
-    
+
     opts.mesh_top1 = true ;             % for sharp feat's
     opts.geom_feat = true ;
 
-   %opts.optm_kern = 'cvt+dqdx';
-    
-   %opts.verbosity = +3 ;
-    
     mesh = jigsaw  (opts) ;
 
-    
-    
-    %{
-    for iter = 1:32
-       
-        pmid = mesh.point.coord(mesh.tria3.index(:,1),1:2) ...
-             + mesh.point.coord(mesh.tria3.index(:,2),1:2) ...
-             + mesh.point.coord(mesh.tria3.index(:,3),1:2) ;
-        pmid = pmid / 3. ;
-        
-        move = zeros(size(mesh.point.coord,1),2);
-        wsum = zeros(size(mesh.point.coord,1),1);
-        nadj = zeros(size(mesh.point.coord,1),1);
-        ladj = zeros(size(mesh.point.coord,1),1);
-        
-        area = trivol2(mesh.point.coord(:,1:2), ...
-                       mesh.tria3.index(:,1:3)) ;
-        
-        ball = tribal2(mesh.point.coord(:,1:2), ...
-                       mesh.tria3.index(:,1:3)) ;
-        
-        pmid = (pmid + ball(:,1:2)) * .5 ;
-                   
-        for cell = 1:size(mesh.tria3.index,1)
-            
-        inod = mesh.tria3.index(cell,1);
-        jnod = mesh.tria3.index(cell,2);
-        knod = mesh.tria3.index(cell,3);
-            
-        move(inod,:) = move(inod,:) + area(cell) * pmid(cell,1:2);
-        move(jnod,:) = move(jnod,:) + area(cell) * pmid(cell,1:2);
-        move(knod,:) = move(knod,:) + area(cell) * pmid(cell,1:2);
-        
-        wsum(inod,1) = wsum(inod,1) + area(cell,1);
-        wsum(jnod,1) = wsum(jnod,1) + area(cell,1);
-        wsum(knod,1) = wsum(knod,1) + area(cell,1);
-        
-        nadj(inod,1) = nadj(inod,1) + 1;
-        nadj(jnod,1) = nadj(jnod,1) + 1;
-        nadj(knod,1) = nadj(knod,1) + 1;
-        
-        ladj(inod,1) = ladj(inod,1) + ball(cell,3);
-        ladj(jnod,1) = ladj(jnod,1) + ball(cell,3);
-        ladj(knod,1) = ladj(knod,1) + ball(cell,3);
-        
-        end
-        
-        ladj = ladj ./ [nadj];
-        move = move ./ [wsum,wsum];
-        
-        ladj(mesh.edge2.index(:,1:2)) = inf ;
-        
-        lmov = sum((mesh.point.coord(:,1:2)-move).^2,2);
-        
-        ltol = 1.E-04; nmov = 0;
-        for node = 1:size(mesh.point.coord,1)
-            if (lmov(node) > ltol * ladj(node))
-                nmov = nmov + 1;
-                mesh.point.coord(node,1:2) = move(node,:);
-            end
-        end
-        
-        disp(nmov);
-        
-        if (nmov <= 0), break; end
-        
-    end
-    %}
-    
-    
     figure('color','w');
     patch ('faces',mesh.tria3.index(:,1:3), ...
         'vertices',mesh.point.coord(:,1:2), ...
@@ -285,7 +184,7 @@ function demo_A
         'linewidth',1.5) ;
 
     drawcost(mesh) ;
-    
+
 end
 
 function demo_B
@@ -597,17 +496,13 @@ function demo_D
 
 %------------------------------------ make mesh using JIGSAW
 
-    opts.hfun_hmax = 0.02 ;             % push HFUN limits
+    opts.hfun_hmax = 0.08 ;             % push HFUN limits
 
     opts.mesh_dims = +3 ;               % 3-dim. simplexes
 
     opts.mesh_top1 = true ;             % for sharp feat's
     opts.geom_feat = true ;
 
-   %opts.mesh_iter = 1000 ;
-    
-   %opts.mesh_kern = 'delaunay';
-   
     mesh = jigsaw  (opts) ;
 
     mask = [];
@@ -1228,7 +1123,7 @@ function demo_5
     opts.hfun_hmin = +0.0 ;
 
    %opts.optm_kern = 'cvt+dqdx';
-    
+
     mesh = jigsaw  (opts) ;
 
     figure ; drawmesh(mesh) ;

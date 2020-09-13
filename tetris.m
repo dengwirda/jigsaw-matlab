@@ -34,9 +34,7 @@ function [mesh] = tetris(opts,nlev)
     end
 
 %---------------------------- call JIGSAW via inc. bisection
-    SCAL = +2. ^ nlev;
-
-    OPTS = opts ; NLEV = nlev ;
+    SCAL = +2. ^ nlev; OPTS = opts;
 
     while (nlev >= +0)
 
@@ -107,7 +105,7 @@ function [mesh] = tetris(opts,nlev)
         end
 
         if (mod(nlev, 2) ~= 0)
-        
+
 %---------------------------- call JIGSAW kernel at this lev
         mesh = jitter ( ...
             OPTS, 3 + nlev * (nlev - 1), 2) ;
