@@ -18,7 +18,7 @@ function [fval] = trifun3(test,vert,tria,tree,ftri)
 %   See also IDXTRI3
 
 %   Darren Engwirda : 2017 --
-%   Email           : de2363@columbia.edu
+%   Email           : d.engwirda@gmail.com
 %   Last updated    : 25/07/2018
 
 %---------------------------------------------- basic checks

@@ -4,8 +4,8 @@ function [okay] = inspect(mesh,varargin)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   19-Dec-2018
-%   darren.engwirda@columbia.edu
+%   30-May-2020
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 
@@ -44,18 +44,19 @@ function [okay] = inspect(mesh,varargin)
         case 'wedg6', item = 'index' ;
         case 'pyra5', item = 'index' ;
         case 'bound', item = 'index' ;
+        case 'seeds', item = 'coord' ;
     end
     end
 
     if (isempty(item))
 %-- check whether MESH.BASE exists
-    okay = isfield(mesh,base) && ...
-            ~isempty(mesh.(base)) ;
+    okay = isfield(mesh, base) && ...
+          ~isempty(mesh.(base)) ;
     else
 %-- check whether MESH.BASE.ITEM exists
-    okay = isfield(mesh,base) && ...
-        isfield(mesh.(base),item) && ...
-            ~isempty(mesh.(base).(item)) ;
+    okay = isfield(mesh, base) && ...
+           isfield(mesh.(base), item) && ...
+          ~isempty(mesh.(base).(item)) ;
     end
 
 end

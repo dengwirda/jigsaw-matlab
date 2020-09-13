@@ -14,7 +14,7 @@ function [dcos] = triang3(pp,t3)
 %   See also TRISCR3, TRIVOL3, TRIBAL3
 
 %   Darren Engwirda : 2017 --
-%   Email           : de2363@columbia.edu
+%   Email           : d.engwirda@gmail.com
 %   Last updated    : 10/07/2018
 
 %---------------------------------------------- basic checks

@@ -14,8 +14,8 @@ function [mesh] = tetris(opts,nlev)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   12-Feb-2020
-%   darren.engwirda@columbia.edu
+%   03-Sep-2020
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 
@@ -36,7 +36,7 @@ function [mesh] = tetris(opts,nlev)
 %---------------------------- call JIGSAW via inc. bisection
     SCAL = +2. ^ nlev;
 
-    OPTS = opts ;
+    OPTS = opts ; NLEV = nlev ;
 
     while (nlev >= +0)
 
@@ -85,16 +85,37 @@ function [mesh] = tetris(opts,nlev)
 
         end
 
-        if (nlev >= +1)
+        if (isfield(opts,'optm_qlim'))
 
-%---------------------------- call JIGSAW kernel at this lev
-        mesh = jitter (OPTS,round( ...
-            +3*(nlev+1)^(5./4.)), +2) ;
+%---------------------------- create/write current QLIM flag
+        scal = min( ...
+            2.0, (nlev + 1) ^ (1./4.));
+
+        QLIM = opts.optm_qlim ;
+
+        OPTS.optm_qlim = QLIM / scal;
 
         else
 
-        mesh = jitter (OPTS,round( ...
-            +3*(nlev+1)^(5./4.)), +3) ;
+        scal = min( ...
+            2.0, (nlev + 1) ^ (1./4.));
+
+        QLIM = 0.93750 ;
+
+        OPTS.optm_qlim = QLIM / scal;
+
+        end
+
+        if (mod(nlev, 2) ~= 0)
+        
+%---------------------------- call JIGSAW kernel at this lev
+        mesh = jitter ( ...
+            OPTS, 3 + nlev * (nlev - 1), 2) ;
+
+        else
+
+        mesh = jitter ( ...
+            OPTS, 3 + nlev * (nlev - 1), 3) ;
 
         end
 
@@ -150,10 +171,38 @@ end
 function [mesh] = attach(mesh)
 %ATTACH attach points to the underlying geometry definition.
 
+    if (inspect(mesh,'hexa8'))
+
+    mark = mesh.hexa8.index(:,1:8);
+    mesh.point.coord(mark,end) = 3;
+
+    end
+
     if (inspect(mesh,'tria4'))
 
     mark = mesh.tria3.index(:,1:4);
     mesh.point.coord(mark,end) = 3;
+
+    end
+
+    if (inspect(mesh,'wedg6'))
+
+    mark = mesh.wedg6.index(:,1:6);
+    mesh.point.coord(mark,end) = 3;
+
+    end
+
+    if (inspect(mesh,'pyra5'))
+
+    mark = mesh.pyra5.index(:,1:5);
+    mesh.point.coord(mark,end) = 3;
+
+    end
+
+    if (inspect(mesh,'quad4'))
+
+    mark = mesh.quad4.index(:,1:4);
+    mesh.point.coord(mark,end) = 2;
 
     end
 

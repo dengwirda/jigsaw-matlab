@@ -11,7 +11,7 @@ function drawpyra_5(pp,p5,varargin)
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
 %   07-Aug-2019
-%   darren.engwirda@columbia.edu
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 

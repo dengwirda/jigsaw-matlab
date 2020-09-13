@@ -84,7 +84,7 @@ function savevtk(name,mesh)
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
 %   20-Aug-2019
-%   darren.engwirda@columbia.edu
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 
@@ -244,7 +244,7 @@ function save_mesh_format(ffid,file,mesh,kind)
     if (inspect(mesh,'quad4'))
 %-- write "QUAD4" data
     fprintf(ffid,['4 ',repmat('%u ',1,4),'\n'], ...
-        mesh.quad4.index(:,1:3)'-1);
+        mesh.quad4.index(:,1:4)'-1);
     end
     if (inspect(mesh,'tria4'))
 %-- write "TRIA4" data

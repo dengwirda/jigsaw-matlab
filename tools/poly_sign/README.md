@@ -4,6 +4,10 @@ A fast 'point-in-polygon' routine for <a href="http://www.mathworks.com">`MATLAB
 
 `INPOLY` returns the "inside/outside" status for a set of vertices `VERT` and a general polygon (`PSLG`) embedded in the two-dimensional plane. General non-convex and multiply-connected polygonal regions can be handled. `INPOLY` is intended as a (very) fast replacement for `MATLAB`'s default `INPOLYGON` routine.
 
+<p align="center">
+  <img src = "../master/test-data/query.png">
+</p>
+
 `INPOLY` is based on a 'crossing-number' test, counting the number of times a line extending from each point past the right-most region of the polygon intersects with the polygonal boundary. Points with odd counts are 'inside'. A simple implementation requires that each edge intersection be checked for each point, leading to (slow) `O(N*M)` overall complexity.
 
 This implementation seeks to improve these bounds. Query points are sorted by `y-value` and candidate intersection sets are determined via binary-search. Given a configuration with `N` test points, `M` edges and an average point-edge 'overlap' of `H`, the overall complexity scales like `O(M*H + M*LOG(N) + N*LOG(N))`, where `O(N*LOG(N))` operations are required for the initial sorting, `O(M*LOG(N))` operations are required for the set of binary-searches, and `O(M*H)` operations are required for the actual intersection tests. `H` is typically small on average, such that `H << N`. Overall, this leads to fast `O((N+M)*LOG(N))` complexity for average cases.

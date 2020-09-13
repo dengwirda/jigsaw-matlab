@@ -11,7 +11,7 @@ function drawhexa_8(pp,h8,varargin)
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
 %   07-Aug-2019
-%   darren.engwirda@columbia.edu
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 

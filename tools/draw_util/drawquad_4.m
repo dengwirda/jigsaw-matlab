@@ -11,7 +11,7 @@ function drawquad_4(pp,q4,varargin)
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
 %   13-Aug-2018
-%   darren.engwirda@columbia.edu
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 

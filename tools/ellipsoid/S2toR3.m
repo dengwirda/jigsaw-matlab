@@ -5,7 +5,7 @@ function [E3] = S2toR3(radii,S2)
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
 %   30-Jul-2019
-%   darren.engwirda@columbia.edu
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 

@@ -248,7 +248,7 @@ function [varargout] = jigsaw(opts)
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
 %   29-Oct-2019
-%   darren.engwirda@columbia.edu
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 

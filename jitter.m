@@ -6,8 +6,8 @@ function [mesh] = jitter(opts,imax,ibad)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   12-Feb-2020
-%   darren.engwirda@columbia.edu
+%   03-Sep-2020
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 
@@ -20,12 +20,14 @@ function [mesh] = jitter(opts,imax,ibad)
 
     end
 
+    next = mesh ; best = metric (mesh);
+
     for iter = +1 : imax
 
-        if (~isempty(mesh))
+        if (~isempty(next))
 
         keep = ...
-        true(size(mesh.point.coord, 1), 1) ;
+        true(size(next.point.coord, 1), 1) ;
 
 %---------------------------------- setup initial conditions
        [path,name,fext] = ...
@@ -38,28 +40,28 @@ function [mesh] = jitter(opts,imax,ibad)
         OPTS.init_file = ...
             [path,name,'-INIT',fext] ;
 
-        if (inspect(mesh,'tria3'))
+        if (inspect(next,'tria3'))
 
 %---------------------------------- mark any irregular nodes
 
         vdeg = trideg2 ( ...
-            mesh.point.coord(:,1:end-1), ...
-                mesh.tria3.index(:,1:end-1)) ;
+            next.point.coord(:,1:end-1), ...
+                next.tria3.index(:,1:end-1)) ;
 
         ierr = abs(vdeg - 6) ;    % error wrt. topol. degree
 
         ierr(vdeg > 6) = ierr(vdeg > 6) * +2 ;
 
         M = sum(ierr( ...
-        mesh.tria3.index(:,1:3)), 2) >= ibad ;
+        next.tria3.index(:,1:3)), 2) >= ibad ;
 
-        keep(mesh.tria3.index(M,1:3)) = false;
+        keep(next.tria3.index(M,1:3)) = false;
 
         end
 
-        if (inspect(mesh,'edge2'))
+        if (inspect(next,'edge2'))
 
-        keep(mesh.edge2.index(:,1:2)) = true ;
+        keep(next.edge2.index(:,1:2)) = true ;
 
         end
 
@@ -82,11 +84,53 @@ function [mesh] = jitter(opts,imax,ibad)
         end
 
 %---------------------------------- call JIGSAW with new ICs
-        mesh = jigsaw(OPTS) ;
+        next = jigsaw(OPTS) ;
+
+        cost = metric(next) ;
+
+        if (cost > best)
+
+%---------------------------------- keep "best" mesh so far!
+            mesh = next;
+            best = cost;
+
+        end
 
         if (done), break; end
 
     end
+
+end
+
+function [cnrm] = metric(mesh)
+%METRIC assemble a combined "cosst" metric for a given mesh.
+
+    cost = [] ; cnrm = +0.0 ;
+
+    if (inspect(mesh,'tria3'))
+%--------------------------------------- append TRIA3 scores
+        COST = triscr2( ...
+            mesh.point.coord(:,1:end-1), ...
+            mesh.tria3.index(:,1:end-1)) ;
+
+        cost = [cost; COST] ;
+    end
+
+    if (inspect(mesh,'tria4'))
+%--------------------------------------- append TRIA4 scores
+        COST = triscr3( ...
+            mesh.point.coord(:,1:end-1), ...
+            mesh.tria4.index(:,1:end-1)) ;
+
+        cost = [cost; COST] ;
+    end
+
+    if (isempty(cost)), return ; end
+
+    norm = sum ((+1.0 ./ cost) .^ 3) ;
+
+    cnrm = ...
+    nthroot(length(cost) ./ norm, 3) ;
 
 end
 

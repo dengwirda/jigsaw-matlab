@@ -11,7 +11,7 @@ function drawtria_4(pp,t4,varargin)
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
 %   07-Aug-2019
-%   darren.engwirda@columbia.edu
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 

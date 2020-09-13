@@ -21,7 +21,7 @@ function [mesh] = loadstl(name)
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
 %   14-Jul-2018
-%   darren.engwirda@columbia.edu
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 

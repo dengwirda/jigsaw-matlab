@@ -4,8 +4,8 @@ function [flag] = certify(mesh)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   07-Aug-2019
-%   darren.engwirda@columbia.edu
+%   30-May-2020
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 
@@ -572,6 +572,50 @@ function [flag] = certify(mesh)
             mesh.bound.index(:,2:2))) < +1 )
         error('certify:invalidMeshIndexing', ...
             'Invalid BOUND.INDEX indexing.') ;
+        end
+        end
+    end
+
+    if (inspect(mesh,'seeds'))
+        if (~isempty  (mesh.seeds.coord))
+        if ( isnumeric(mesh.seeds.coord))
+%----------------------------------------- check SEEDS array
+        ns = size(mesh.seeds.coord,1) ;
+
+        if (ndims(mesh.seeds.coord) ~= 2)
+        error('certify:incorrectDimensions', ...
+            'Invalid SEEDS.COORD dimensions.') ;
+        end
+        if ( size(mesh.seeds.coord,2)< 3)
+        error('certify:incorrectDimensions', ...
+            'Invalid SEEDS.COORD dimensions.') ;
+        end
+
+        if (any(isinf(mesh.seeds.coord)))
+        error('certify:invalidMeshPosition', ...
+            'Invalid SEEDS.COORD values.') ;
+        end
+        if (any(isnan(mesh.seeds.coord)))
+        error('certify:invalidMeshPosition', ...
+            'Invalid SEEDS.COORD values.') ;
+        end
+
+        if (isfield(mesh,'mshID'))
+        if (strcmpi(mesh.mshID,'euclidean-grid'))
+        error('certify:incompatiblemshID', ...
+            'Incompatible msh-ID flag.') ;
+        end
+        if (strcmpi(mesh.mshID,'ellipsoid-grid'))
+        error('certify:incompatiblemshID', ...
+            'Incompatible msh-ID flag.') ;
+        end
+        end
+
+        else
+%----------------------------------------- wrong SEEDS class
+        error('certify:incorrectInputClass', ...
+            'Invalid SEEDS.COORD type.') ;
+
         end
         end
     end

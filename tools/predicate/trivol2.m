@@ -11,7 +11,7 @@ function [area] = trivol2(pp,t2)
 %   See also TRISCR2, TRIANG2, TRIBAL2
 
 %   Darren Engwirda : 2017 --
-%   Email           : de2363@columbia.edu
+%   Email           : d.engwirda@gmail.com
 %   Last updated    : 03/05/2018
 
 %---------------------------------------------- basic checks

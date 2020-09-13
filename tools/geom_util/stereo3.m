@@ -24,7 +24,7 @@ function [XPOS,YPOS,SCAL] = ...
 
 %-----------------------------------------------------------
 %   Darren Engwirda : 2017 --
-%   Email           : de2363@columbia.edu
+%   Email           : d.engwirda@gmail.com
 %   Last updated    : 03/05/2018
 %-----------------------------------------------------------
 

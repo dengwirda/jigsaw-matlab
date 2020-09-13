@@ -38,7 +38,7 @@ function savestl(name,mesh,varargin)
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
 %   15-Jul-2018
-%   darren.engwirda@columbia.edu
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 

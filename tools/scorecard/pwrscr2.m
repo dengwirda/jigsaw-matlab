@@ -13,7 +13,7 @@ function [sc] = pwrscr2(pp,pw,t2)
 %   See also TRISCR2, PWRBAL2
 
 %   Darren Engwirda : 2017 --
-%   Email           : de2363@columbia.edu
+%   Email           : d.engwirda@gmail.com
 %   Last updated    : 03/05/2018
 
     nd = size(pp,2);

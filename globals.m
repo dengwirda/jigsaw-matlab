@@ -7,7 +7,7 @@ function globals
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
 %   27-Nov-2019
-%   darren.engwirda@columbia.edu
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 
@@ -90,6 +90,7 @@ function globals
 
     JIGSAW_KERN_ODT_DQDX    = +404 ;
     JIGSAW_KERN_CVT_DQDX    = +405 ;
+    JIGSAW_KERN_H95_DQDX    = +406 ;
 
 end
 
