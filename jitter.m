@@ -75,7 +75,7 @@ function [mesh] = jitter(opts,imax,ibad)
 %---------------------------------- keep nodes far from seam
         init.mshID = 'euclidean-mesh';
         init.point.coord = ...
-            mesh.point.coord(keep,:) ;
+            next.point.coord(keep,:) ;
 
         done = all(keep);
 
