@@ -59,7 +59,7 @@ function [mesh] = loadmsh(name)
 %       element numbering and INDEX(:,3) is an array of
 %       element "tags", describing which element "kind" is
 %       numbered via INDEX(:,2). Element tags are defined
-%       via a series of constants instantiated in LIBDATA.
+%       via constants defined in GLOBALS.m.
 %       In the default case, where BOUND is not specified,
 %       all elements in the geometry are assumed to define
 %       the boundaries of enclosed "parts".
@@ -106,8 +106,8 @@ function [mesh] = loadmsh(name)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   20-Aug-2019
-%   darren.engwirda@columbia.edu
+%   30-May-2020
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 
@@ -155,6 +155,13 @@ function [mesh] = loadmsh(name)
 
                 nver = str2double(stag{1}) ;
 
+                if (isnan(nver))
+
+                warning(['Invalid MSHID: ', lstr]);
+                continue;
+
+                end
+
                 if (length(stag) >= +2)
                     kind = ...
                     strtrim(upper(stag{2}));
@@ -180,6 +187,13 @@ function [mesh] = loadmsh(name)
                     str2double(stag{3})  ...
                     ] ;
 
+                if (any(isnan(mesh.radii)))
+
+                warning(['Invalid RADII: ', lstr]);
+                continue;
+
+                end
+
                 else
 
                 warning(['Invalid RADII: ', lstr]);
@@ -195,8 +209,15 @@ function [mesh] = loadmsh(name)
 
                 numr = nnum*(ndim+1);
 
-                data = ...
+               [data,have] = ...
             fscanf(ffid,[repmat(real,1,ndim),'%i'],numr);
+
+                if (have ~= numr)
+
+                warning('Invalid POINT! ') ;
+                continue ;
+
+                end
 
                 if (ndim == +2)
                 mesh.point.coord = [ ...
@@ -206,6 +227,38 @@ function [mesh] = loadmsh(name)
                 end
                 if (ndim == +3)
                 mesh.point.coord = [ ...
+                    data(1:4:end), ...
+                    data(2:4:end), ...
+                    data(3:4:end), ...
+                    data(4:4:end)] ;
+                end
+
+            case 'seeds'
+
+        %-- read "SEEDS" data
+
+                nnum = str2double(tstr{2}) ;
+
+                numr = nnum*(ndim+1);
+
+               [data,have] = ...
+            fscanf(ffid,[repmat(real,1,ndim),'%i'],numr);
+
+                if (have ~= numr)
+
+                warning('Invalid SEEDS! ') ;
+                continue ;
+
+                end
+
+                if (ndim == +2)
+                mesh.seeds.coord = [ ...
+                    data(1:3:end), ...
+                    data(2:3:end), ...
+                    data(3:3:end)] ;
+                end
+                if (ndim == +3)
+                mesh.seeds.coord = [ ...
                     data(1:4:end), ...
                     data(2:4:end), ...
                     data(3:4:end), ...
@@ -223,7 +276,15 @@ function [mesh] = loadmsh(name)
 
                 ndim = max(ndim,idim);
 
-                data = fscanf(ffid,'%f',cnum) ;
+               [data,have] = ...
+                    fscanf(ffid,'%f',cnum) ;
+
+                if (have ~= cnum)
+
+                warning('Invalid COORD! ') ;
+                continue ;
+
+                end
 
                 mesh.point.coord{idim}= data  ;
 
@@ -235,8 +296,15 @@ function [mesh] = loadmsh(name)
 
                 numr = nnum * 3;
 
-                data = ...
+               [data,have] = ...
             fscanf(ffid,[repmat(ints,1,2),'%i'],numr);
+
+                if (have ~= numr)
+
+                warning('Invalid EDGE2! ') ;
+                continue ;
+
+                end
 
                 mesh.edge2.index = [ ...
                     data(1:3:end), ...
@@ -254,8 +322,15 @@ function [mesh] = loadmsh(name)
 
                 numr = nnum * 4;
 
-                data = ...
+               [data,have] = ...
             fscanf(ffid,[repmat(ints,1,3),'%i'],numr);
+
+                if (have ~= numr)
+
+                warning('Invalid TRIA3! ') ;
+                continue ;
+
+                end
 
                 mesh.tria3.index = [ ...
                     data(1:4:end), ...
@@ -274,8 +349,15 @@ function [mesh] = loadmsh(name)
 
                 numr = nnum * 5;
 
-                data = ...
+               [data,have] = ...
             fscanf(ffid,[repmat(ints,1,4),'%i'],numr);
+
+                if (have ~= numr)
+
+                warning('Invalid QUAD4! ') ;
+                continue ;
+
+                end
 
                 mesh.quad4.index = [ ...
                     data(1:5:end), ...
@@ -295,8 +377,15 @@ function [mesh] = loadmsh(name)
 
                 numr = nnum * 5;
 
-                data = ...
+               [data,have] = ...
             fscanf(ffid,[repmat(ints,1,4),'%i'],numr);
+
+                if (have ~= numr)
+
+                warning('Invalid TRIA4! ') ;
+                continue ;
+
+                end
 
                 mesh.tria4.index = [ ...
                     data(1:5:end), ...
@@ -316,8 +405,15 @@ function [mesh] = loadmsh(name)
 
                 numr = nnum * 9;
 
-                data = ...
+               [data,have] = ...
             fscanf(ffid,[repmat(ints,1,8),'%i'],numr);
+
+                if (have ~= numr)
+
+                warning('Invalid HEXA8! ') ;
+                continue ;
+
+                end
 
                 mesh.hexa8.index = [ ...
                     data(1:9:end), ...
@@ -341,8 +437,15 @@ function [mesh] = loadmsh(name)
 
                 numr = nnum * 7;
 
-                data = ...
+               [data,have] = ...
             fscanf(ffid,[repmat(ints,1,6),'%i'],numr);
+
+                if (have ~= numr)
+
+                warning('Invalid WEDG6! ') ;
+                continue ;
+
+                end
 
                 mesh.wedg6.index = [ ...
                     data(1:7:end), ...
@@ -364,8 +467,15 @@ function [mesh] = loadmsh(name)
 
                 numr = nnum * 6;
 
-                data = ...
+               [data,have] = ...
             fscanf(ffid,[repmat(ints,1,5),'%i'],numr);
+
+                if (have ~= numr)
+
+                warning('Invalid PYRA5! ') ;
+                continue ;
+
+                end
 
                 mesh.pyra5.index = [ ...
                     data(1:6:end), ...
@@ -386,8 +496,15 @@ function [mesh] = loadmsh(name)
 
                 numr = nnum * 3;
 
-                data = ...
+               [data,have] = ...
             fscanf(ffid,[repmat(ints,1,2),'%i'],numr);
+
+                if (have ~= numr)
+
+                warning('Invalid BOUND! ') ;
+                continue ;
+
+                end
 
                 mesh.bound.index = [ ...
                     data(1:3:end), ...
@@ -415,12 +532,19 @@ function [mesh] = loadmsh(name)
 
                 end
 
-                numr = nnum * (vnum+1) ;
+                numr = nnum * (vnum+0) ;
 
                 fstr = repmat(real,1,vnum) ;
 
-                data = fscanf( ...
+               [data,have] = fscanf( ...
                   ffid,fstr(1:end-1),numr) ;
+
+                if (have ~= numr)
+
+                warning(['Invalid VALUE: ', lstr]);
+                continue ;
+
+                end
 
                 mesh.value = zeros(nnum, vnum);
 
@@ -453,8 +577,15 @@ function [mesh] = loadmsh(name)
 
                 fstr = repmat(real,1,pnum) ;
 
-                data = fscanf( ...
+               [data,have] = fscanf( ...
                   ffid,fstr(1:end-1),numr) ;
+
+                if (have ~= numr)
+
+                warning(['Invalid POWER: ', lstr]);
+                continue ;
+
+                end
 
                 mesh.point.power = ...
                     zeros(nnum, pnum) ;
@@ -488,8 +619,15 @@ function [mesh] = loadmsh(name)
 
                 fstr = repmat(real,1,vnum) ;
 
-                data = fscanf( ...
+               [data,have] = fscanf( ...
                   ffid,fstr(1:end-1),numr) ;
+
+                if (have ~= numr)
+
+                warning(['Invalid SLOPE: ', lstr]);
+                continue ;
+
+                end
 
                 mesh.slope = ...
                     zeros(nnum, vnum) ;

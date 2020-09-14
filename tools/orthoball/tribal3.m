@@ -6,7 +6,7 @@ function [bb] = tribal3(pp,tt)
 %   [XC,YC,ZC,RC.^2].
 
 %   Darren Engwirda : 2017 --
-%   Email           : de2363@columbia.edu
+%   Email           : d.engwirda@gmail.com
 %   Last updated    : 20/06/2018
 
     bb = pwrbal3(pp,zeros(size(pp,1),1),tt) ;

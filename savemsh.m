@@ -59,7 +59,7 @@ function savemsh(name,mesh)
 %       element numbering and INDEX(:,3) is an array of
 %       element "tags", describing which element "kind" is
 %       numbered via INDEX(:,2). Element tags are defined
-%       via a series of constants instantiated in LIBDATA.
+%       via constants defined in GLOBALS.m.
 %       In the default case, where BOUND is not specified,
 %       all elements in the geometry are assumed to define
 %       the boundaries of enclosed "parts".
@@ -76,7 +76,7 @@ function savemsh(name,mesh)
 %   .IF. MESH.MSHID == 'ELLIPSOID-MESH':
 %   -----------------------------------
 %
-%   MESH.RADII - [ 3x 1] array of principle ellipsoid radii.
+%   MESH.RADII - [ 3x 1] array of principal ellipsoid radii.
 %
 %   Additionally, entities described in the 'EUCLIDEAN-MESH'
 %   data-type are optionally written.
@@ -107,8 +107,8 @@ function savemsh(name,mesh)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   20-Aug-2019
-%   darren.engwirda@columbia.edu
+%   30-May-2020
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 
@@ -252,6 +252,35 @@ function save_mesh_format(ffid,nver,mesh,kind)
 
         fprintf(ffid, ...
         [repmat(vstr,1,ndim),'%i\n'],mesh.point.coord');
+
+    end
+
+    if (isfield(mesh,'seeds') && ...
+            isfield(mesh.seeds,'coord') && ...
+                ~isempty(mesh.seeds.coord) )
+
+    %------------------------------------ write "SEEDS" data
+
+        if (~isnumeric(mesh.seeds.coord))
+            error('Incorrect input type!');
+        end
+        if (ndims(mesh.seeds.coord) ~= 2)
+            error('Incorrect dimensions!');
+        end
+
+        sdim = size(mesh.seeds.coord,2)-1 ;
+
+        fprintf(ffid, ...
+            ['SEEDS=%u','\n'],size(mesh.seeds.coord,1));
+
+        if (isa(mesh.seeds.coord,'double'))
+            vstr = sprintf('%%1.%ug;',+16);
+        else
+            vstr = sprintf('%%1.%ug;',+ 8);
+        end
+
+        fprintf(ffid, ...
+        [repmat(vstr,1,sdim),'%i\n'],mesh.seeds.coord');
 
     end
 

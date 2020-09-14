@@ -6,7 +6,7 @@ function [stat,bnds] = ...
 %mber comparisons; break when the local y-range is exceeded.
 
 %   Darren Engwirda : 2017 --
-%   Email           : de2363@columbia.edu
+%   Email           : d.engwirda@gmail.com
 %   Last updated    : 27/10/2018
 
     feps = fTOL * lbar ^ +2 ;

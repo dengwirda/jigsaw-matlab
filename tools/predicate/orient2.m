@@ -4,7 +4,7 @@ function [sign] = orient2(pa,pb,pc,pp)
 %   See also ORIENT1
 
 %   Darren Engwirda : 2018 --
-%   Email           : de2363@columbia.edu
+%   Email           : d.engwirda@gmail.com
 %   Last updated    : 25/07/2018
 
 %---------------------------------------------- calc. det(S)

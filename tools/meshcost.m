@@ -5,7 +5,7 @@ function [cost] = meshcost(varargin)
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
 %   01-Aug-2019
-%   darren.engwirda@columbia.edu
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 

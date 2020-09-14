@@ -12,7 +12,7 @@ function [tree] = idxtri2(vert,tria)
 %   See also MAKETREE
 
 %   Darren Engwirda : 2017 --
-%   Email           : de2363@columbia.edu
+%   Email           : d.engwirda@gmail.com
 %   Last updated    : 10/07/2018
 
 %---------------------------------------------- basic checks

@@ -9,7 +9,7 @@ function [ok] = welcen3(pp,pw,tt)
 %   and dual vertices are triangle circumcentres.
 
 %   Darren Engwirda : 2018 --
-%   Email           : de2363@columbia.edu
+%   Email           : d.engwirda@gmail.com
 %   Last updated    : 10/07/2018
 
 %---------------------------------------------- basic checks

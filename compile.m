@@ -17,7 +17,7 @@ function compile
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
 %   26-Jul-2019
-%   darren.engwirda@columbia.edu
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 

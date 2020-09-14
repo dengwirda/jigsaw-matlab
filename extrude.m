@@ -15,7 +15,7 @@ function [mesh] = extrude( ...
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
 %   09-Aug-2019
-%   darren.engwirda@columbia.edu
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 

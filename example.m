@@ -46,7 +46,7 @@ function example(varargin)
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
 %   07-Aug-2019
-%   darren.engwirda@columbia.edu
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 
@@ -1121,6 +1121,8 @@ function demo_5
     opts.hfun_scal = 'absolute';
     opts.hfun_hmax = +inf ;
     opts.hfun_hmin = +0.0 ;
+
+   %opts.optm_kern = 'cvt+dqdx';
 
     mesh = jigsaw  (opts) ;
 

@@ -76,7 +76,7 @@ function [varargout] = tripod(opts)
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
 %   27-Apr-2019
-%   darren.engwirda@columbia.edu
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 

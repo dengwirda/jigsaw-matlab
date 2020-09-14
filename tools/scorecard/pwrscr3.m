@@ -1,4 +1,4 @@
-function [sc] = vorscr3(pp,pw,t3)
+function [sc] = pwrscr3(pp,pw,t3)
 %PWRSCR3 calc. a dual grid quality metric for triangles in a
 %3-simplex triangulation in R^3.
 %   [SCR3] = PWRSCR3(VERT,VPWR,TRIA) returns the dual metric
@@ -13,7 +13,7 @@ function [sc] = vorscr3(pp,pw,t3)
 %   See also TRISCR3, PWRBAL3
 
 %   Darren Engwirda : 2018 --
-%   Email           : de2363@columbia.edu
+%   Email           : d.engwirda@gmail.com
 %   Last updated    : 20/06/2018
 
     nd = size(pp,2);
@@ -104,7 +104,7 @@ function [sc] = vorscr3(pp,pw,t3)
     q5 = +1.0 - d5 ./ r5 ;
     q6 = +1.0 - d6 ./ r6 ;
 
-    qe = (q1+q2+q3+q4+q5+q6) /3. ;
+    qe = (q1+q2+q3+q4+q5+q6) /6. ;
 
     sc = 0.50 * qf + 0.50 * qe ;
 

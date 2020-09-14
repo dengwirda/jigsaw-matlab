@@ -39,7 +39,7 @@ function [varargout] = marche(opts)
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
 %   05-Aug-2019
-%   darren.engwirda@columbia.edu
+%   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
 

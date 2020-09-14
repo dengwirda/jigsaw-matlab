@@ -13,7 +13,7 @@ function [nvec] = normal2(pp,t2)
 %   See also TRIVOL2, TRIVOL3
 
 %   Darren Engwirda : 2017 --
-%   Email           : de2363@columbia.edu
+%   Email           : d.engwirda@gmail.com
 %   Last updated    : 10/07/2018
 
 %---------------------------------------------- basic checks

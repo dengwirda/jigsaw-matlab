@@ -12,7 +12,7 @@ function [vol3] = trivol3(pp,t3)
 %   See also TRISCR3, TRIANG3, TRIBAL3
 
 %   Darren Engwirda : 2017 --
-%   Email           : de2363@columbia.edu
+%   Email           : d.engwirda@gmail.com
 %   Last updated    : 10/0/2018
 
 %---------------------------------------------- basic checks

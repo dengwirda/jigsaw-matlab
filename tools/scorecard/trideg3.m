@@ -13,7 +13,7 @@ function [vdeg] = trideg3(pp,t3)
 %   See also TRISCR3, TRIVOL3, TRIANG3, TRIBAL3
 
 %   Darren Engwirda : 2017 --
-%   Email           : de2363@columbia.edu
+%   Email           : d.engwirda@gmail.com
 %   Last updated    : 29/07/2018
 
 %---------------------------------------------- basic checks

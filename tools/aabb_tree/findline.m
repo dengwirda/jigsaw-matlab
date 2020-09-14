@@ -25,7 +25,7 @@ function [lp,lj,tr] = findline(pa,pb,pp,varargin)
 %   passed via [...] = FINDLINE(...,TR,OP). See MAKETREE for
 %   additional information.
 %
-%   See also MAKETREE, FINDTRIA, FINDBALL, LINELINE
+%   See also MAKETREE, EXCHANGE
 
 % Please see the following for additional information:
 %
@@ -36,7 +36,7 @@ function [lp,lj,tr] = findline(pa,pb,pp,varargin)
 
 %-----------------------------------------------------------
 %   Darren Engwirda : 2017 --
-%   Email           : de2363@columbia.edu
+%   Email           : d.engwirda@gmail.com
 %   Last updated    : 02/08/2017
 %-----------------------------------------------------------
 
