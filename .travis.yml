@@ -1,0 +1,3 @@
+language: matlab
+matlab: latest
+script: matlab -batch 'compile; example(-1);'
