@@ -4,7 +4,7 @@ function savejig(name,opts)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   29-Oct-2019
+%   21-Sep-2020
 %   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
@@ -234,7 +234,7 @@ function pushreal(ffid,data,name)
 
     if (isnumeric(data))
         if (numel(data) == +1)
-        fprintf(ffid,['  ',name,'=%1.16g\n'],data);
+        fprintf(ffid,['  ',name,'=%1.17g\n'],data);
         else
         error(['Incorrect dims: OPTS.',upper(name)]) ;
         end

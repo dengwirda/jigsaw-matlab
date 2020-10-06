@@ -30,7 +30,7 @@ function savewav(name,mesh)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   05-Mar-2019
+%   21-Sep-2020
 %   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
@@ -75,7 +75,7 @@ function savewav(name,mesh)
         otherwise
         error('Unsupported dimensionality!') ;
     end
-    fprintf(ffid,['v %1.16g %1.16g %1.16g','\n'],coord') ;
+    fprintf(ffid,['v %1.17g %1.17g %1.17g','\n'],coord') ;
     end
 
     if (inspect(mesh,'edge2'))
