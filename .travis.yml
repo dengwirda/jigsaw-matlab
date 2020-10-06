@@ -1,3 +1,16 @@
 language: matlab
+
+os: linux
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - g++-8
+      
 matlab: latest
-script: matlab -batch 'compile; example(-1);'
+script:
+  - export CC=gcc-8
+  - export CXX=g++-8
+  - g++ --version
+  - matlab -batch 'compile; example(-1);'
