@@ -12,5 +12,4 @@ matlab: latest
 script:
   - export CC=gcc-8
   - export CXX=g++-8
-  - g++ --version
   - matlab -batch 'compile; example(-1);'
