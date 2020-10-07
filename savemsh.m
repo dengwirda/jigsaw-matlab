@@ -1,4 +1,4 @@
-function savemsh(name,mesh)
+function savemsh(name,mesh,varargin)
 %SAVEMSH save a *.MSH file for JIGSAW.
 %
 %   SAVEMSH(NAME,MESH);
@@ -107,7 +107,7 @@ function savemsh(name,mesh)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   30-May-2020
+%   21-Sep-2020
 %   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
@@ -245,9 +245,9 @@ function save_mesh_format(ffid,nver,mesh,kind)
             ['POINT=%u','\n'],size(mesh.point.coord,1));
 
         if (isa(mesh.point.coord,'double'))
-            vstr = sprintf('%%1.%ug;',+16);
+            vstr = sprintf('%%1.%ug;',+17);
         else
-            vstr = sprintf('%%1.%ug;',+ 8);
+            vstr = sprintf('%%1.%ug;',+ 9);
         end
 
         fprintf(ffid, ...
@@ -274,9 +274,9 @@ function save_mesh_format(ffid,nver,mesh,kind)
             ['SEEDS=%u','\n'],size(mesh.seeds.coord,1));
 
         if (isa(mesh.seeds.coord,'double'))
-            vstr = sprintf('%%1.%ug;',+16);
+            vstr = sprintf('%%1.%ug;',+17);
         else
-            vstr = sprintf('%%1.%ug;',+ 8);
+            vstr = sprintf('%%1.%ug;',+ 9);
         end
 
         fprintf(ffid, ...
@@ -301,9 +301,9 @@ function save_mesh_format(ffid,nver,mesh,kind)
         nrow = size(mesh.point.power,1) - 0 ;
 
         if (isa(mesh.point.power,'double'))
-        vstr = sprintf('%%1.%ug;',+16) ;
+        vstr = sprintf('%%1.%ug;',+17) ;
         else
-        vstr = sprintf('%%1.%ug;',+ 8) ;
+        vstr = sprintf('%%1.%ug;',+ 9) ;
         end
         vstr = repmat(vstr,+1,npwr) ;
 
@@ -331,9 +331,9 @@ function save_mesh_format(ffid,nver,mesh,kind)
         nval = size(mesh.value,2);
 
         if     (isa(mesh.value, 'double'))
-        vstr = sprintf('%%1.%ug;',+16) ;
+        vstr = sprintf('%%1.%ug;',+17) ;
         elseif (isa(mesh.value, 'single'))
-        vstr = sprintf('%%1.%ug;',+ 8) ;
+        vstr = sprintf('%%1.%ug;',+ 9) ;
         elseif (isa(mesh.value,'integer'))
         vstr = '%d;' ;
         else
@@ -365,9 +365,9 @@ function save_mesh_format(ffid,nver,mesh,kind)
         nval = size(mesh.slope,2);
 
         if     (isa(mesh.slope, 'double'))
-        vstr = sprintf('%%1.%ug;',+16) ;
+        vstr = sprintf('%%1.%ug;',+17) ;
         elseif (isa(mesh.slope, 'single'))
-        vstr = sprintf('%%1.%ug;',+ 8) ;
+        vstr = sprintf('%%1.%ug;',+ 9) ;
         elseif (isa(mesh.slope,'integer'))
         vstr = '%d;' ;
         else
@@ -690,9 +690,9 @@ function save_grid_format(ffid,nver,mesh,kind)
             length(mesh.point.coord{idim}) ;
 
         if (isa(mesh.point.coord{idim}, 'double'))
-            vstr = sprintf('%%1.%ug\n',+16);
+            vstr = sprintf('%%1.%ug\n',+17);
         else
-            vstr = sprintf('%%1.%ug\n',+ 8);
+            vstr = sprintf('%%1.%ug\n',+ 9);
         end
 
         fprintf(ffid,...
@@ -734,9 +734,9 @@ function save_grid_format(ffid,nver,mesh,kind)
         end
 
         if     (isa(mesh.value, 'double'))
-        vstr = sprintf('%%1.%ug;',+16) ;
+        vstr = sprintf('%%1.%ug;',+17) ;
         elseif (isa(mesh.value, 'single'))
-        vstr = sprintf('%%1.%ug;',+ 8) ;
+        vstr = sprintf('%%1.%ug;',+ 9) ;
         elseif (isa(mesh.value,'integer'))
         vstr = '%d;' ;
         else
@@ -784,9 +784,9 @@ function save_grid_format(ffid,nver,mesh,kind)
         end
 
         if     (isa(mesh.slope, 'double'))
-        vstr = sprintf('%%1.%ug;',+16) ;
+        vstr = sprintf('%%1.%ug;',+17) ;
         elseif (isa(mesh.slope, 'single'))
-        vstr = sprintf('%%1.%ug;',+ 8) ;
+        vstr = sprintf('%%1.%ug;',+ 9) ;
         elseif (isa(mesh.slope,'integer'))
         vstr = '%d;' ;
         else

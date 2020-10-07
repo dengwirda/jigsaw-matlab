@@ -83,7 +83,7 @@ function savevtk(name,mesh)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   20-Aug-2019
+%   21-Sep-2020
 %   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
@@ -203,7 +203,7 @@ function save_mesh_format(ffid,file,mesh,kind)
             mesh.point.coord(:,1:2) ;
 
         fprintf(ffid, ...
-       [repmat('%1.16g ',1,3),'\n'],data') ;
+       [repmat('%1.17g ',1,3),'\n'],data') ;
 
         case +4
         data = zeros(size( ...
@@ -212,7 +212,7 @@ function save_mesh_format(ffid,file,mesh,kind)
             mesh.point.coord(:,1:3) ;
 
         fprintf(ffid, ...
-       [repmat('%1.16g ',1,3),'\n'],data') ;
+       [repmat('%1.17g ',1,3),'\n'],data') ;
 
         otherwise
         error('Unsupported dimensions!') ;
@@ -327,7 +327,7 @@ function save_mesh_format(ffid,file,mesh,kind)
     error('VALUE must be a scalar function') ;
     end
 
-    fprintf(ffid,['%1.8g','\n'],mesh.value') ;
+    fprintf(ffid,['%1.9g','\n'],mesh.value') ;
     end
 
     if (inspect(mesh,'slope') && ...
@@ -340,7 +340,7 @@ function save_mesh_format(ffid,file,mesh,kind)
     fprintf(ffid, ...
         ['LOOKUP_TABLE default ','\n']);
 
-    fprintf(ffid,['%1.8g','\n'],mesh.slope') ;
+    fprintf(ffid,['%1.9g','\n'],mesh.slope') ;
     end
 
 end
@@ -377,33 +377,33 @@ function save_grid_format(ffid,file,mesh,kind)
         fprintf(ffid, ...
    ['X_COORDINATE %u double\n'],ncoord(1)) ;
         fprintf(ffid, ...
-   ['%1.16g','\n'],mesh.point.coord{1}) ;
+   ['%1.17g','\n'],mesh.point.coord{1}) ;
     else
         fprintf(ffid, ...
    ['X_COORDINATE %u double\n'],ncoord(1)) ;
-        fprintf(ffid,'%1.16g\n',0.) ;
+        fprintf(ffid,'%1.17g\n',0.) ;
     end
 
     if (length(mesh.point.coord) >= 2)
         fprintf(ffid, ...
    ['Y_COORDINATE %u double\n'],ncoord(2)) ;
         fprintf(ffid, ...
-   ['%1.16g','\n'],mesh.point.coord{2}) ;
+   ['%1.17g','\n'],mesh.point.coord{2}) ;
     else
         fprintf(ffid, ...
    ['Y_COORDINATE %u double\n'],ncoord(2)) ;
-        fprintf(ffid,'%1.16g\n',0.) ;
+        fprintf(ffid,'%1.17g\n',0.) ;
     end
 
     if (length(mesh.point.coord) >= 3)
         fprintf(ffid, ...
    ['Z_COORDINATE %u double\n'],ncoord(3)) ;
         fprintf(ffid, ...
-   ['%1.16g','\n'],mesh.point.coord{3}) ;
+   ['%1.17g','\n'],mesh.point.coord{3}) ;
     else
         fprintf(ffid, ...
    ['Z_COORDINATE %u double\n'],ncoord(3)) ;
-        fprintf(ffid,'%1.16g\n',0.) ;
+        fprintf(ffid,'%1.17g\n',0.) ;
     end
 
     end
@@ -428,7 +428,7 @@ function save_grid_format(ffid,file,mesh,kind)
     data = reshape( ...
       permute(data,perm),prod(ncoord),[]);
 
-    fprintf(ffid,['%1.8g','\n'],data') ;
+    fprintf(ffid,['%1.9g','\n'],data') ;
     end
 
     if (inspect(mesh,'slope') && ...
@@ -451,7 +451,7 @@ function save_grid_format(ffid,file,mesh,kind)
     data = reshape( ...
       permute(data,perm),prod(ncoord),[]);
 
-    fprintf(ffid,['%1.8g','\n'],data') ;
+    fprintf(ffid,['%1.9g','\n'],data') ;
     end
 
 end

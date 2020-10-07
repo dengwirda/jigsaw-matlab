@@ -45,7 +45,7 @@ function example(varargin)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   07-Aug-2019
+%   05-Oct-2020
 %   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
@@ -53,20 +53,30 @@ function example(varargin)
     close all ;
 
     demo =  +1;
+    show =  +1;
 
     if (nargin >= 1), demo = varargin{1}; end
+    if (nargin >= 2), show = varargin{2}; end
 
     switch (demo)
-        case 0, demo_0 ;
-        case 1, demo_1 ;
-        case 2, demo_2 ;
-        case 3, demo_3 ;
-        case 4, demo_4 ;
-        case 5, demo_5 ;
-        case 6, demo_6 ;
-        case 7, demo_7 ;
-        case 8, demo_8 ;
-        case 9, demo_9 ;
+        case-1
+%------ run all of the examples sequentially, for ci testing
+        for ex = 0 : 9
+            example (ex, +0) ;
+        end
+        disp('Jigsaw tests completed successfully!') ;
+
+%------ run "regular" examples, via e.g. the MATLAB cmd-line
+        case 0, demo_0(show) ;
+        case 1, demo_1(show) ;
+        case 2, demo_2(show) ;
+        case 3, demo_3(show) ;
+        case 4, demo_4(show) ;
+        case 5, demo_5(show) ;
+        case 6, demo_6(show) ;
+        case 7, demo_7(show) ;
+        case 8, demo_8(show) ;
+        case 9, demo_9(show) ;
 
         otherwise
         error( ...
@@ -75,17 +85,16 @@ function example(varargin)
 
 end
 
-function demo_0
+function demo_0(show)
 % DEMO-0 --- Simple 2-dimensional examples illustrating the
 %   construction of geometry + user-defined mesh-size const-
 %   raints.
 
-    demo_A();
-    demo_B();
-    demo_C();
+    demo_A(show);
+    demo_B(show);
+    demo_C(show);
 
-    drawnow ;
-
+    if (show > 0)
     set(figure(1),'units','normalized', ...
         'position',[.05,.50,.25,.30]) ;
     set(figure(2),'units','normalized', ...
@@ -100,10 +109,11 @@ function demo_0
         'position',[.55,.50,.25,.30]) ;
     set(figure(6),'units','normalized', ...
         'position',[.55,.15,.25,.25]) ;
+    end
 
 end
 
-function demo_A
+function demo_A(show)
 % DEMO-0 --- Simple 2-dimensional examples illustrating the
 %   construction of geometry + user-defined mesh-size const-
 %   raints.
@@ -166,6 +176,7 @@ function demo_A
 
     mesh = jigsaw  (opts) ;
 
+    if (show > +0)
     figure('color','w');
     patch ('faces',mesh.tria3.index(:,1:3), ...
         'vertices',mesh.point.coord(:,1:2), ...
@@ -184,10 +195,11 @@ function demo_A
         'linewidth',1.5) ;
 
     drawcost(mesh) ;
+    end
 
 end
 
-function demo_B
+function demo_B(show)
 % DEMO-0 --- Simple 2-dimensional examples illustrating the
 %   construction of geometry + user-defined mesh-size const-
 %   raints.
@@ -270,6 +282,7 @@ function demo_B
 
     mesh = jigsaw  (opts) ;
 
+    if (show > +0)
     figure('color','w');
     I = mesh.tria3.index(:,4) == +1;
     patch ('faces',mesh.tria3.index(I,1:3), ...
@@ -294,10 +307,11 @@ function demo_B
         'linewidth',1.5) ;
 
     drawcost(mesh) ;
+    end
 
 end
 
-function demo_C
+function demo_C(show)
 % DEMO-0 --- Simple 2-dimensional examples illustrating the
 %   construction of geometry + user-defined mesh-size const-
 %   raints.
@@ -391,6 +405,7 @@ function demo_C
 
     mesh = jigsaw  (opts) ;
 
+    if (show > +0)
     figure('color','w');
     patch ('faces',mesh.tria3.index(:,1:3), ...
         'vertices',mesh.point.coord(:,1:2), ...
@@ -409,20 +424,20 @@ function demo_C
         'linewidth',1.5) ;
 
     drawcost(mesh) ;
+    end
 
 end
 
-function demo_1
+function demo_1(show)
 % DEMO-1 --- Simple 3-dimensional examples illustrating the
 %   construction of geometry + user-defined mesh-size const-
 %   raints.
 
-    demo_D();
-    demo_E();
-    demo_F();
+    demo_D(show);
+    demo_E(show);
+    demo_F(show);
 
-    drawnow ;
-
+    if (show > 0)
     set(figure(1),'units','normalized', ...
         'position',[.05,.50,.25,.30]) ;
     set(figure(2),'units','normalized', ...
@@ -437,10 +452,11 @@ function demo_1
         'position',[.55,.50,.25,.30]) ;
     set(figure(6),'units','normalized', ...
         'position',[.55,.10,.25,.30]) ;
+    end
 
 end
 
-function demo_D
+function demo_D(show)
 % DEMO-1 --- Simple 3-dimensional examples illustrating the
 %   construction of geometry + user-defined mesh-size const-
 %   raints.
@@ -505,6 +521,7 @@ function demo_D
 
     mesh = jigsaw  (opts) ;
 
+    if (show > +0)
     mask = [];
     mask.tria3 = true(size( ...         % just draw TRIA-3
     mesh.tria3.index,1),1);
@@ -518,10 +535,11 @@ function demo_D
 
     figure ; drawmesh(mesh,mask);
     view(-10,-110); axis image;
+    end
 
 end
 
-function demo_E
+function demo_E(show)
 % DEMO-1 --- Simple 3-dimensional examples illustrating the
 %   construction of geometry + user-defined mesh-size const-
 %   raints.
@@ -609,6 +627,7 @@ function demo_E
 
     mesh = jigsaw  (opts) ;
 
+    if (show > +0)
     mask = [];
     mask.tria3 = true(size( ...         % just draw TRIA-3
     mesh.tria3.index,1),1);
@@ -624,10 +643,11 @@ function demo_E
 
     figure ; drawmesh(mesh,mask);
     view(-10,-110); axis image;
+    end
 
 end
 
-function demo_F
+function demo_F(show)
 % DEMO-1 --- Simple 3-dimensional examples illustrating the
 %   construction of geometry + user-defined mesh-size const-
 %   raints.
@@ -731,6 +751,7 @@ function demo_F
 
     mesh = jigsaw  (opts) ;
 
+    if (show > +0)
     mask = [];
     mask.tria3 = true(size( ...         % just draw TRIA-3
     mesh.tria3.index,1),1);
@@ -744,10 +765,11 @@ function demo_F
 
     figure ; drawmesh(mesh,mask);
     view(-10,-110); axis image;
+    end
 
 end
 
-function demo_2
+function demo_2(show)
 % DEMO-2 --- Build planar meshes for the "lakes" geometry.
 %   Compare the performance of the "delaunay" &
 %   "delfront" meshing kernals. Show mesh quality metrics.
@@ -777,9 +799,11 @@ function demo_2
 
     geom = loadmsh (opts.geom_file);
 
+    if (show > +0)
     figure ; drawmesh(geom);
     axis image;
     title('INPUT GEOMETRY');
+    end
 
 %------------------------------------ make mesh using JIGSAW
 
@@ -795,6 +819,7 @@ function demo_2
 
     mesh = jigsaw  (opts) ;
 
+    if (show > +0)
     mask = [];
     mask.tria3 = true(size( ...         % just draw TRIA-3
     mesh.tria3.index,1),1);
@@ -804,6 +829,7 @@ function demo_2
     title('JIGSAW (KERN=delaunay)');
 
     drawcost(mesh) ;
+    end
 
 %------------------------------------ make mesh using JIGSAW
 
@@ -819,6 +845,7 @@ function demo_2
 
     mesh = jigsaw  (opts) ;
 
+    if (show > +0)
     mask = [];
     mask.tria3 = true(size( ...         % just draw TRIA-3
     mesh.tria3.index,1),1);
@@ -828,8 +855,6 @@ function demo_2
     title('JIGSAW (KERN=delfront)');
 
     drawcost(mesh) ;
-
-    drawnow ;
 
     set(figure(1),'units','normalized', ...
         'position',[.55,.50,.25,.30]) ;
@@ -843,10 +868,11 @@ function demo_2
         'position',[.05,.15,.25,.25]) ;
     set(figure(5),'units','normalized', ...
         'position',[.30,.15,.25,.25]) ;
+    end
 
 end
 
-function demo_3
+function demo_3(show)
 % DEMO-3 --- Build surface meshes for the "stanford-bunny"
 %   geometry. Compare the performance of the "delaunay" &
 %   "delfront" meshing kernals. Show mesh quality metrics.
@@ -876,9 +902,11 @@ function demo_3
 
     geom = loadmsh (opts.geom_file);
 
+    if (show > +0)
     figure ; drawmesh(geom);
     view(0,-110); axis image;
     title('INPUT GEOMETRY');
+    end
 
 %------------------------------------ make mesh using JIGSAW
 
@@ -889,11 +917,13 @@ function demo_3
 
     mesh = jigsaw  (opts) ;
 
+    if (show > +0)
     figure ; drawmesh(mesh);
     view(0,-110); axis image;
     title('JIGSAW (KERN=delaunay)') ;
 
     drawcost(mesh) ;
+    end
 
 %------------------------------------ make mesh using JIGSAW
 
@@ -904,13 +934,12 @@ function demo_3
 
     mesh = jigsaw  (opts) ;
 
+    if (show > +0)
     figure ; drawmesh(mesh);
     view(0,-110); axis image;
     title('JIGSAW (KERN=delfront)') ;
 
     drawcost(mesh) ;
-
-    drawnow ;
 
     set(figure(1),'units','normalized', ...
         'position',[.55,.50,.25,.30]) ;
@@ -924,10 +953,11 @@ function demo_3
         'position',[.05,.15,.25,.25]) ;
     set(figure(5),'units','normalized', ...
         'position',[.30,.15,.25,.25]) ;
+    end
 
 end
 
-function demo_4
+function demo_4(show)
 % DEMO-4 --- Build _volume meshes for the "stanford-bunny"
 %   geometry. Compare the performance of the "delaunay" &
 %   "delfront" meshing kernals. Show mesh quality metrics.
@@ -957,9 +987,11 @@ function demo_4
 
     geom = loadmsh (opts.geom_file);
 
+    if (show > +0)
     figure ; drawmesh(geom);
     view(-10,-110); axis image;
     title('INPUT GEOMETRY');
+    end
 
 %------------------------------------ make mesh using JIGSAW
 
@@ -970,6 +1002,7 @@ function demo_4
 
     mesh = jigsaw  (opts) ;
 
+    if (show > +0)
     mask = [];
     mask.tria3 = true(size( ...         % just draw TRIA-3
     mesh.tria3.index,1),1);
@@ -987,6 +1020,7 @@ function demo_4
     title('JIGSAW (KERN=delaunay)');
 
     drawcost(mesh);
+    end
 
 %------------------------------------ make mesh using JIGSAW
 
@@ -997,6 +1031,7 @@ function demo_4
 
     mesh = jigsaw  (opts) ;
 
+    if (show > +0)
     mask = [];
     mask.tria3 = true(size( ...         % just draw TRIA-3
     mesh.tria3.index,1),1);
@@ -1014,8 +1049,6 @@ function demo_4
     title('JIGSAW (KERN=delfront)');
 
     drawcost(mesh);
-
-    drawnow ;
 
     set(figure(1),'units','normalized',...
         'position',[.55,.50,.25,.30]) ;
@@ -1037,10 +1070,11 @@ function demo_4
         'position',[.30,.15,.25,.25]) ;
     set(figure(9),'units','normalized',...
         'position',[.30,.15,.25,.25]) ;
+    end
 
 end
 
-function demo_5
+function demo_5(show)
 % DEMO-5 --- Build planar meshes for the "airfoil" problem.
 %   Impose user-defined mesh-spacing constraints.
 
@@ -1073,9 +1107,11 @@ function demo_5
 
     geom = loadmsh (opts.geom_file);
 
+    if (show > +0)
     figure ; drawmesh(geom);
     axis image;
     title('INPUT GEOMETRY');
+    end
 
 %------------------------------------ compute HFUN over GEOM
 
@@ -1126,11 +1162,12 @@ function demo_5
 
     mesh = jigsaw  (opts) ;
 
+    if (show > +0)
     figure ; drawmesh(mesh) ;
     axis image;
     title('JIGSAW OUTPUT');
 
-    drawcost(mesh); drawnow ;
+    drawcost(mesh) ;
 
     set(figure(1),'units','normalized', ...
         'position',[.55,.50,.25,.30]) ;
@@ -1139,10 +1176,11 @@ function demo_5
         'position',[.30,.50,.25,.30]) ;
     set(figure(3),'units','normalized', ...
         'position',[.30,.15,.25,.25]) ;
+    end
 
 end
 
-function demo_6
+function demo_6(show)
 % DEMO-6 --- Build surface meshes for a mechanical bracket.
 %   Configure to detect and preserve sharp-features in the
 %   input geometry.
@@ -1172,9 +1210,11 @@ function demo_6
 
     geom = loadmsh (opts.geom_file);
 
+    if (show > +0)
     figure ; drawmesh(geom);
     view(-30,+30); axis image;
     title('INPUT GEOMETRY');
+    end
 
 %------------------------------------ make mesh using JIGSAW
 
@@ -1187,9 +1227,11 @@ function demo_6
 
     mesh = jigsaw  (opts) ;
 
+    if (show > +0)
     figure ; drawmesh(mesh);
     view(-30,+30); axis image;
     title('JIGSAW (FEAT=false)');
+    end
 
 %------------------------------------ make mesh using JIGSAW
 
@@ -1203,6 +1245,7 @@ function demo_6
 
     mesh = jigsaw  (opts) ;
 
+    if (show > +0)
     mask = [];
     mask.edge2 = true(size( ...         % just draw EDGE-2
     mesh.edge2.index,1),1);
@@ -1219,8 +1262,6 @@ function demo_6
     view(-30,+30); axis image;
     title('JIGSAW (FEAT=true)');
 
-    drawnow ;
-
     set(figure(1),'units','normalized',...
         'position',[.55,.50,.25,.30]) ;
 
@@ -1231,10 +1272,11 @@ function demo_6
         'position',[.30,.10,.25,.30]) ;
     set(figure(4),'units','normalized',...
         'position',[.30,.50,.25,.30]) ;
+    end
 
 end
 
-function demo_7
+function demo_7(show)
 % DEMO-7 --- Build surface meshes for the "wheel" geometry;
 %   defined as a collection of open surfaces.
 
@@ -1263,9 +1305,11 @@ function demo_7
 
     geom = loadmsh (opts.geom_file);
 
+    if (show)
     figure ; drawmesh(geom);
     view(+65,+20); axis image;
     title('INPUT GEOMETRY');
+    end
 
 %------------------------------------ make mesh using JIGSAW
 
@@ -1280,6 +1324,7 @@ function demo_7
 
     mesh = jigsaw  (opts) ;
 
+    if (show > +0)
     mask = [];
     mask.edge2 = true(size( ...         % just draw EDGE-2
     mesh.edge2.index,1),1);
@@ -1296,8 +1341,6 @@ function demo_7
     view(+65,+20); axis image;
     title('JIGSAW (FEAT=true)');
 
-    drawnow ;
-
     set(figure(1),'units','normalized',...
         'position',[.55,.50,.25,.30]) ;
 
@@ -1305,10 +1348,11 @@ function demo_7
         'position',[.05,.50,.25,.30]) ;
     set(figure(3),'units','normalized',...
         'position',[.30,.50,.25,.30]) ;
+    end
 
 end
 
-function demo_8
+function demo_8(show)
 % DEMO-8 --- re-mesh geometry generated using marching-cubes
 %   approach.
 
@@ -1337,11 +1381,13 @@ function demo_8
 
     geom = loadmsh (opts.geom_file);
 
+    if (show > +0)
     figure ; drawmesh(geom);
     view(+50,+25); axis image;
     title('INPUT (marching cubes)');
 
-    drawcost(geom);
+    drawcost(geom) ;
+    end
 
 %------------------------------------ make mesh using JIGSAW
 
@@ -1352,6 +1398,7 @@ function demo_8
 
     mesh = jigsaw  (opts) ;
 
+    if (show > +0)
     mask = [];
     mask.tria3 = true(size( ...         % just draw TRIA-3
     mesh.tria3.index,1),1);
@@ -1362,8 +1409,6 @@ function demo_8
 
     drawcost(mesh);
 
-    drawnow ;
-
     set(figure(1),'units','normalized',...
         'position',[.30,.50,.25,.30]) ;
     set(figure(2),'units','normalized',...
@@ -1373,10 +1418,11 @@ function demo_8
         'position',[.05,.50,.25,.30]) ;
     set(figure(4),'units','normalized',...
         'position',[.05,.10,.25,.30]) ;
+    end
 
 end
 
-function demo_9
+function demo_9(show)
 % DEMO-9 --- extrude a surface mesh into a prismatic volume
 %   representation.
 
@@ -1454,7 +1500,9 @@ function demo_9
     mesh = extrude( ...
         base,levs,-3,0.10);
 
+    if (show > +0)
     figure; drawmesh(mesh);
+    end
 
 end
 

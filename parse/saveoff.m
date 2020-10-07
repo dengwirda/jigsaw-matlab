@@ -25,7 +25,7 @@ function saveoff(name,mesh)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   15-Jul-2018
+%   21-Sep-2020
 %   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
@@ -104,7 +104,7 @@ function saveoff(name,mesh)
         otherwise
         error('Unsupported dimensionality!') ;
     end
-    fprintf(ffid,['%1.16g %1.16g %1.16g','\n'],coord') ;
+    fprintf(ffid,['%1.17g %1.17g %1.17g','\n'],coord') ;
     end
 
     if (inspect(mesh,'edge2'))

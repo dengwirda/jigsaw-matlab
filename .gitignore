@@ -1,0 +1,25 @@
+# jigsaw things
+*
+!/**/
+!*.*
+*.exe
+*.dll
+*.so
+*.dylib
+cache/*.log
+cache/*.jig
+cache/*.msh
+
+# matlab things
+*.m~
+*.asv
+*.mex*
+octave-workspace
+
+# data files, etc
+*.nc
+*.grd
+*.vtk
+*.off
+*.obj
+*.stl
