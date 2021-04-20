@@ -6,7 +6,7 @@ function [mesh] = jitter(opts,imax,ibad)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   03-Sep-2020
+%   16-Apr-2021
 %   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
@@ -61,7 +61,7 @@ function [mesh] = jitter(opts,imax,ibad)
 
         if (inspect(next,'edge2'))
 
-        keep(next.edge2.index(:,1:2)) = true ;
+        keep(next.edge2.index(:,1:2)) = false;
 
         end
 
