@@ -1,9 +1,0 @@
-# cpp binaries
-*
-!/**/
-!*.*
-*.exe
-*.dll
-*.so
-*.dylib
-
