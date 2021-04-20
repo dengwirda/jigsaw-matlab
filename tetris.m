@@ -14,7 +14,7 @@ function [mesh] = tetris(opts,nlev)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   30-Sep-2020
+%   16-Apr-2021
 %   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
@@ -108,14 +108,14 @@ function [mesh] = tetris(opts,nlev)
 
 %---------------------------- call JIGSAW kernel at this lev
         mesh = jitter ( ...
-            OPTS, 3 + min(64, nlev ^ 2), 3) ;
+            OPTS, 2 + min(64, nlev ^ 2), 3) ;
 
         flag = +1 ;         % alternate
 
         else
 
         mesh = jitter ( ...
-            OPTS, 3 + min(64, nlev ^ 2), 2) ;
+            OPTS, 2 + min(64, nlev ^ 2), 2) ;
 
         flag = +0 ;         % alternate
 

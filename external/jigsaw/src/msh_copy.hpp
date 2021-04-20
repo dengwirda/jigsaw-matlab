@@ -31,9 +31,9 @@
      *
     --------------------------------------------------------
      *
-     * Last updated: 10 Sept., 2020
+     * Last updated: 19 Apr., 2021
      *
-     * Copyright 2013-2020
+     * Copyright 2013-2021
      * Darren Engwirda
      * d.engwirda@gmail.com
      * https://github.com/dengwirda/
@@ -71,14 +71,21 @@
             jmsh_kind::euclidean_mesh)
         {
     /*---------------------------------- copy 2-dim. mesh */
+        containers::array<iptr_type> _nmap ;
+
+        _nmap.set_count(_mesh.
+        _euclidean_rdel_2d._tria._nset.count(),
+        containers::loose_alloc, -1) ;
+
         _mesh._euclidean_mesh_2d._mesh.
             clear(containers::tight_alloc) ;
 
+        iptr_type _npos  = +0 ;
         for (auto _iter  = _mesh.
         _euclidean_rdel_2d._tria._nset.head() ;
                   _iter != _mesh.
         _euclidean_rdel_2d._tria._nset.tend() ;
-                ++_iter  )
+                ++_iter, ++_npos)
         {
             if (_iter->mark() >= +0)
             {
@@ -88,14 +95,15 @@
             _node.pval(0) = _iter->pval(0) ;
             _node.pval(1) = _iter->pval(1) ;
 
-            _node.pval(2) = (real_type)+0. ;
+            _node.pval(2) = _iter->pval(2) ;
 
             _node.hidx () = _iter->idxh () ;
 
-            _node.itag () = (iptr_type)+0;
+            _node.itag () = _iter->part () ;
             _node.fdim () = _iter->fdim () ;
             _node.feat () = _iter->feat () ;
 
+            _nmap[_npos] = 
             _mesh._euclidean_mesh_2d.
                 _mesh.push_node (_node, false) ;
             }
@@ -120,9 +128,9 @@
                 euclidean_mesh_2d::
             mesh_type::edge_type _face;
             _face.node(0) =
-                _item->_data._node[0] ;
+                _nmap[_item->_data._node[0]] ;
             _face.node(1) =
-                _item->_data._node[1] ;
+                _nmap[_item->_data._node[1]] ;
 
             _face.itag () =
                 _item->_data._part;
@@ -152,11 +160,11 @@
                 euclidean_mesh_2d::
             mesh_type::tri3_type _face;
             _face.node(0) =
-                _item->_data._node[0] ;
+                _nmap[_item->_data._node[0]] ;
             _face.node(1) =
-                _item->_data._node[1] ;
+                _nmap[_item->_data._node[1]] ;
             _face.node(2) =
-                _item->_data._node[2] ;
+                _nmap[_item->_data._node[2]] ;
 
             _face.itag () =
                 _item->_data._part;
@@ -183,14 +191,21 @@
             jmsh_kind::euclidean_mesh)
         {
     /*---------------------------------- copy 3-dim. mesh */
+        containers::array<iptr_type> _nmap ;
+
+        _nmap.set_count(_mesh.
+        _euclidean_rdel_3d._tria._nset.count(),
+        containers::loose_alloc, -1) ;
+
         _mesh._euclidean_mesh_3d._mesh.
             clear(containers::tight_alloc) ;
 
+        iptr_type _npos  = +0 ;
         for (auto _iter  = _mesh.
         _euclidean_rdel_3d._tria._nset.head() ;
                   _iter != _mesh.
         _euclidean_rdel_3d._tria._nset.tend() ;
-                ++_iter  )
+                ++_iter, ++_npos)
         {
             if (_iter->mark() >= +0)
             {
@@ -201,14 +216,15 @@
             _node.pval(1) = _iter->pval(1) ;
             _node.pval(2) = _iter->pval(2) ;
 
-            _node.pval(3) = (real_type)+0. ;
+            _node.pval(3) = _iter->pval(3) ;
 
             _node.hidx () = _iter->idxh () ;
 
-            _node.itag () = (iptr_type)+0;
+            _node.itag () = _iter->part () ;
             _node.fdim () = _iter->fdim () ;
             _node.feat () = _iter->feat () ;
 
+            _nmap[_npos] = 
             _mesh._euclidean_mesh_3d.
                 _mesh.push_node (_node, false) ;
             }
@@ -233,9 +249,9 @@
                 euclidean_mesh_3d::
             mesh_type::edge_type _face;
             _face.node(0) =
-                _item->_data._node[0] ;
+                _nmap[_item->_data._node[0]] ;
             _face.node(1) =
-                _item->_data._node[1] ;
+                _nmap[_item->_data._node[1]] ;
 
             _face.itag () =
                 _item->_data._part;
@@ -265,11 +281,11 @@
                 euclidean_mesh_3d::
             mesh_type::tri3_type _face;
             _face.node(0) =
-                _item->_data._node[0] ;
+                _nmap[_item->_data._node[0]] ;
             _face.node(1) =
-                _item->_data._node[1] ;
+                _nmap[_item->_data._node[1]] ;
             _face.node(2) =
-                _item->_data._node[2] ;
+                _nmap[_item->_data._node[2]] ;
 
             _face.itag () =
                 _item->_data._part;
@@ -299,13 +315,13 @@
                 euclidean_mesh_3d::
             mesh_type::tri4_type _face;
             _face.node(0) =
-                _item->_data._node[0] ;
+                _nmap[_item->_data._node[0]] ;
             _face.node(1) =
-                _item->_data._node[1] ;
+                _nmap[_item->_data._node[1]] ;
             _face.node(2) =
-                _item->_data._node[2] ;
+                _nmap[_item->_data._node[2]] ;
             _face.node(3) =
-                _item->_data._node[3] ;
+                _nmap[_item->_data._node[3]] ;
 
             _face.itag () =
                 _item->_data._part;

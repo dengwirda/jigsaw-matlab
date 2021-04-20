@@ -75,7 +75,7 @@ function [varargout] = tripod(opts)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   27-Apr-2019
+%   18-Apr-2021
 %   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
@@ -131,7 +131,8 @@ function [varargout] = tripod(opts)
     if (exist(jexename,'file')==2)
 
    [status, result] = system( ...
-        [jexename,' ',opts.jcfg_file], '-echo');
+        ['"',jexename,'"',' ','"',opts.jcfg_file,'"'], ...
+            '-echo') ;
 
 %---------------------------- OCTAVE doesn't handle '-echo'!
     if (exist('OCTAVE_VERSION', 'builtin') > 0)

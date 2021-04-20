@@ -247,7 +247,7 @@ function [varargout] = jigsaw(opts)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   29-Oct-2019
+%   18-Apr-2021
 %   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
@@ -303,7 +303,8 @@ function [varargout] = jigsaw(opts)
     if (exist(jexename,'file')==2)
 
    [status, result] = system( ...
-        [jexename,' ',opts.jcfg_file], '-echo');
+        ['"',jexename,'"',' ','"',opts.jcfg_file,'"'], ...
+            '-echo') ;
 
 %---------------------------- OCTAVE doesn't handle '-echo'!
     if (exist('OCTAVE_VERSION', 'builtin') > 0)

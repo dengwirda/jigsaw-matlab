@@ -31,9 +31,9 @@
      *
     --------------------------------------------------------
      *
-     * Last updated: 05 March, 2020
+     * Last updated: 02 Feb., 2021
      *
-     * Copyright 2013-2020
+     * Copyright 2013-2021
      * Darren Engwirda
      * d.engwirda@gmail.com
      * https://github.com/dengwirda/
@@ -588,8 +588,8 @@
         _scal =  std::max(
             _scal , _plen[ 1]);
 
-        _plen[ 0]*= (real_type)+2.0 ;
-        _plen[ 1]*= (real_type)+2.0 ;
+        _plen[ 0]*= (real_type)+4.0 ;
+        _plen[ 1]*= (real_type)+4.0 ;
 
         _pmin[ 0]-= _plen[ 0] ;
         _pmin[ 1]-= _plen[ 1] ;
@@ -622,8 +622,8 @@
         _tria.node(+2)->topo() = +0 ;
 
     /*------------------------------ seed feat from geom. */
-        _geom.
-         seed_feat(_mesh, _opts) ;
+        _geom.seed_root(_mesh, _opts) ;
+        _geom.seed_feat(_mesh, _opts) ;
 
     /*------------------------------ seed mesh from init. */
          real_type _NEAR =
@@ -636,8 +636,7 @@
                    _NEAR) ;
 
     /*------------------------------ seed mesh from geom. */
-        _geom.
-         seed_mesh(_mesh, _opts) ;
+        _geom.seed_mesh(_mesh, _opts) ;
     }
 
     /*
@@ -673,11 +672,9 @@
 
     #   ifdef  __use_timers
         typename std ::chrono::
-        high_resolution_clock::
-            time_point _ttic ;
+        high_resolution_clock::time_point  _ttic ;
         typename std ::chrono::
-        high_resolution_clock::
-            time_point _ttoc ;
+        high_resolution_clock::time_point  _ttoc ;
         typename std ::chrono::
         high_resolution_clock _time ;
 

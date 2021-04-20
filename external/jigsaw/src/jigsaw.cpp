@@ -40,10 +40,11 @@
      * JIGSAW: an unstructured mesh generation library.
     --------------------------------------------------------
      *
-     * JIGSAW release 0.9.14.x
-     * Last updated: 30 Sept., 2020
+     * JIGSAW release 0.9.15.x
      *
-     * Copyright 2013 -- 2020
+     * Last updated: 16 April, 2021
+     *
+     * Copyright 2013 -- 2021
      * Darren Engwirda
      * d.engwirda@gmail.com
      * https://github.com/dengwirda
@@ -187,7 +188,7 @@
     --------------------------------------------------------
      */
 
-#   define __JGSWVSTR "JIGSAW VERSION 0.9.14"
+#   define __JGSWVSTR "JIGSAW VERSION 0.9.15"
 
 #   if  defined(  USE_NETCDF)
 #       define  __use_netcdf
@@ -265,7 +266,7 @@
 #   include "libcpp/useropts.hpp"
 
 #   include "libcpp/rdelmesh.hpp"
-#   include "libcpp/treemesh.hpp"
+//  include "libcpp/treemesh.hpp"
 #   include "libcpp/itermesh.hpp"
 
     extern  "C"
@@ -274,6 +275,7 @@
     }
 
     typedef real_t real_type ;        // double-precision
+    typedef fp32_t fp32_type ;        // single-precision
     typedef indx_t iptr_type ;        // 32bit signed int
 
     /*---------------------------------- JIGSAW mesh kind */
@@ -476,27 +478,33 @@
 
         typedef mesh ::hfun_mesh_euclidean_2d  <
                     real_type,
+                    fp32_type,
                     iptr_type>   euclidean_mesh_2d ;
 
         typedef mesh ::hfun_mesh_euclidean_3d  <
                     real_type,
+                    fp32_type,
                     iptr_type>   euclidean_mesh_3d ;
 
         typedef mesh ::hfun_mesh_ellipsoid_3d  <
                     real_type,
+                    fp32_type,
                     iptr_type>   ellipsoid_mesh_3d ;
 
         typedef mesh ::hfun_grid_euclidean_2d  <
                     real_type,
+                    fp32_type,
                     iptr_type>   euclidean_grid_2d ;
 
         typedef mesh ::hfun_grid_euclidean_3d  <
                     real_type,
+                    fp32_type,
                     iptr_type>   euclidean_grid_3d ;
 
         typedef mesh ::hfun_grid_ellipsoid_3d  <
-                    iptr_type,
-                    real_type>   ellipsoid_grid_3d ;
+                    real_type,
+                    fp32_type,
+                    iptr_type>   ellipsoid_grid_3d ;
 
 		std::size_t             _ndim = +0;
 
