@@ -22,12 +22,16 @@
      * how they can obtain it for free, then you are not
      * required to make any arrangement with me.)
      *
-     * Disclaimer:  Neither I nor: Columbia University, The
-     * Massachusetts Institute of Technology, The
-     * University of Sydney, nor The National Aeronautics
-     * and Space Administration warrant this code in any
-     * way whatsoever.  This code is provided "as-is" to be
-     * used at your own risk.
+     * Disclaimer:  Neither I nor THE CONTRIBUTORS warrant
+     * this code in any way whatsoever.  This code is
+     * provided "as-is" to be used at your own risk.
+     *
+     * THE CONTRIBUTORS include:
+     * (a) The University of Sydney
+     * (b) The Massachusetts Institute of Technology
+     * (c) Columbia University
+     * (d) The National Aeronautics & Space Administration
+     * (e) Los Alamos National Laboratory
      *
     --------------------------------------------------------
      *
@@ -1204,7 +1208,7 @@
             }
 
             _jlog.push(
-                "  |COORD.| = " 
+                "  |COORD.| = "
                 + std::to_string(_nnN1) + "\n");
 
             for (auto _iter  = _init.
@@ -1217,7 +1221,7 @@
             }
 
             _jlog.push(
-                "  |EDGE-2| = " 
+                "  |EDGE-2| = "
                 + std::to_string(_nnE2) + "\n");
 
             for (auto _iter  = _init.
@@ -1230,7 +1234,7 @@
             }
 
             _jlog.push(
-                "  |TRIA-3| = " 
+                "  |TRIA-3| = "
                 + std::to_string(_nnT3) + "\n");
 
             for (auto _iter  = _init.
@@ -1243,7 +1247,7 @@
             }
 
             _jlog.push(
-                "  |QUAD-4| = " 
+                "  |QUAD-4| = "
                 + std::to_string(_nnQ4) + "\n");
         }
         else
@@ -1275,7 +1279,7 @@
             }
 
             _jlog.push(
-                "  |COORD.| = " 
+                "  |COORD.| = "
                 + std::to_string(_nnN1) + "\n");
 
             for (auto _iter  = _init.
@@ -1288,7 +1292,7 @@
             }
 
             _jlog.push(
-                "  |EDGE-2| = " 
+                "  |EDGE-2| = "
                 + std::to_string(_nnE2) + "\n");
 
             for (auto _iter  = _init.
@@ -1301,7 +1305,7 @@
             }
 
             _jlog.push(
-                "  |TRIA-3| = " 
+                "  |TRIA-3| = "
                 + std::to_string(_nnT3) + "\n");
 
             for (auto _iter  = _init.
@@ -1314,7 +1318,7 @@
             }
 
             _jlog.push(
-                "  |QUAD-4| = " 
+                "  |QUAD-4| = "
                 + std::to_string(_nnQ4) + "\n");
 
             for (auto _iter  = _init.
@@ -1327,7 +1331,7 @@
             }
 
             _jlog.push(
-                "  |TRIA-4| = " 
+                "  |TRIA-4| = "
                 + std::to_string(_nnT4) + "\n");
         }
 

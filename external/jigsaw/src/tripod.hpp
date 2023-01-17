@@ -14,9 +14,9 @@
      * TRIPOD: a "restricted" delaunay tessellator.
     --------------------------------------------------------
      *
-     * Last updated: 16 Apr., 2021
+     * Last updated: 10 Jun., 2022
      *
-     * Copyright 2013 -- 2021
+     * Copyright 2013 -- 2022
      * Darren Engwirda
      * d.engwirda@gmail.com
      * https://github.com/dengwirda
@@ -41,12 +41,16 @@
      * how they can obtain it for free, then you are not
      * required to make any arrangement with me.)
      *
-     * Disclaimer:  Neither I nor: Columbia University, The
-     * Massachusetts Institute of Technology, The
-     * University of Sydney, nor the National Aeronautics
-     * and Space Administration warrant this code in any
-     * way whatsoever.  This code is provided "as-is" to be
-     * used at your own risk.
+     * Disclaimer:  Neither I nor THE CONTRIBUTORS warrant
+     * this code in any way whatsoever.  This code is
+     * provided "as-is" to be used at your own risk.
+     *
+     * THE CONTRIBUTORS include:
+     * (a) The University of Sydney
+     * (b) The Massachusetts Institute of Technology
+     * (c) Columbia University
+     * (d) The National Aeronautics & Space Administration
+     * (e) Los Alamos National Laboratory
      *
     --------------------------------------------------------
      */
@@ -296,6 +300,8 @@
         mesh_data _mesh ;               // TRIA data
         jcfg_data _jcfg ;               // CFG. data
 
+        float     _xoff[3] = {+0.f} ;   // to origin
+
 #       ifdef  __use_timers
         typename std ::chrono::
         high_resolution_clock::time_point  _ttic ;
@@ -360,6 +366,78 @@
 #           endif//__use_timers
         }
 
+        if (_gmsh != nullptr )
+        {
+    /*--------------------------------- parse *.GEOM data */
+            _jlog.push (  __jloglndv    "\n" ) ;
+            _jlog.push (
+                "  Reading GEOM data...\n\n" ) ;
+
+#           ifdef  __use_timers
+            _ttic   = _time.now();
+#           endif//__use_timers
+
+            if ((_retv = copy_geom (
+                 _jcfg, _jlog ,
+                 _geom,*_gmsh)) != __no_error)
+            {
+                return  _retv ;
+            }
+
+            if ((_retv = test_geom (
+                 _jcfg,
+                 _jlog, _geom)) != __no_error)
+            {
+                return  _retv ;
+            }
+
+            if ((_retv = separator (
+                 _jcfg, _jlog ,
+                 _geom, _xoff)) != __no_error)
+            {
+                return  _retv ;
+            }
+
+#           ifdef  __use_timers
+            _ttoc   = _time.now();
+            _jlog.push(dump_time(_ttic, _ttoc));
+#           endif//__use_timers
+        }
+
+        if (_gmsh != nullptr )
+        {
+    /*--------------------------------- parse *.GEOM data */
+            _jlog.push (  __jloglndv    "\n" ) ;
+            _jlog.push (
+                "  Forming GEOM data...\n\n" ) ;
+
+#           ifdef  __use_timers
+            _ttic   = _time.now();
+#           endif//__use_timers
+
+            _geom.init_geom(_jcfg, _xoff) ;
+
+            if (_jcfg._verbosity > 0 )
+            {
+
+            _jlog.push (
+                "  GEOM data summary...\n\n" ) ;
+
+            if ((_retv = echo_geom (
+                 _jcfg,
+                 _jlog, _geom)) != __no_error)
+            {
+                return  _retv ;
+            }
+
+            }
+
+#           ifdef  __use_timers
+            _ttoc   = _time.now();
+            _jlog.push(dump_time(_ttic, _ttoc));
+#           endif//__use_timers
+        }
+
         if (_imsh != nullptr )
         {
     /*--------------------------------- parse *.INIT data */
@@ -402,6 +480,9 @@
             _ttic   = _time.now();
 #           endif//__use_timers
 
+            _mesh.init_mesh(
+                _jcfg, _xoff, false) ;
+
             if (_jcfg._verbosity > 0 )
             {
 
@@ -411,71 +492,6 @@
             if ((_retv = echo_init (
                  _jcfg,
                  _jlog, _mesh)) != __no_error)
-            {
-                return  _retv ;
-            }
-
-            }
-
-#           ifdef  __use_timers
-            _ttoc   = _time.now();
-            _jlog.push(dump_time(_ttic, _ttoc));
-#           endif//__use_timers
-        }
-
-        if (_gmsh != nullptr )
-        {
-    /*--------------------------------- parse *.GEOM data */
-            _jlog.push (  __jloglndv    "\n" ) ;
-            _jlog.push (
-                "  Reading GEOM data...\n\n" ) ;
-
-#           ifdef  __use_timers
-            _ttic   = _time.now();
-#           endif//__use_timers
-
-            if ((_retv = copy_geom (
-                 _jcfg, _jlog ,
-                 _geom,*_gmsh)) != __no_error)
-            {
-                return  _retv ;
-            }
-
-            if ((_retv = test_geom (
-                 _jcfg,
-                 _jlog, _geom)) != __no_error)
-            {
-                return  _retv ;
-            }
-
-#           ifdef  __use_timers
-            _ttoc   = _time.now();
-            _jlog.push(dump_time(_ttic, _ttoc));
-#           endif//__use_timers
-        }
-
-        if (_gmsh != nullptr )
-        {
-    /*--------------------------------- parse *.GEOM data */
-            _jlog.push (  __jloglndv    "\n" ) ;
-            _jlog.push (
-                "  Forming GEOM data...\n\n" ) ;
-
-#           ifdef  __use_timers
-            _ttic   = _time.now();
-#           endif//__use_timers
-
-            _geom.init_geom(_jcfg) ;
-
-            if (_jcfg._verbosity > 0 )
-            {
-
-            _jlog.push (
-                "  GEOM data summary...\n\n" ) ;
-
-            if ((_retv = echo_geom (
-                 _jcfg,
-                 _jlog, _geom)) != __no_error)
             {
                 return  _retv ;
             }
@@ -530,6 +546,7 @@
 
             if ((_retv = save_rdel (
                  _jcfg, _jlog ,
+                 _xoff,
                  _mesh,*_mmsh)) != __no_error)
             {
                 return  _retv ;
@@ -541,6 +558,7 @@
 
             if ((_retv = save_tria (
                  _jcfg, _jlog ,
+                 _xoff,
                  _mesh,*_mmsh)) != __no_error)
             {
                 return  _retv ;
@@ -570,6 +588,8 @@
     {
         geom_data _geom ;               // GEOM data
         mesh_data _mesh ;               // TRIA data
+
+        float     _xoff[3] = {+0.f} ;   // to origin
 
 #       ifdef  __use_timers
         typename std ::chrono::
@@ -639,15 +659,10 @@
 
     /*--------------------------------- setup *.JLOG file */
          jlog_text _jlog(_jcfg) ;
-        _jlog.push(TRIPOD::
-                   asciibanner) ;
 
         if(!_jcfg._jcfg_file.empty())
         {
     /*--------------------------------- parse *.JCFG file */
-            _jlog.push (
-                "  Reading CFG. file...\n\n" ) ;
-
 #           ifdef  __use_timers
             _ttic   = _time.now();
 #           endif//__use_timers
@@ -657,6 +672,11 @@
             {
                 return  _retv ;
             }
+
+            _jlog._verbosity =
+                _jcfg._verbosity ;
+
+            _jlog.push ( TRIPOD::asciibanner ) ;
 
             if ((_retv = test_jcfg (
                  _jcfg, _jlog)) != __no_error)
@@ -671,6 +691,78 @@
                  _jcfg, _jlog)) != __no_error)
             {
                 return  _retv ;
+            }
+
+#           ifdef  __use_timers
+            _ttoc   = _time.now();
+            _jlog.push(dump_time(_ttic, _ttoc));
+#           endif//__use_timers
+        }
+
+        if(!_jcfg._geom_file.empty())
+        {
+    /*--------------------------------- parse *.GEOM file */
+            _jlog.push (  __jloglndv    "\n" ) ;
+            _jlog.push (
+                "  Reading GEOM file...\n\n" ) ;
+
+#           ifdef  __use_timers
+            _ttic   = _time.now();
+#           endif//__use_timers
+
+            if ((_retv = read_geom (
+                 _jcfg,
+                 _jlog, _geom)) != __no_error)
+            {
+                return  _retv ;
+            }
+
+            if ((_retv = test_geom (
+                 _jcfg,
+                 _jlog, _geom)) != __no_error)
+            {
+                return  _retv ;
+            }
+
+            if ((_retv = separator (
+                 _jcfg, _jlog ,
+                 _geom, _xoff)) != __no_error)
+            {
+                return  _retv ;
+            }
+
+#           ifdef  __use_timers
+            _ttoc   = _time.now();
+            _jlog.push(dump_time(_ttic, _ttoc));
+#           endif//__use_timers
+        }
+
+        if(!_jcfg._geom_file.empty())
+        {
+    /*--------------------------------- assemble geometry */
+            _jlog.push (  __jloglndv    "\n" ) ;
+            _jlog.push (
+                "  Forming GEOM data...\n\n" ) ;
+
+#           ifdef  __use_timers
+            _ttic   = _time.now();
+#           endif//__use_timers
+
+            _geom.init_geom(_jcfg, _xoff) ;
+
+            if (_jcfg._verbosity > 0 )
+            {
+
+            _jlog.push (
+                "  GEOM data summary...\n\n" ) ;
+
+            if ((_retv = echo_geom (
+                 _jcfg,
+                 _jlog, _geom)) != __no_error)
+            {
+                return  _retv ;
+            }
+
             }
 
 #           ifdef  __use_timers
@@ -721,6 +813,9 @@
             _ttic   = _time.now();
 #           endif//__use_timers
 
+            _mesh.init_mesh(
+                _jcfg, _xoff, false) ;
+
             if (_jcfg._verbosity > 0 )
             {
 
@@ -730,71 +825,6 @@
             if ((_retv = echo_init (
                  _jcfg,
                  _jlog, _mesh)) != __no_error)
-            {
-                return  _retv ;
-            }
-
-            }
-
-#           ifdef  __use_timers
-            _ttoc   = _time.now();
-            _jlog.push(dump_time(_ttic, _ttoc));
-#           endif//__use_timers
-        }
-
-        if(!_jcfg._geom_file.empty())
-        {
-    /*--------------------------------- parse *.GEOM file */
-            _jlog.push (  __jloglndv    "\n" ) ;
-            _jlog.push (
-                "  Reading GEOM file...\n\n" ) ;
-
-#           ifdef  __use_timers
-            _ttic   = _time.now();
-#           endif//__use_timers
-
-            if ((_retv = read_geom (
-                 _jcfg,
-                 _jlog, _geom)) != __no_error)
-            {
-                return  _retv ;
-            }
-
-            if ((_retv = test_geom (
-                 _jcfg,
-                 _jlog, _geom)) != __no_error)
-            {
-                return  _retv ;
-            }
-
-#           ifdef  __use_timers
-            _ttoc   = _time.now();
-            _jlog.push(dump_time(_ttic, _ttoc));
-#           endif//__use_timers
-        }
-
-        if(!_jcfg._geom_file.empty())
-        {
-    /*--------------------------------- assemble geometry */
-            _jlog.push (  __jloglndv    "\n" ) ;
-            _jlog.push (
-                "  Forming GEOM data...\n\n" ) ;
-
-#           ifdef  __use_timers
-            _ttic   = _time.now();
-#           endif//__use_timers
-
-            _geom.init_geom(_jcfg) ;
-
-            if (_jcfg._verbosity > 0 )
-            {
-
-            _jlog.push (
-                "  GEOM data summary...\n\n" ) ;
-
-            if ((_retv = echo_geom (
-                 _jcfg,
-                 _jlog, _geom)) != __no_error)
             {
                 return  _retv ;
             }
@@ -845,8 +875,8 @@
 #           endif//__use_timers
 
             if ((_retv = save_tria (
-                 _jcfg,
-                 _jlog, _mesh)) != __no_error)
+                 _jcfg, _jlog,
+                 _xoff, _mesh)) != __no_error)
             {
                 return  _retv ;
             }
@@ -873,8 +903,8 @@
             {
 
             if ((_retv = save_rdel (
-                 _jcfg,
-                 _jlog, _mesh)) != __no_error)
+                 _jcfg, _jlog,
+                 _xoff, _mesh)) != __no_error)
             {
                 return  _retv ;
             }
@@ -884,8 +914,8 @@
             {
 
             if ((_retv = save_tria (
-                 _jcfg,
-                 _jlog, _mesh)) != __no_error)
+                 _jcfg, _jlog,
+                 _xoff, _mesh)) != __no_error)
             {
                 return  _retv ;
             }

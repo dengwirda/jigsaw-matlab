@@ -22,18 +22,22 @@
      * how they can obtain it for free, then you are not
      * required to make any arrangement with me.)
      *
-     * Disclaimer:  Neither I nor: Columbia University, The
-     * Massachusetts Institute of Technology, The
-     * University of Sydney, nor The National Aeronautics
-     * and Space Administration warrant this code in any
-     * way whatsoever.  This code is provided "as-is" to be
-     * used at your own risk.
+     * Disclaimer:  Neither I nor THE CONTRIBUTORS warrant
+     * this code in any way whatsoever.  This code is
+     * provided "as-is" to be used at your own risk.
+     *
+     * THE CONTRIBUTORS include:
+     * (a) The University of Sydney
+     * (b) The Massachusetts Institute of Technology
+     * (c) Columbia University
+     * (d) The National Aeronautics & Space Administration
+     * (e) Los Alamos National Laboratory
      *
     --------------------------------------------------------
      *
-     * Last updated: 30 April, 2020
+     * Last updated: 12 Dec., 2022
      *
-     * Copyright 2013-2020
+     * Copyright 2013-2022
      * Darren Engwirda
      * d.engwirda@gmail.com
      * https://github.com/dengwirda/
@@ -54,25 +58,49 @@
     --------------------------------------------------------
      */
 
-    template <
-    typename R ,
-    typename I
-             >
     class iter_timers
         {
         public  :
 
-        typedef R                       real_type ;
-        typedef I                       iptr_type ;
+        double      _iter_full = (double   )  +0. ;
 
-        typedef iter_timers<R, I>       self_type ;
+        double      _init_iter = (double   )  +0. ;
 
-        real_type   _iter_full = (real_type)  +0. ;
+        double      _move_node = (double   )  +0. ;
+        double      _init_node = (double   )  +0. ;
+        double      _core_node = (double   )  +0. ;
+        double      _seqs_node = (double   )  +0. ;
+        double      _para_node = (double   )  +0. ;
+        double      _ldir_node = (double   )  +0. ;
+        double      _lopt_node = (double   )  +0. ;
 
-        real_type   _move_node = (real_type)  +0. ;
-        real_type   _move_dual = (real_type)  +0. ;
-        real_type   _topo_flip = (real_type)  +0. ;
-        real_type   _topo_zips = (real_type)  +0. ;
+        double      _move_dual = (double   )  +0. ;
+        double      _init_dual = (double   )  +0. ;
+        double      _core_dual = (double   )  +0. ;
+        double      _seqs_dual = (double   )  +0. ;
+        double      _para_dual = (double   )  +0. ;
+        double      _ldir_dual = (double   )  +0. ;
+        double      _lopt_dual = (double   )  +0. ;
+
+        double      _topo_flip = (double   )  +0. ;
+        double      _init_flip = (double   )  +0. ;
+        double      _core_flip = (double   )  +0. ;
+
+        double      _topo_zips = (double   )  +0. ;
+        double      _init_zips = (double   )  +0. ;
+        double      _core_zips = (double   )  +0. ;
+        double      _core_divs = (double   )  +0. ;
+
+        double      _full_part = (double   )  +0. ;
+        double      _tree_part = (double   )  +0. ;
+        double      _redo_part = (double   )  +0. ;
+        double      _part_part = (double   )  +0. ;
+        double      _seqs_part = (double   )  +0. ;
+
+        double      _part_node = (double   )  +0. ;
+        double      _part_dual = (double   )  +0. ;
+        double      _part_flip = (double   )  +0. ;
+        double      _part_topo = (double   )  +0. ;
 
         public  :
 
@@ -93,6 +121,21 @@
                 std::chrono::duration_cast<
                 std::chrono::microseconds >
                 (_ttoc-_ttic).count()) / +1.0E+06 ;
+        }
+
+        __inline_call double nano_span (
+            typename std::
+                chrono::high_resolution_clock
+                    ::time_point const& _ttic,
+            typename std::
+                chrono::high_resolution_clock
+                    ::time_point const& _ttoc
+            )
+        {
+            return (double)(
+                std::chrono::duration_cast<
+                std::chrono:: nanoseconds >
+                (_ttoc-_ttic).count()) / +1.0E+09 ;
         }
 
     #   endif//__use_timers

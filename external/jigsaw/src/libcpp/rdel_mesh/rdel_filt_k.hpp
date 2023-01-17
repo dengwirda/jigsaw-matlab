@@ -22,18 +22,22 @@
      * how they can obtain it for free, then you are not
      * required to make any arrangement with me.)
      *
-     * Disclaimer:  Neither I nor: Columbia University, The
-     * Massachusetts Institute of Technology, The
-     * University of Sydney, nor The National Aeronautics
-     * and Space Administration warrant this code in any
-     * way whatsoever.  This code is provided "as-is" to be
-     * used at your own risk.
+     * Disclaimer:  Neither I nor THE CONTRIBUTORS warrant
+     * this code in any way whatsoever.  This code is
+     * provided "as-is" to be used at your own risk.
+     *
+     * THE CONTRIBUTORS include:
+     * (a) The University of Sydney
+     * (b) The Massachusetts Institute of Technology
+     * (c) Columbia University
+     * (d) The National Aeronautics & Space Administration
+     * (e) Los Alamos National Laboratory
      *
     --------------------------------------------------------
      *
-     * Last updated: 04 October, 2017
+     * Last updated: 18 Aug., 2021
      *
-     * Copyright 2013-2017
+     * Copyright 2013-2021
      * Darren Engwirda
      * d.engwirda@gmail.com
      * https://github.com/dengwirda/
@@ -63,12 +67,12 @@
         {
     /*----------------------- internal "co-ord." type */
         public  :
-            real_type          _ppos[2]={(real_type)0.} ;
+            real_type          _ppos[2]={0.};
 
             char_type          _hits ;
 
             char_type          _feat ;
-            char_type          _topo ;
+            char_type          _topo[2]={+0};
 
             iptr_type          _itag ;
         public  :
@@ -85,13 +89,16 @@
             )
         {   return this-> _feat ;
         }
-        __inline_call char_type      & topo (
-            )
-        {   return this-> _topo ;
-        }
         __inline_call iptr_type      & itag (
             )
         {   return this-> _itag ;
+        }
+        __inline_call char_type      & topo (
+            char_type _kind = filt_topo
+            )
+        {   return ( _kind == filt_topo ) ?
+                   this-> _topo[  +0 ] :
+                   this-> _topo[  +1 ] ;
         }
         __inline_call real_type const& pval (
             iptr_type     _ipos
@@ -106,13 +113,16 @@
             ) const
         {   return this-> _feat ;
         }
-        __inline_call char_type const& topo (
-            ) const
-        {   return this-> _topo ;
-        }
         __inline_call iptr_type const& itag (
             ) const
         {   return this-> _itag ;
+        }
+        __inline_call char_type const& topo (
+            char_type _kind = filt_topo
+            ) const
+        {   return ( _kind == filt_topo ) ?
+                   this-> _topo[  +0 ] :
+                   this-> _topo[  +1 ] ;
         }
         } ;
     } ;
@@ -132,12 +142,12 @@
         {
     /*----------------------- internal "co-ord." type */
         public  :
-            real_type          _ppos[3]={(real_type)0.} ;
+            real_type          _ppos[3]={0.};
 
             char_type          _hits ;
 
             char_type          _feat ;
-            char_type          _topo ;
+            char_type          _topo[2]={+0};
 
             iptr_type          _itag ;
         public  :
@@ -154,13 +164,16 @@
             )
         {   return this-> _feat ;
         }
-        __inline_call char_type      & topo (
-            )
-        {   return this-> _topo ;
-        }
         __inline_call iptr_type      & itag (
             )
         {   return this-> _itag ;
+        }
+        __inline_call char_type      & topo (
+            char_type _kind = filt_topo
+            )
+        {   return ( _kind == filt_topo ) ?
+                   this-> _topo[  +0 ] :
+                   this-> _topo[  +1 ] ;
         }
         __inline_call real_type const& pval (
             iptr_type     _ipos
@@ -175,13 +188,16 @@
             ) const
         {   return this-> _feat ;
         }
-        __inline_call char_type const& topo (
-            ) const
-        {   return this-> _topo ;
-        }
         __inline_call iptr_type const& itag (
             ) const
         {   return this-> _itag ;
+        }
+        __inline_call char_type const& topo (
+            char_type _kind = filt_topo
+            ) const
+        {   return ( _kind == filt_topo ) ?
+                   this-> _topo[  +0 ] :
+                   this-> _topo[  +1 ] ;
         }
         } ;
     } ;
@@ -231,7 +247,7 @@
     __const_ptr ( real_type) _xpos,
         char_type _hits,
         char_type _feat,
-        char_type _topo,
+    __const_ptr ( char_type) _topo,
         iptr_type _itag
         )
     {
@@ -242,8 +258,12 @@
             ->hits () = _hits ;
         this->_list.tail()
             ->feat () = _feat ;
+
         this->_list.tail()
-            ->topo () = _topo ;
+            ->topo(0) = _topo[0];
+        this->_list.tail()
+            ->topo(1) = _topo[1];
+
         this->_list.tail()
             ->itag () = _itag ;
 
@@ -301,7 +321,7 @@
     __const_ptr ( real_type) _xpos,
         char_type _hits,
         char_type _feat,
-        char_type _topo,
+    __const_ptr ( char_type) _topo,
         iptr_type _itag
         )
     {
@@ -312,8 +332,202 @@
             ->hits () = _hits ;
         this->_list.tail()
             ->feat () = _feat ;
+
         this->_list.tail()
-            ->topo () = _topo ;
+            ->topo(0) = _topo[0];
+        this->_list.tail()
+            ->topo(1) = _topo[1];
+
+        this->_list.tail()
+            ->itag () = _itag ;
+
+        this->_list.tail()
+            ->pval(0) = _xpos[0];
+        this->_list.tail()
+            ->pval(1) = _xpos[1];
+        this->_list.tail()
+            ->pval(2) = _xpos[2];
+
+        this->_find = true ;
+    }
+    } ;
+
+    template <
+    typename R,
+    typename I
+             >
+    class filt_all_2d : public keep_base_2d<R,I>
+    {
+/*----------------- "filt-all" intersection predicate */
+    public  :
+    typedef R               real_type ;
+    typedef I               iptr_type ;
+
+    typedef keep_base_2d <
+            real_type ,
+            iptr_type    >  pred_base ;
+
+    public  :
+    containers::array <
+        typename pred_base::node_data>  _list ;
+
+    real_type                   _near ;
+
+    iptr_type                   _inum ;
+    bool_type                   _find ;
+
+    public  :
+/*------------------------------ construct from _src. */
+    __inline_call filt_all_2d (
+        real_type  _nsrc
+        )
+    {
+        this->_near = std::pow( _nsrc, 2) ;
+
+        this->_find = false;
+        this->_inum =   +0 ;
+    }
+/*------------------------------ nullify intersection */
+    __inline_call void_type clear (
+        )
+    {
+        this->_list.clear();
+
+        this->_find = false;
+        this->_inum =   +0 ;
+    }
+/*------------------------------ process intersection */
+    __inline_call
+        void_type operator()  (
+    __const_ptr ( real_type) _xpos,
+        char_type _hits,
+        char_type _feat,
+    __const_ptr ( char_type) _topo,
+        iptr_type _itag
+        )
+    {
+        for (auto
+            _iter  = this->_list.head() ;
+            _iter != this->_list.tend() ;
+          ++_iter  )
+        {
+    /*----------------------------- exit if too close */
+            real_type _dsqr =
+            geometry::lensqr_2d (
+                _xpos,
+               &_iter->pval(0)) ;
+
+            if (_dsqr < this->_near) return;
+        }
+
+    /*----------------------------- if well-separated */
+        this->_inum +=  +1 ;
+
+        this->_list.push_tail() ;
+        this->_list.tail()
+            ->hits () = _hits ;
+        this->_list.tail()
+            ->feat () = _feat ;
+
+        this->_list.tail()
+            ->topo(0) = _topo[0];
+        this->_list.tail()
+            ->topo(1) = _topo[1];
+
+        this->_list.tail()
+            ->itag () = _itag ;
+
+        this->_list.tail()
+            ->pval(0) = _xpos[0];
+        this->_list.tail()
+            ->pval(1) = _xpos[1];
+
+        this->_find = true ;
+    }
+    } ;
+
+    template <
+    typename R,
+    typename I
+             >
+    class filt_all_3d : public keep_base_3d<R,I>
+    {
+/*----------------- "filt-all" intersection predicate */
+    public  :
+    typedef R               real_type ;
+    typedef I               iptr_type ;
+
+    typedef keep_base_3d <
+            real_type ,
+            iptr_type    >  pred_base ;
+
+    public  :
+    containers::array <
+        typename pred_base::node_data>  _list ;
+
+    real_type                   _near ;
+
+    iptr_type                   _inum ;
+    bool_type                   _find ;
+
+    public  :
+/*------------------------------ construct from _src. */
+    __inline_call filt_all_3d (
+        real_type  _nsrc
+        )
+    {
+        this->_near = std::pow( _nsrc, 2) ;
+
+        this->_find = false;
+        this->_inum =   +0 ;
+    }
+/*------------------------------ nullify intersection */
+    __inline_call void_type clear (
+        )
+    {
+        this->_list.clear();
+
+        this->_find = false;
+        this->_inum =   +0 ;
+    }
+/*------------------------------ process intersection */
+    __inline_call
+        void_type operator()  (
+    __const_ptr ( real_type) _xpos,
+        char_type _hits,
+        char_type _feat,
+    __const_ptr ( char_type) _topo,
+        iptr_type _itag
+        )
+    {
+        for (auto
+            _iter  = this->_list.head() ;
+            _iter != this->_list.tend() ;
+          ++_iter  )
+        {
+    /*----------------------------- exit if too close */
+            real_type _dsqr =
+            geometry::lensqr_3d (
+                _xpos,
+               &_iter->pval(0)) ;
+
+            if (_dsqr < this->_near) return;
+        }
+
+    /*----------------------------- if well-separated */
+        this->_inum +=  +1 ;
+
+        this->_list.push_tail() ;
+        this->_list.tail()
+            ->hits () = _hits ;
+        this->_list.tail()
+            ->feat () = _feat ;
+
+        this->_list.tail()
+            ->topo(0) = _topo[0];
+        this->_list.tail()
+            ->topo(1) = _topo[1];
+
         this->_list.tail()
             ->itag () = _itag ;
 
@@ -384,7 +598,7 @@
     __const_ptr ( real_type) _xpos,
         char_type _hits,
         char_type _feat,
-        char_type _topo,
+    __const_ptr ( char_type) _topo,
         iptr_type _itag
         )
     {
@@ -405,8 +619,12 @@
            _pmin.hits () = _hits;
             this->
            _pmin.feat () = _feat;
+
             this->
-           _pmin.topo () = _topo;
+           _pmin.topo(0) = _topo[0];
+            this->
+           _pmin.topo(1) = _topo[1];
+
             this->
            _pmin.itag () = _itag;
 
@@ -429,8 +647,12 @@
            _pmax.hits () = _hits;
             this->
            _pmax.feat () = _feat;
+
             this->
-           _pmax.topo () = _topo;
+           _pmax.topo(0) = _topo[0];
+            this->
+           _pmax.topo(1) = _topo[1];
+
             this->
            _pmax.itag () = _itag;
 
@@ -503,7 +725,7 @@
     __const_ptr ( real_type) _xpos,
         char_type _hits,
         char_type _feat,
-        char_type _topo,
+    __const_ptr ( char_type) _topo,
         iptr_type _itag
         )
     {
@@ -526,8 +748,12 @@
            _pmin.hits () = _hits;
             this->
            _pmin.feat () = _feat;
+
             this->
-           _pmin.topo () = _topo;
+           _pmin.topo(0) = _topo[0];
+            this->
+           _pmin.topo(1) = _topo[1];
+
             this->
            _pmin.itag () = _itag;
 
@@ -549,8 +775,12 @@
            _pmax.hits () = _hits;
             this->
            _pmax.feat () = _feat;
+
             this->
-           _pmax.topo () = _topo;
+           _pmax.topo(0) = _topo[0];
+            this->
+           _pmax.topo(1) = _topo[1];
+
             this->
            _pmax.itag () = _itag;
 
@@ -620,7 +850,7 @@
     __const_ptr ( real_type) _xpos,
         char_type _hits,
         char_type _feat,
-        char_type _topo,
+    __const_ptr ( char_type) _topo,
         iptr_type _itag
         )
     {
@@ -651,8 +881,12 @@
            _proj.hits () = _hits;
             this->
            _proj.feat () = _feat;
+
             this->
-           _proj.topo () = _topo;
+           _proj.topo(0) = _topo[0];
+            this->
+           _proj.topo(1) = _topo[1];
+
             this->
            _proj.itag () = _itag;
 
@@ -724,7 +958,7 @@
     __const_ptr ( real_type) _xpos,
         char_type _hits,
         char_type _feat,
-        char_type _topo,
+    __const_ptr ( char_type) _topo,
         iptr_type _itag
         )
     {
@@ -759,8 +993,12 @@
            _proj.hits () = _hits;
             this->
            _proj.feat () = _feat;
+
             this->
-           _proj.topo () = _topo;
+           _proj.topo(0) = _topo[0];
+            this->
+           _proj.topo(1) = _topo[1];
+
             this->
            _proj.itag () = _itag;
 

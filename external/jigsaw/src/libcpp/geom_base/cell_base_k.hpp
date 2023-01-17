@@ -22,18 +22,22 @@
      * how they can obtain it for free, then you are not
      * required to make any arrangement with me.)
      *
-     * Disclaimer:  Neither I nor: Columbia University, The
-     * Massachusetts Institute of Technology, The
-     * University of Sydney, nor The National Aeronautics
-     * and Space Administration warrant this code in any
-     * way whatsoever.  This code is provided "as-is" to be
-     * used at your own risk.
+     * Disclaimer:  Neither I nor THE CONTRIBUTORS warrant
+     * this code in any way whatsoever.  This code is
+     * provided "as-is" to be used at your own risk.
+     *
+     * THE CONTRIBUTORS include:
+     * (a) The University of Sydney
+     * (b) The Massachusetts Institute of Technology
+     * (c) Columbia University
+     * (d) The National Aeronautics & Space Administration
+     * (e) Los Alamos National Laboratory
      *
     --------------------------------------------------------
      *
-     * Last updated: 28 Dec., 2020
+     * Last updated: 12 Jul., 2022
      *
-     * Copyright 2013-2020
+     * Copyright 2013-2022
      * Darren Engwirda
      * d.engwirda@gmail.com
      * https://github.com/dengwirda/
@@ -179,8 +183,9 @@
         return ((_a1+_a2) + (_a3+_a4)) / +2.;
 
         /*
-    //  real_type _x1[2], _x2[2], _nc;
-    //  quad_axes_2d(_p1, _p2, _p3, _p4, _x1, _x2);
+        real_type _x1[2], _x2[2], _nc;
+        quad_axes_2d(
+            _p1, _p2, _p3, _p4, _x1, _x2);
 
         real_type _v1[2], _a1;
         real_type _v2[2], _a2;
@@ -223,7 +228,8 @@
 
         /*
         real_type _x1[3], _x2[3], _nc[3];
-        quad_axes_3d(_p1, _p2, _p3, _p4, _x1, _x2);
+        quad_axes_3d(
+            _p1, _p2, _p3, _p4, _x1, _x2);
 
         real_type _v1[3], _n1[3];
         real_type _v2[3], _n2[3];
@@ -267,6 +273,26 @@
     {
         _nv[0] = _p1[1] - _p2[1];
         _nv[1] = _p2[0] - _p1[0];
+    }
+
+    template <
+    typename      real_type
+             >
+    __inline_call void_type tria_norm_2d (
+    __const_ptr  (real_type) _p1,
+    __const_ptr  (real_type) _p2,
+    __const_ptr  (real_type) _p3,
+    __write_ptr  (real_type) _nv
+         )
+    {
+        real_type _ev12[2], _ev13[2] ;
+        vector_2d(_p1, _p2, _ev12);
+        vector_2d(_p1, _p3, _ev13);
+
+        _nv[0] = (real_type)+0. ;
+        _nv[1] = (real_type)+0. ;
+        _nv[2] = _ev12[0] * _ev13[1] -
+                 _ev12[1] * _ev13[0] ;
     }
 
     template <
@@ -529,6 +555,114 @@
 
     /*
     --------------------------------------------------------
+     * skew "quality" scores.
+    --------------------------------------------------------
+     */
+
+    template <
+    typename      real_type
+             >
+    __inline_call
+        real_type tria_skewcos_2d (
+    __const_ptr  (real_type) _p1,
+    __const_ptr  (real_type) _p2,
+    __const_ptr  (real_type) _p3
+        )
+    {   // "skewed-cosine"; penalty for obtuse
+        // Engwirda, D. (2022):
+        // An 'asymmetric-cosine' metric for primal-dual mesh optimisation.
+        real_type _vv12[2] ;
+        real_type _vv23[2] ;
+        real_type _vv31[2] ;
+        geometry::vector_2d(_p1, _p2, _vv12) ;
+        geometry::vector_2d(_p2, _p3, _vv23) ;
+        geometry::vector_2d(_p3, _p1, _vv31) ;
+
+        real_type _ll12 =
+        geometry::length_2d (_vv12) ;
+        real_type _ll23 =
+        geometry::length_2d (_vv23) ;
+        real_type _ll31 =
+        geometry::length_2d (_vv31) ;
+
+        // -ve due to ccw sign of vectors
+        real_type _dd11 =
+        geometry::dot_2d(
+            _vv31, _vv12) / _ll31 / _ll12 ;
+        real_type _dd22 =
+        geometry::dot_2d(
+            _vv12, _vv23) / _ll12 / _ll23 ;
+        real_type _dd33 =
+        geometry::dot_2d(
+            _vv23, _vv31) / _ll23 / _ll31 ;
+
+        _dd11 += (real_type)+ 1./2. ;
+        _dd22 += (real_type)+ 1./2. ;
+        _dd33 += (real_type)+ 1./2. ;
+
+        real_type _skew =
+            (real_type) +4. / 11. * (
+            std::pow(_dd11, 2) +
+            std::pow(_dd22, 2) +
+            std::pow(_dd33, 2) )  ;
+
+        return std::pow(
+            (real_type) +1. - _skew, +4./3.) ;
+    }
+
+    template <
+    typename      real_type
+             >
+    __inline_call
+        real_type tria_skewcos_3d (
+    __const_ptr  (real_type) _p1,
+    __const_ptr  (real_type) _p2,
+    __const_ptr  (real_type) _p3
+        )
+    {   // "skewed-cosine"; penalty for obtuse
+        // Engwirda, D. (2022):
+        // An 'asymmetric-cosine' metric for primal-dual mesh optimisation.
+        real_type _vv12[3] ;
+        real_type _vv23[3] ;
+        real_type _vv31[3] ;
+        geometry::vector_3d(_p1, _p2, _vv12) ;
+        geometry::vector_3d(_p2, _p3, _vv23) ;
+        geometry::vector_3d(_p3, _p1, _vv31) ;
+
+        real_type _ll12 =
+        geometry::length_3d (_vv12) ;
+        real_type _ll23 =
+        geometry::length_3d (_vv23) ;
+        real_type _ll31 =
+        geometry::length_3d (_vv31) ;
+
+        // -ve due to ccw sign of vectors
+        real_type _dd11 =
+        geometry::dot_3d(
+            _vv31, _vv12) / _ll31 / _ll12 ;
+        real_type _dd22 =
+        geometry::dot_3d(
+            _vv12, _vv23) / _ll12 / _ll23 ;
+        real_type _dd33 =
+        geometry::dot_3d(
+            _vv23, _vv31) / _ll23 / _ll31 ;
+
+        _dd11 += (real_type)+ 1./2. ;
+        _dd22 += (real_type)+ 1./2. ;
+        _dd33 += (real_type)+ 1./2. ;
+
+        real_type _skew =
+            (real_type) +4. / 11. * (
+            std::pow(_dd11, 2) +
+            std::pow(_dd22, 2) +
+            std::pow(_dd33, 2) )  ;
+
+        return std::pow(
+            (real_type) +1. - _skew, +4./3.) ;
+    }
+
+    /*
+    --------------------------------------------------------
      * dual "quality" scores.
     --------------------------------------------------------
      */
@@ -542,7 +676,10 @@
     __const_ptr  (real_type) _p2,
     __const_ptr  (real_type) _p3
         )
-    {
+    {   // optimise primal-dual staggering
+        // Engwirda, D. (2018):
+        // Generalised primal-dual grids for unstructured co-volume schemes.
+        // J. Comp. Phys., 375, pp.155-176
         real_type _ob[3];
         perp_ball_2d(_ob, _p1, _p2, _p3);
 
@@ -574,7 +711,7 @@
         real_type _r3 = _m3[2] ;
 
         real_type _rb =             // chara.-length
-       (_r1+_r2+_r3) / (real_type)+3. ;
+        std::pow( _r1 * _r2 * _r3, 1./3.) ;
 
         real_type _qb = _lb / _rb ;
 
@@ -586,10 +723,10 @@
        (_q1+_q2+_q3) / (real_type)+3. ;
 
         real_type _qq =
-      ((real_type)+1.-.33) * _qb +
-      ((real_type)+0.+.33) * _qe ;
+      ((real_type)+1. - 1./3.) * _qb  +
+      ((real_type)+0. + 1./3.) * _qe  ;
 
-        return (real_type)1.-_qq ;
+        return (real_type)+1.0 - _qq  ;
     }
 
     template <
@@ -601,7 +738,10 @@
     __const_ptr  (real_type) _p2,
     __const_ptr  (real_type) _p3
         )
-    {
+    {   // optimise primal-dual staggering
+        // Engwirda, D. (2018):
+        // Generalised primal-dual grids for unstructured co-volume schemes.
+        // J. Comp. Phys., 375, pp.155-176
         real_type _ob[4];
         perp_ball_3d(_ob, _p1, _p2, _p3);
 
@@ -633,7 +773,7 @@
         real_type _r3 = _m3[3] ;
 
         real_type _rb =             // chara.-length
-       (_r1+_r2+_r3) / (real_type)+3. ;
+        std::pow( _r1 * _r2 * _r3, 1./3.) ;
 
         real_type _qb = _lb / _rb ;
 
@@ -645,32 +785,15 @@
        (_q1+_q2+_q3) / (real_type)+3. ;
 
         real_type _qq =
-      ((real_type)+1.-.33) * _qb +
-      ((real_type)+0.+.33) * _qe ;
+      ((real_type)+1. - 1./3.) * _qb  +
+      ((real_type)+0. + 1./3.) * _qe  ;
 
-        return (real_type)1.-_qq ;
+        return (real_type)+1.0 - _qq  ;
     }
 
-    /*
-    template <
-    typename      real_type
-             >
-    __normal_call
-        real_type tria_duality_3d (
-    __const_ptr  (real_type) _p1,
-    __const_ptr  (real_type) _p2,
-    __const_ptr  (real_type) _p3,
-    __const_ptr  (real_type) _p4
-        )
-    {
-        //!! to-do...
-
-        return    _qq ;
-    }
-    */
 
     }
 
-#   endif//__CELL_BASE_K__
+#   endif   // __CELL_BASE_K__
 
 

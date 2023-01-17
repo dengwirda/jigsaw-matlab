@@ -22,18 +22,22 @@
  * how they can obtain it for free, then you are not
  * required to make any arrangement with me.)
  *
- * Disclaimer:  Neither I nor: Columbia University, The
- * Massachusetts Institute of Technology, The
- * University of Sydney, nor The National Aeronautics
- * and Space Administration warrant this code in any
- * way whatsoever.  This code is provided "as-is" to be
- * used at your own risk.
+ * Disclaimer:  Neither I nor THE CONTRIBUTORS warrant
+ * this code in any way whatsoever.  This code is
+ * provided "as-is" to be used at your own risk.
+ *
+ * THE CONTRIBUTORS include:
+ * (a) The University of Sydney
+ * (b) The Massachusetts Institute of Technology
+ * (c) Columbia University
+ * (d) The National Aeronautics & Space Administration
+ * (e) Los Alamos National Laboratory
  *
 ------------------------------------------------------------
  *
- * Last updated: 20 February, 2019
+ * Last updated: 18 Aug., 2021
  *
- * Copyright 2013-2019
+ * Copyright 2013-2021
  * Darren Engwirda
  * d.engwirda@gmail.com
  * https://github.com/dengwirda/
@@ -56,6 +60,9 @@
 
     char_type constexpr null_ball = 0 ;
     char_type constexpr feat_ball = 1 ;
+
+    char_type constexpr filt_topo = 0 ;
+    char_type constexpr full_topo = 1 ;
     }
 
 #   include "containers.hpp"
@@ -66,9 +73,10 @@
 
 #   include "tessellate.hpp"
 
-#   include "geomtype.hpp"
-#   include "meshfunc.hpp"
-#   include "meshtype.hpp"
+#   include "geomreps.hpp"
+#   include "meshreps.hpp"
+
+#   include "interpolate.hpp"
 
 #   include "rdel_mesh/rdel_complex_2.hpp"
 #   include "rdel_mesh/rdel_complex_3.hpp"
