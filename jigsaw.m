@@ -180,9 +180,31 @@ function [varargout] = jigsaw(opts)
 %       "blend" of the ODT/CVT updates, and gradients of a
 %       "fall-back" mesh quality function Q.
 %
+%   OPTS.OPTM_COST - {default='area-len'} mesh optimisation
+%       cost metric, choice of area-length (COST='area-len')
+%       or skewed-cosine (COST='skew-cos') functions.
+%       The area-length metric is symmetric wrt. both small
+%       and large cell angles, and is typically appropriate
+%       for simplex-only meshes. The skewed-cosine metric is
+%       based on an asymmetric penalisation of large cell
+%       angles, and may be useful for staggered primal-dual
+%       tessellations.
+%
 %   OPTS.OPTM_ITER - {default=16} max. number of mesh optim-
 %       isation iterations. Set ITER=N to see progress after
 %       N iterations.
+%
+%   OPTS.OPTM_BETA - {default=0.4950} "momentum"-type weight
+%       for gradient descent updates, such that
+%       DX' = BETA * DX(K-1) + (1-BETA) * DX(K).
+%       Momentum typically improves the convergence of mesh
+%       optimisation.
+%
+%   OPTS.OPTM_ZETA - {default=0.8250} "momentum"-type weight
+%       for search direction updates, such that
+%       DX* = ZETA * DX' (K) + (1-ZETA) * DX(K).
+%       Momentum typically improves the convergence of mesh
+%       optimisation.
 %
 %   OPTS.OPTM_QTOL - {default=1.E-04} tolerance on mesh cost
 %       function for convergence. Iteration on a given node
@@ -210,6 +232,10 @@ function [varargout] = jigsaw(opts)
 %
 %   OPTS.VERBOSITY - {default=0} verbosity of log-file gene-
 %       rated by JIGSAW. Set VERBOSITY >= 1 for more output.
+%
+%   OPTS>NUMTHREAD - {default=0} control for thread-parallel
+%       implementations. Set NUMTHREAD <= 0 to autodetect a
+%       machine's max-thread allocation.
 %
 %   See also LOADMSH, SAVEMSH
 %
@@ -247,7 +273,7 @@ function [varargout] = jigsaw(opts)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   18-Apr-2021
+%   15-Jan-2023
 %   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %

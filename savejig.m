@@ -4,7 +4,7 @@ function savejig(name,opts)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   21-Sep-2020
+%   15-Jan-2023
 %   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
@@ -36,6 +36,9 @@ function savejig(name,opts)
     %------------------------------------------ MISC options
         case 'verbosity'
         pushints(ffid,opts.verbosity,'VERBOSITY');
+        
+        case 'numthread'
+        pushints(ffid,opts.numthread,'NUMTHREAD');
 
         case 'tria_file'
         pushchar(ffid,opts.tria_file,'TRIA_FILE');
@@ -142,9 +145,16 @@ function savejig(name,opts)
     %------------------------------------------ OPTM options
         case 'optm_kern'
         pushchar(ffid,opts.optm_kern,'OPTM_KERN');
+        case 'optm_cost'
+        pushchar(ffid,opts.optm_cost,'OPTM_COST');
 
         case 'optm_iter'
         pushints(ffid,opts.optm_iter,'OPTM_ITER');
+
+        case 'optm_beta'
+        pushreal(ffid,opts.optm_beta,'OPTM_BETA');
+        case 'optm_zeta'
+        pushreal(ffid,opts.optm_zeta,'OPTM_ZETA');
 
         case 'optm_qtol'
         pushreal(ffid,opts.optm_qtol,'OPTM_QTOL');

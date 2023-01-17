@@ -6,7 +6,7 @@ function globals
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   27-Nov-2019
+%   15-Jan-2023
 %   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
@@ -25,11 +25,22 @@ function globals
 
     global JIGSAW_FILE_NOT_LOCATED ;
     global JIGSAW_FILE_NOT_CREATED ;
-    global JIGSAW_INVALID_ARGUMENT ;
+    global JIGSAW_NETCDF_NOT_FOUND ;
 
     JIGSAW_FILE_NOT_LOCATED = +2 ;
     JIGSAW_FILE_NOT_CREATED = +3 ;
+
+    JIGSAW_NETCDF_NOT_FOUND = +9 ;
+
+    global JIGSAW_INVALID_ARGUMENT ;
+    global JIGSAW_INVALID_INDEXING ;
+    global JIGSAW_INVALID_USEROPTS ;
+    global JIGSAW_INVALID_ARRAYDIM ;
+
     JIGSAW_INVALID_ARGUMENT = +4 ;
+    JIGSAW_INVALID_INDEXING = +5 ;
+    JIGSAW_INVALID_USEROPTS = +6 ;
+    JIGSAW_INVALID_ARRAYDIM = +7 ;
 
 %-- constants for JIGSAW
 
@@ -88,9 +99,18 @@ function globals
     JIGSAW_BNDS_TRIACELL    = +402 ;
     JIGSAW_BNDS_DUALCELL    = +403 ;
 
+    global JIGSAW_KERN_ODT_DQDX ;
+    global JIGSAW_KERN_CVT_DQDX ;
+    global JIGSAW_KERN_H95_DQDX ;
+    global JIGSAW_KERN_AREA_LEN ;
+    global JIGSAW_KERN_SKEW_COS ;
+
     JIGSAW_KERN_ODT_DQDX    = +404 ;
     JIGSAW_KERN_CVT_DQDX    = +405 ;
     JIGSAW_KERN_H95_DQDX    = +406 ;
+
+    JIGSAW_KERN_AREA_LEN    = +410 ;
+    JIGSAW_KERN_SKEW_COS    = +411 ;
 
 end
 

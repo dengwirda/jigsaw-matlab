@@ -16,7 +16,7 @@ function compile
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   26-Jul-2019
+%   15-Jan-2023
 %   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
@@ -37,9 +37,23 @@ function compile
         fprintf(+1, '%s', cout) ;
     end
 
+   [okay, cout] = system('cmake --version') ;
+
+    vstr = find_ver_str(split(lower(cout))) ;
+    
+    if (any(str2double(vstr)-[3,12,0] < 0)) % cmake-3.12.0
+    
    [okay, cout] = system( ...
         'cmake --build . --config Release --target install', ...
             '-echo') ;
+
+    else
+
+   [okay, cout] = system( ...
+       ['cmake --build . --config Release --target install', ...
+        ' --parallel 4'], '-echo') ;
+
+    end
 
     if (exist('OCTAVE_VERSION', 'builtin') > 0)
         fprintf(+1, '%s', cout) ;
@@ -57,6 +71,19 @@ function compile
 
     rethrow(err) ;
 
+    end
+
+end
+
+function [vstr] = find_ver_str(cstr)
+
+    vstr = '' ;
+    for ii = +1:length(cstr)
+        tstr = regexp( cstr{ii},'\.','split') ;
+        if (length(tstr) == 3 && ...
+               ~any(isnan(str2double(tstr))))
+            vstr = tstr; return;
+        end
     end
 
 end

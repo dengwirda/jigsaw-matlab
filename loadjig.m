@@ -4,7 +4,7 @@ function [opts] = loadjig(name)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   29-Oct-2019
+%   15-Jan-2023
 %   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
@@ -40,6 +40,9 @@ function [opts] = loadjig(name)
         %-------------------------------------- MISC options
             case 'verbosity'
             opts .verbosity = str2double(tstr{2});
+
+            case 'numthread'
+            opts .numthread = str2double(tstr{2});
 
             case 'tria_file'
             opts .tria_file = strtrim(tstr{2});
@@ -147,9 +150,16 @@ function [opts] = loadjig(name)
         %-------------------------------------- OPTM options
             case 'optm_kern'
             opts .optm_kern = strtrim(tstr{2});
+            case 'optm_cost'
+            opts .optm_cost = strtrim(tstr{2});
 
             case 'optm_iter'
             opts .optm_iter = str2double(tstr{2});
+
+            case 'optm_beta'
+            opts .optm_beta = str2double(tstr{2});
+            case 'optm_zeta'
+            opts .optm_zeta = str2double(tstr{2});
 
             case 'optm_qtol'
             opts .optm_qtol = str2double(tstr{2});
