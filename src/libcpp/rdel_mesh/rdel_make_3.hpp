@@ -22,16 +22,20 @@
      * how they can obtain it for free, then you are not
      * required to make any arrangement with me.)
      *
-     * Disclaimer:  Neither I nor: Columbia University, The
-     * Massachusetts Institute of Technology, The
-     * University of Sydney, nor The National Aeronautics
-     * and Space Administration warrant this code in any
-     * way whatsoever.  This code is provided "as-is" to be
-     * used at your own risk.
+     * Disclaimer:  Neither I nor THE CONTRIBUTORS warrant
+     * this code in any way whatsoever.  This code is
+     * provided "as-is" to be used at your own risk.
+     *
+     * THE CONTRIBUTORS include:
+     * (a) The University of Sydney
+     * (b) The Massachusetts Institute of Technology
+     * (c) Columbia University
+     * (d) The National Aeronautics & Space Administration
+     * (e) Los Alamos National Laboratory
      *
     --------------------------------------------------------
      *
-     * Last updated: 10 Jul., 2021
+     * Last updated: 12 Jul., 2021
      *
      * Copyright 2013-2021
      * Darren Engwirda
@@ -117,6 +121,8 @@
     typedef typename
             mesh_type::tria_data        tria_data ;
 
+    typedef mesh::rdel_timers           rdel_stat ;
+
     typedef containers::array       <
                 iptr_type           >   iptr_list ;
 
@@ -127,10 +133,6 @@
     typedef mesh::mesh_params       <
                 real_type,
                 iptr_type           >   rdel_opts ;
-
-    typedef mesh::rdel_timers       <
-                real_type ,
-                iptr_type           >   rdel_stat ;
 
     /*
     --------------------------------------------------------
@@ -292,7 +294,7 @@
                                  // only in hash-set
 
         /*--------------------------- call face predicate */
-            char_type _feat, _topo;
+            char_type _topo[ 2], _feat;
             real_type _fbal[ 4];
             real_type _sbal[ 4];
 
@@ -489,7 +491,7 @@
 
     /*---------------------- calc. ball in floating-point */
         real_type _tbal[4] ;
-        geometry::circ_ball_3d (
+        geometry::perp_ball_3d (
             _tbal ,
        &_mesh._tria.
             node(_tnod[0])->pval(0) ,
@@ -766,9 +768,9 @@
         _pmax[ 1] - _pmin[ 1] ,
         _pmax[ 2] - _pmin[ 2] ,
             } ;
-        _plen[ 0]*= (real_type)+4.0 ;
-        _plen[ 1]*= (real_type)+4.0 ;
-        _plen[ 2]*= (real_type)+4.0 ;
+        _plen[ 0]*= (real_type)+8.0 ;
+        _plen[ 1]*= (real_type)+8.0 ;
+        _plen[ 2]*= (real_type)+8.0 ;
 
         _pmin[ 0]-= _plen[ 0] ;
         _pmin[ 1]-= _plen[ 1] ;
@@ -1020,124 +1022,110 @@
         {
     /*------------------------- push rDEL scheme metrics */
         _dump.push("\n")  ;
-        _dump.push("**DELTRI statistics... \n") ;
-        _dump.push("\n")  ;
+        _dump.push("**TIMING statistics...\n") ;
 
-        _dump.push("**FUNCTION timing: ") ;
-        _dump.push("\n")  ;
-
-        _dump.push("  MESH-SEED = ") ;
+        _dump.push(" *mesh-seed = ") ;
         _dump.push(
         std::to_string (_tcpu._mesh_seed));
         _dump.push("\n")  ;
-
-        _dump.push("  EDGE-INIT = ") ;
+        _dump.push(" *edge-init = ") ;
         _dump.push(
         std::to_string (_tcpu._edge_init));
         _dump.push("\n")  ;
-        _dump.push("  FACE-INIT = ") ;
+        _dump.push(" *face-init = ") ;
         _dump.push(
         std::to_string (_tcpu._face_init));
         _dump.push("\n")  ;
-        _dump.push("  TRIA-INIT = ") ;
+        _dump.push(" *tria-init = ") ;
         _dump.push(
         std::to_string (_tcpu._tria_init));
         _dump.push("\n")  ;
-        _dump.push("\n")  ;
 
-        _dump.push("**RESTRICTED-TRIA: ") ;
         _dump.push("\n")  ;
+        _dump.push("**rDT(x) statistics...\n") ;
 
-        _dump.push("  rDEL-EDGE = ");
+        _dump.push(" *rDEL-edge = ");
         _dump.push(std::to_string (_nedg));
         _dump.push("\n")  ;
-
-        _dump.push("  rDEL-FACE = ");
+        _dump.push(" *rDEL-face = ");
         _dump.push(std::to_string (_nfac));
         _dump.push("\n")  ;
-
-        _dump.push("  rDEL-TRIA = ");
+        _dump.push(" *rDEL-tria = ");
         _dump.push(std::to_string (_ntri));
-        _dump.push("\n")  ;
         _dump.push("\n")  ;
 
         }
 
-        if (_args.verb() >= +3 )
+        if (_args.verb() >= +2 )
         {
-    /*------------------------- push rDEL memory metrics */
+    /*------------------------- more rDEL scheme metrics */
         _dump.push("\n")  ;
-        _dump.push("**MEMORY statistics... \n") ;
-        _dump.push("\n")  ;
+        _dump.push("**MEMORY statistics...\n") ;
 
-        _dump.push("**DELAUNAY-OBJECT: ") ;
-        _dump.push("\n")  ;
-
-        _dump.push("  NODE-BYTE = ") ;
+        _dump.push("  xDEL-type:\n") ;
+        _dump.push(" *node-byte = ") ;
         _dump.push(std::to_string(
             sizeof(typename mesh_type::
                 tria_type:: node_type)) ) ;
         _dump.push("\n")  ;
-        _dump.push("  NODE-LIST = ") ;
+        _dump.push(" *nset-size = ") ;
         _dump.push(std::to_string(
             _mesh._tria._nset.alloc())) ;
         _dump.push("\n")  ;
-
-        _dump.push("  TRIA-BYTE = ") ;
+        _dump.push(" *tria-byte = ") ;
         _dump.push(std::to_string(
             sizeof(typename mesh_type::
                 tria_type:: tria_type)) ) ;
         _dump.push("\n")  ;
-        _dump.push("  TRIA-LIST = ") ;
+        _dump.push(" *tset-size = ") ;
         _dump.push(std::to_string(
             _mesh._tria._tset.alloc())) ;
         _dump.push("\n")  ;
+        _dump.push(" *pool-byte = ") ;
+        _dump.push(std::to_string(
+            _mesh._tria._fpol.bytes())) ;
         _dump.push("\n")  ;
 
-        _dump.push("**RESTRICTED-TRIA: ") ;
         _dump.push("\n")  ;
-
-        _dump.push("  EDGE-BYTE = ") ;
+        _dump.push("  rDEL-type:\n") ;
+        _dump.push(" *edge-byte = ") ;
         _dump.push(std::to_string(
             sizeof(
         typename mesh_type::edge_item)) ) ;
         _dump.push("\n")  ;
-        _dump.push("  EDGE-HASH = ") ;
+        _dump.push(" *eset-size = ") ;
         _dump.push(std::to_string(
             _mesh._eset._lptr.alloc())) ;
         _dump.push("\n")  ;
-        _dump.push("  POOL-BYTE = ") ;
-        _dump.push(std::to_string(
-            _mesh._epol.bytes () ) ) ;
+        _dump.push(" *pool-byte = ") ;
+        _dump.push(
+        std::to_string(_mesh._epol.bytes())) ;
         _dump.push("\n")  ;
-
-        _dump.push("  FACE-BYTE = ") ;
+        _dump.push(" *face-byte = ") ;
         _dump.push(std::to_string(
             sizeof(
         typename mesh_type::face_item)) ) ;
         _dump.push("\n")  ;
-        _dump.push("  FACE-HASH = ") ;
+        _dump.push(" *fset-size = ") ;
         _dump.push(std::to_string(
             _mesh._fset._lptr.alloc())) ;
         _dump.push("\n")  ;
-        _dump.push("  POOL-BYTE = ") ;
-        _dump.push(std::to_string(
-            _mesh._fpol.bytes () ) ) ;
+        _dump.push(" *pool-byte = ") ;
+        _dump.push(
+        std::to_string(_mesh._fpol.bytes())) ;
         _dump.push("\n")  ;
-
-        _dump.push("  TRIA-BYTE = ") ;
+        _dump.push(" *tria-byte = ") ;
         _dump.push(std::to_string(
             sizeof(
         typename mesh_type::tria_item)) ) ;
         _dump.push("\n")  ;
-        _dump.push("  TRIA-HASH = ") ;
+        _dump.push(" *tset-size = ") ;
         _dump.push(std::to_string(
             _mesh._tset._lptr.alloc())) ;
         _dump.push("\n")  ;
-        _dump.push("  POOL-BYTE = ") ;
-        _dump.push(std::to_string(
-            _mesh._tpol.bytes () ) ) ;
-        _dump.push("\n")  ;
+        _dump.push(" *pool-byte = ") ;
+        _dump.push(
+        std::to_string(_mesh._tpol.bytes())) ;
         _dump.push("\n")  ;
 
         }

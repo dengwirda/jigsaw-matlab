@@ -22,16 +22,20 @@
      * how they can obtain it for free, then you are not
      * required to make any arrangement with me.)
      *
-     * Disclaimer:  Neither I nor: Columbia University, The
-     * Massachusetts Institute of Technology, The
-     * University of Sydney, nor The National Aeronautics
-     * and Space Administration warrant this code in any
-     * way whatsoever.  This code is provided "as-is" to be
-     * used at your own risk.
+     * Disclaimer:  Neither I nor THE CONTRIBUTORS warrant
+     * this code in any way whatsoever.  This code is
+     * provided "as-is" to be used at your own risk.
+     *
+     * THE CONTRIBUTORS include:
+     * (a) The University of Sydney
+     * (b) The Massachusetts Institute of Technology
+     * (c) Columbia University
+     * (d) The National Aeronautics & Space Administration
+     * (e) Los Alamos National Laboratory
      *
     --------------------------------------------------------
      *
-     * Last updated: 21 Apr., 2021
+     * Last updated: 12 Jul., 2021
      *
      * Copyright 2013-2021
      * Darren Engwirda
@@ -150,9 +154,9 @@
              >
     __static_call
     __normal_call bool_type clip_dual (
-        mesh_type &_mesh,
-        half_list &_hset,
-        real_type *_ppos,
+        mesh_type &_mesh,  // mesh object
+        half_list &_hset,  // list of halfspace objects
+        real_type *_ppos,  // point to test
         bool_type &_safe,
         real_type  _rtol
         )
@@ -225,11 +229,11 @@
              >
     __static_call
     __normal_call void_type edge_loop (
-        mesh_type &_mesh,
-        iptr_type *_enod,
-        iptr_type  _tadj,
-        iptr_type  _fadj,
-        list_type &_loop
+        mesh_type &_mesh,  // mesh object
+        iptr_type *_enod,  // array of edge node indexing
+        iptr_type  _tadj,  // index of adj. simplex
+        iptr_type  _fadj,  // index of face in adj. cell
+        list_type &_loop   // list of cells adj. to edge
         )
     {
     /*----------------- assemble edge-adj. cells in-order */
@@ -292,15 +296,15 @@
 
     __static_call
     __normal_call bool_type edge_ball (
-        geom_type &_geom,
-        mesh_type &_mesh,
-        iptr_type  _tadj,
-        iptr_type  _eadj,
-        real_type *_ebal,
-        real_type *_sbal,
-        char_type &_feat,
-        char_type &_topo,
-        iptr_type &_part
+        geom_type &_geom,  // geometry object
+        mesh_type &_mesh,  // mesh object
+        iptr_type  _tadj,  // index of adj. simplex
+        iptr_type  _eadj,  // index of edge in adj. cell
+        real_type *_ebal,  // circumball on edge
+        real_type *_sbal,  // circumball on geometry
+        char_type &_feat,  // returned feature kind
+        char_type *_topo,  // returned topology tag
+        iptr_type &_part   // returned geometry tag
         )
     {
         real_type static const _rEPS =
@@ -498,27 +502,22 @@
 
     /*--------------------------- test loc. intersections */
         auto _iful = _pred._list.tend() ;
-        auto _imin = _pred._list.tend() ;
+        auto _imax = _pred._list.tend() ;
 
         real_type _RTOL  = _rEPS*_radj;
 
-        real_type _dmin  =
-            +std::numeric_limits
-                <real_type>::infinity() ;
+        real_type _dmax  =
+       -std::numeric_limits<real_type>::infinity() ;
         real_type _dful  =
-            -std::numeric_limits
-                <real_type>::infinity() ;
+       -std::numeric_limits<real_type>::infinity() ;
 
         bool_type _safe  ;
-        for (auto _iter  =
-                  _pred._list.head() ;
-                  _iter !=
-                  _pred._list.tend() ;
+        for (auto _iter  = _pred._list.head() ;
+                  _iter != _pred._list.tend() ;
                 ++_iter  )
         {
-            if (clip_dual( _mesh, _hset ,
-                   &_iter->pval( 0),
-                    _safe, _RTOL) )
+            if (clip_dual( _mesh, _hset,
+                 &_iter->pval(0), _safe, _RTOL) )
             {
     /*--------------------------- prune near-degeneracies */
                 if(!_safe)
@@ -555,10 +554,10 @@
                    &_iter->pval( 0)) ;
 
     /*--------------------------- keep furthest from ball */
-                if (_dsqr < _dmin )
+                if (_dsqr > _dmax )
                 {
-                    _dmin = _dsqr ;
-                    _imin = _iter ;
+                    _dmax = _dsqr ;
+                    _imax = _iter ;
                 }
 
                 if (_dsqr > _dful &&
@@ -570,8 +569,7 @@
             }
         }
 
-        if (_iful !=
-                _pred._list.tend() )
+        if(_iful != _pred._list.tend() )
         {
     /*--------------------------- keep best intersections */
         _sbal[ 0] = _iful->pval(0);
@@ -580,7 +578,9 @@
 
         _part     = _iful->itag ();
         _feat     = _iful->feat ();
-        _topo     = _iful->topo ();
+
+        _topo[ 0] = _iful->topo(0);
+        _topo[ 1] = _iful->topo(1);
 
     /*--------------------------- eval. surf. ball radius */
         _sbal[ 3]+=
@@ -598,17 +598,18 @@
         return (  true ) ;
         }
         else
-        if (_imin !=
-                _pred._list.tend() )
+        if(_imax != _pred._list.tend() )
         {
     /*--------------------------- keep best intersections */
-        _sbal[ 0] = _imin->pval(0);
-        _sbal[ 1] = _imin->pval(1);
-        _sbal[ 2] = _imin->pval(2);
+        _sbal[ 0] = _imax->pval(0);
+        _sbal[ 1] = _imax->pval(1);
+        _sbal[ 2] = _imax->pval(2);
 
-        _part     = _imin->itag ();
-        _feat     = _imin->feat ();
-        _topo     = _imin->topo ();
+        _part     = _imax->itag ();
+        _feat     = _imax->feat ();
+
+        _topo[ 0] = _imax->topo(0);
+        _topo[ 1] = _imax->topo(1);
 
     /*--------------------------- eval. surf. ball radius */
         _sbal[ 3]+=
@@ -637,15 +638,15 @@
 
     __static_call
     __normal_call bool_type face_ball (
-        geom_type &_geom,
-        mesh_type &_mesh,
-        iptr_type  _tadj,
-        iptr_type  _fadj,
-        real_type *_fbal,
-        real_type *_sbal,
-        char_type &_feat,
-        char_type &_topo,
-        iptr_type &_part
+        geom_type &_geom,  // geometry object
+        mesh_type &_mesh,  // mesh object
+        iptr_type  _tadj,  // index of adj. simplex
+        iptr_type  _fadj,  // index of face in adj. cell
+        real_type *_fbal,  // circumball on edge
+        real_type *_sbal,  // circumball on geometry
+        char_type &_feat,  // returned feature kind
+        char_type *_topo,  // returned topology tag
+        iptr_type &_part   // returned geometry tag
         )
     {
         real_type static const _rEPS =
@@ -840,27 +841,22 @@
 
     /*--------------------------- test loc. intersections */
         auto _iful = _pred._list.tend() ;
-        auto _imin = _pred._list.tend() ;
+        auto _imax = _pred._list.tend() ;
 
         real_type _RTOL  = _rEPS*_radj;
 
-        real_type _dmin  =
-            +std::numeric_limits
-                <real_type>::infinity() ;
+        real_type _dmax  =
+       -std::numeric_limits<real_type>::infinity() ;
         real_type _dful  =
-            -std::numeric_limits
-                <real_type>::infinity() ;
+       -std::numeric_limits<real_type>::infinity() ;
 
         bool_type _safe  ;
-        for (auto _iter  =
-                  _pred._list.head() ;
-                  _iter !=
-                  _pred._list.tend() ;
+        for (auto _iter  = _pred._list.head() ;
+                  _iter != _pred._list.tend() ;
                 ++_iter  )
         {
-            if (clip_dual( _mesh, _hset ,
-                   &_iter->pval( 0),
-                    _safe, _RTOL) )
+            if (clip_dual( _mesh, _hset,
+                 &_iter->pval(0), _safe, _RTOL) )
             {
     /*--------------------------- prune near-degeneracies */
                 if(!_safe)
@@ -892,10 +888,10 @@
                    &_iter->pval( 0)) ;
 
     /*--------------------------- keep furthest from ball */
-                if (_dsqr < _dmin )
+                if (_dsqr > _dmax )
                 {
-                    _dmin = _dsqr ;
-                    _imin = _iter ;
+                    _dmax = _dsqr ;
+                    _imax = _iter ;
                 }
 
                 if (_dsqr > _dful &&
@@ -907,8 +903,7 @@
             }
         }
 
-        if (_iful !=
-                _pred._list.tend() )
+        if(_iful != _pred._list.tend() )
         {
     /*--------------------------- keep best intersections */
         _sbal[ 0] = _iful->pval(0);
@@ -917,7 +912,9 @@
 
         _part     = _iful->itag ();
         _feat     = _iful->feat ();
-        _topo     = _iful->topo ();
+
+        _topo[ 0] = _iful->topo(0);
+        _topo[ 1] = _iful->topo(1);
 
     /*--------------------------- eval. surf. ball radius */
         _sbal[ 3]+=
@@ -939,17 +936,18 @@
         return (  true ) ;
         }
         else
-        if (_imin !=
-                _pred._list.tend() )
+        if(_imax != _pred._list.tend() )
         {
     /*--------------------------- keep best intersections */
-        _sbal[ 0] = _imin->pval(0);
-        _sbal[ 1] = _imin->pval(1);
-        _sbal[ 2] = _imin->pval(2);
+        _sbal[ 0] = _imax->pval(0);
+        _sbal[ 1] = _imax->pval(1);
+        _sbal[ 2] = _imax->pval(2);
 
-        _part     = _imin->itag ();
-        _feat     = _imin->feat ();
-        _topo     = _imin->topo ();
+        _part     = _imax->itag ();
+        _feat     = _imax->feat ();
+
+        _topo[ 0] = _imax->topo(0);
+        _topo[ 1] = _imax->topo(1);
 
     /*--------------------------- eval. surf. ball radius */
         _sbal[ 3]+=
@@ -982,11 +980,11 @@
 
     __static_call
     __inline_call bool_type tria_ball (
-        geom_type &_geom,
-        mesh_type &_mesh,
-        iptr_type  _tpos,
-        real_type *_tbal,
-        iptr_type &_part
+        geom_type &_geom,  // geometry object
+        mesh_type &_mesh,  // mesh object
+        iptr_type  _tpos,  // index of adj. simplex
+        real_type *_tbal,  // circumball on cell
+        iptr_type &_part   // returned geometry tag
         )
     {
     /*--------------------------- assemble local indexing */
@@ -1029,9 +1027,45 @@
 
         _tbal[3]/= (real_type)+4. ;
 
+    /*--------------------------- init. local inpoly ball */
+
+    //  nudge away from orthoball, to sanitise degenerate
+    //  cases adj. to sharp boundaries
+
+        real_type static const _bump =
+            std::pow(std::numeric_limits
+                <real_type>::epsilon(), +0.5) ;
+
+        real_type _test[3] ;
+        _test[0] = (real_type)1./4. * (
+        _mesh._tria.node(_tnod[0])->pval(0) +
+        _mesh._tria.node(_tnod[1])->pval(0) +
+        _mesh._tria.node(_tnod[2])->pval(0) +
+        _mesh._tria.node(_tnod[3])->pval(0)
+            ) ;
+        _test[1] = (real_type)1./4. * (
+        _mesh._tria.node(_tnod[0])->pval(1) +
+        _mesh._tria.node(_tnod[1])->pval(1) +
+        _mesh._tria.node(_tnod[2])->pval(1) +
+        _mesh._tria.node(_tnod[3])->pval(1)
+            ) ;
+        _test[2] = (real_type)1./4. * (
+        _mesh._tria.node(_tnod[0])->pval(2) +
+        _mesh._tria.node(_tnod[1])->pval(2) +
+        _mesh._tria.node(_tnod[2])->pval(2) +
+        _mesh._tria.node(_tnod[3])->pval(2)
+            ) ;
+
+        _test[0] = (1.0 - _bump) * _tbal[0] +
+                   (0.0 + _bump) * _test[0] ;
+        _test[1] = (1.0 - _bump) * _tbal[1] +
+                   (0.0 + _bump) * _test[1] ;
+        _test[2] = (1.0 - _bump) * _tbal[2] +
+                   (0.0 + _bump) * _test[2] ;
+
     /*------------------------- evaluate "in--out" status */
         if (_part <= -1 && (_part =
-            _geom.is_inside(_tbal)) < +0)
+            _geom.is_inside(_test)) < +0)
         {
     /*------------------------- is not a restricted facet */
             return false ;

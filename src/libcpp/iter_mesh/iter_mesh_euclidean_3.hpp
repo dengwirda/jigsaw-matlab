@@ -22,16 +22,20 @@
      * how they can obtain it for free, then you are not
      * required to make any arrangement with me.)
      *
-     * Disclaimer:  Neither I nor: Columbia University, The
-     * Massachusetts Institute of Technology, The
-     * University of Sydney, nor The National Aeronautics
-     * and Space Administration warrant this code in any
-     * way whatsoever.  This code is provided "as-is" to be
-     * used at your own risk.
+     * Disclaimer:  Neither I nor THE CONTRIBUTORS warrant
+     * this code in any way whatsoever.  This code is
+     * provided "as-is" to be used at your own risk.
+     *
+     * THE CONTRIBUTORS include:
+     * (a) The University of Sydney
+     * (b) The Massachusetts Institute of Technology
+     * (c) Columbia University
+     * (d) The National Aeronautics & Space Administration
+     * (e) Los Alamos National Laboratory
      *
     --------------------------------------------------------
      *
-     * Last updated: 24 Feb., 2021
+     * Last updated: 15 Jul., 2021
      *
      * Copyright 2013-2021
      * Darren Engwirda
@@ -134,7 +138,7 @@ template <
     /*------------------------- edge type for ITER-MESH-3 */
         public  :
 
-        iptr_type                     _itag ;
+        iptr_type                     _itag = 0 ;
 
         public  :
 
@@ -153,7 +157,7 @@ template <
     /*------------------------- face type for ITER-MESH-3 */
         public  :
 
-        iptr_type                     _itag ;
+        iptr_type                     _itag = 0 ;
 
         public  :
 
@@ -172,7 +176,7 @@ template <
     /*------------------------- face type for ITER-MESH-3 */
         public  :
 
-        iptr_type                     _itag ;
+        iptr_type                     _itag = 0 ;
 
         public  :
 
@@ -191,7 +195,7 @@ template <
     /*------------------------- cell type for ITER-MESH-3 */
         public  :
 
-        iptr_type                     _itag ;
+        iptr_type                     _itag = 0 ;
 
         public  :
 
@@ -210,7 +214,7 @@ template <
     /*------------------------- cell type for ITER-MESH-3 */
         public  :
 
-        iptr_type                     _itag ;
+        iptr_type                     _itag = 0 ;
 
         public  :
 
@@ -229,7 +233,7 @@ template <
     /*------------------------- cell type for ITER-MESH-3 */
         public  :
 
-        iptr_type                     _itag ;
+        iptr_type                     _itag = 0 ;
 
         public  :
 
@@ -248,7 +252,7 @@ template <
     /*------------------------- cell type for ITER-MESH-3 */
         public  :
 
-        iptr_type                     _itag ;
+        iptr_type                     _itag = 0 ;
 
         public  :
 
@@ -273,6 +277,35 @@ template <
     public  :
 
     mesh_type                         _mesh ;
+
+    public  :
+
+    /*
+    --------------------------------------------------------
+     * INIT-MESH: impose (optional) offsets
+    --------------------------------------------------------
+     */
+
+    __normal_call void_type init (
+        float _xoff = + 0.f ,
+        float _yoff = + 0.f ,
+        float _zoff = + 0.f
+        )
+    {
+        for (auto  _iter  =
+             this->_mesh.node().head () ;
+                   _iter !=
+             this->_mesh.node().tend () ;
+                 ++_iter  )
+        {
+            if (_iter->mark() >= +0)
+            {
+                _iter->pval(0) -= _xoff ;
+                _iter->pval(1) -= _yoff ;
+                _iter->pval(2) -= _zoff ;
+            }
+        }
+    }
 
     } ;
 

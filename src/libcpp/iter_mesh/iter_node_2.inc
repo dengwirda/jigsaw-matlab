@@ -22,18 +22,22 @@
      * how they can obtain it for free, then you are not
      * required to make any arrangement with me.)
      *
-     * Disclaimer:  Neither I nor: Columbia University, The
-     * Massachusetts Institute of Technology, The
-     * University of Sydney, nor The National Aeronautics
-     * and Space Administration warrant this code in any
-     * way whatsoever.  This code is provided "as-is" to be
-     * used at your own risk.
+     * Disclaimer:  Neither I nor THE CONTRIBUTORS warrant
+     * this code in any way whatsoever.  This code is
+     * provided "as-is" to be used at your own risk.
+     *
+     * THE CONTRIBUTORS include:
+     * (a) The University of Sydney
+     * (b) The Massachusetts Institute of Technology
+     * (c) Columbia University
+     * (d) The National Aeronautics & Space Administration
+     * (e) Los Alamos National Laboratory
      *
     --------------------------------------------------------
      *
-     * Last updated: 30 Mar., 2021
+     * Last updated: 30 Dec., 2022
      *
-     * Copyright 2013-2021
+     * Copyright 2013-2022
      * Darren Engwirda
      * d.engwirda@gmail.com
      * https://github.com/dengwirda/
@@ -75,8 +79,8 @@
            &_NPTR->pval(0), _NPTR->hidx())  ;
 
     #   define LOOPDIMS( _ITER )    \
-            for ( auto _idim =          \
-        pred_type::geom_dims; _idim-- != 0; )
+            for ( auto _ITER =          \
+        pred_type::geom_dims; _ITER-- != 0; )
 
         __unreferenced(_node) ;
 
@@ -124,6 +128,9 @@
         EVALHFUN( _jnod , _jptr )
         EVALHFUN( _knod , _kptr )
 
+        real_type _hbal = _hfun.eval(
+            &_ball[0], _node->hidx()) ;
+
         real_type _irho =
             _hval[_imid] / _hval[_inod] ;
         real_type _jrho =
@@ -131,10 +138,14 @@
         real_type _krho =
             _hval[_imid] / _hval[_knod] ;
 
+        real_type _0rho =
+            _hval[_imid] / _hbal        ;
+
         real_type _hrho =
-            _irho * (real_type)1./3. +
-            _jrho * (real_type)1./3. +
-            _krho * (real_type)1./3. ;
+            _irho * (real_type)2./9. +
+            _jrho * (real_type)2./9. +
+            _krho * (real_type)2./9. +
+            _0rho * (real_type)3./9. ;
 
         _hrho =
             _tmag * std::pow(_hrho, +3) ;
@@ -183,8 +194,8 @@
            &_NPTR->pval(0), _NPTR->hidx())  ;
 
     #   define LOOPDIMS( _ITER )    \
-            for ( auto _idim =          \
-        pred_type::geom_dims; _idim-- != 0; )
+            for ( auto _ITER =          \
+        pred_type::geom_dims; _ITER-- != 0; )
 
         __unreferenced(_node) ;
 
@@ -238,6 +249,9 @@
         EVALHFUN( _knod , _kptr )
         EVALHFUN( _lnod , _lptr )
 
+        real_type _hbal = _hfun.eval(
+            &_ball[0], _node->hidx()) ;
+
         real_type _irho =
             _hval[_imid] / _hval[_inod] ;
         real_type _jrho =
@@ -247,11 +261,15 @@
         real_type _lrho =
             _hval[_imid] / _hval[_lnod] ;
 
+        real_type _0rho =
+            _hval[_imid] / _hbal        ;
+
         real_type _hrho =
-            _irho * (real_type)1./4. +
-            _jrho * (real_type)1./4. +
-            _krho * (real_type)1./4. +
-            _lrho * (real_type)1./4. ;
+            _irho * (real_type)2./12 +
+            _jrho * (real_type)2./12 +
+            _krho * (real_type)2./12 +
+            _lrho * (real_type)2./12 +
+            _0rho * (real_type)4./12 ;
 
         _hrho =
             _qmag * std::pow(_hrho, +3) ;
@@ -379,8 +397,8 @@
            &_NPTR->pval(0), _NPTR->hidx())  ;
 
     #   define LOOPDIMS( _ITER )    \
-            for ( auto _idim =          \
-        pred_type::geom_dims; _idim-- != 0; )
+            for ( auto _ITER =          \
+        pred_type::geom_dims; _ITER-- != 0; )
 
     /*------------------------------------- cell indexing */
         auto _tptr =
@@ -456,7 +474,7 @@
         real_type _lsqr = std::max(
             _0bal[_last], (real_type) +0.);
 
-        EVALHFUN( _inod , _iptr )
+        EVALHFUN( _inod , _iptr )        // eval. at node
         EVALHFUN( _jnod , _jptr )
         EVALHFUN( _knod , _kptr )
 
@@ -473,6 +491,17 @@
         real_type _2rho =
             _hval[_inod] * (real_type)1./2. +
             _hval[_knod] * (real_type)1./2. ;
+
+        real_type _0val = _hfun.eval(    // eval. on dual
+            &_0bal[0], _node->hidx()) ;
+        real_type _1val = _hfun.eval(
+            &_1bal[0], _node->hidx()) ;
+        real_type _2val = _hfun.eval(
+            &_2bal[0], _node->hidx()) ;
+
+        _0rho = +.5 * (_0rho + _0val) ;
+        _1rho = +.5 * (_1rho + _1val) ;
+        _2rho = +.5 * (_2rho + _2val) ;
 
         _0rho = std::pow(
             _hval[_inod] / _0rho, +3) ;
@@ -540,8 +569,8 @@
            &_NPTR->pval(0), _NPTR->hidx())  ;
 
     #   define LOOPDIMS( _ITER )    \
-            for ( auto _idim =          \
-        pred_type::geom_dims; _idim-- != 0; )
+            for ( auto _ITER =          \
+        pred_type::geom_dims; _ITER-- != 0; )
 
     /*------------------------------------- cell indexing */
         auto _qptr =
@@ -631,7 +660,7 @@
         real_type _lsqr = std::max(
             _0bal[_last], (real_type) +0.);
 
-        EVALHFUN( _inod , _iptr )
+        EVALHFUN( _inod , _iptr )        // eval. at node
         EVALHFUN( _jnod , _jptr )
         EVALHFUN( _knod , _kptr )
         EVALHFUN( _lnod , _lptr )
@@ -650,6 +679,17 @@
         real_type _2rho =
             _hval[_inod] * (real_type)1./2. +
             _hval[_lnod] * (real_type)1./2. ;
+
+        real_type _0val = _hfun.eval(    // eval. on dual
+            &_0bal[0], _node->hidx()) ;
+        real_type _1val = _hfun.eval(
+            &_1bal[0], _node->hidx()) ;
+        real_type _2val = _hfun.eval(
+            &_2bal[0], _node->hidx()) ;
+
+        _0rho = +.5 * (_0rho + _0val) ;
+        _1rho = +.5 * (_1rho + _1val) ;
+        _2rho = +.5 * (_2rho + _2val) ;
 
         _0rho = std::pow(
             _hval[_inod] / _0rho, +3) ;
@@ -859,14 +899,6 @@
             std::pow(std::numeric_limits
                 <real_type>::epsilon(), .50) ;
 
-        real_type static const _RMIN =
-            std::pow(std::numeric_limits
-                <real_type>::epsilon(), .75) ;
-
-        real_type static const _RMAX =
-            std::pow(std::numeric_limits
-                <real_type>::epsilon(), .25) ;
-
     /*------------------------------------- cell indexing */
         auto _ppos = &_node->pval(0);
 
@@ -881,22 +913,11 @@
                           _bmin[_idim] ;
 
         real_type _hdel = _HINC*_binc;
-
-        real_type _hsum = (real_type)0.;
-
-        real_type _sdel = (real_type)0.;
-        real_type _sabs = (real_type)0.;
-        real_type _sbar = (real_type)0.;
-
-        for (auto _iter = +0; _iter++ != +2; )
+        real_type _dsup , _dsdn ;
         {
     /*------------------ centred finite-diff. for dQ / dx */
             _ppos[_idim] =
                 _SAVE[_idim] + _hdel;
-
-            _hsum  = (real_type)+0. ;
-            _hsum +=
-                _ppos[_idim] - _SAVE[_idim];
 
             real_type _scr1 =
                 pred_type::tri3_cost (
@@ -910,11 +931,10 @@
                 pred_type::cell_kind ()
                     ) ;
 
+            _dsup = (_scr1 - _COST) / _hdel ;
+
             _ppos[_idim] =
                 _SAVE[_idim] - _hdel;
-
-            _hsum -=
-                _ppos[_idim] - _SAVE[_idim];
 
             real_type _scr0 =
                 pred_type::tri3_cost (
@@ -928,33 +948,15 @@
                 pred_type::cell_kind ()
                     ) ;
 
-            _sdel = _scr1 - _scr0 ;
-
-            _sbar = std::abs(_COST) ;
-            _sabs = std::abs(_sdel) ;
-
-    /*------------------ try to adjust step on rel. diff. */
-            if (_sabs > (real_type)0.)
-            {
-            if (_sabs > _RMAX * _sbar)
-            {
-                _hdel/= (real_type) +10. ;
-            }
-            else
-            if (_sabs < _RMIN * _sbar)
-            {
-                _hdel*= (real_type) +10. ;
-            }
-            else { break ; }
-            }
-            else { break ; }
+            _dsdn = (_COST - _scr0) / _hdel ;
         }
 
-        _ppos[_idim]  = _SAVE  [_idim];
+        _ppos[_idim]  = _SAVE  [_idim] ;
 
     /*------------------ finalise gradient and accumulate */
-
-        _DQDX[_idim] += _sdel / _hsum ;
+        if (_dsup * _dsdn > (real_type)0.)
+            _DQDX [ _idim ] +=
+        (real_type)+.5 * (_dsup + _dsdn) ;
 
         }
     }
@@ -1061,14 +1063,6 @@
             std::pow(std::numeric_limits
                 <real_type>::epsilon(), .50) ;
 
-        real_type static const _RMIN =
-            std::pow(std::numeric_limits
-                <real_type>::epsilon(), .75) ;
-
-        real_type static const _RMAX =
-            std::pow(std::numeric_limits
-                <real_type>::epsilon(), .25) ;
-
     /*------------------------------------- cell indexing */
         auto _ppos = &_node->pval(0);
 
@@ -1083,22 +1077,11 @@
                           _bmin[_idim] ;
 
         real_type _hdel = _HINC*_binc;
-
-        real_type _hsum = (real_type)0.;
-
-        real_type _sdel = (real_type)0.;
-        real_type _sabs = (real_type)0.;
-        real_type _sbar = (real_type)0.;
-
-        for (auto _iter = +0; _iter++ != +2; )
+        real_type _dsup , _dsdn ;
         {
     /*------------------ centred finite-diff. for dQ / dx */
             _ppos[_idim] =
-                _SAVE[_idim] + _hdel;
-
-            _hsum  = (real_type)+0. ;
-            _hsum +=
-                _ppos[_idim] - _SAVE[_idim];
+                _SAVE[_idim] + _hdel ;
 
             real_type _scr1 =
                 pred_type::quad_cost (
@@ -1114,11 +1097,10 @@
                 pred_type::cell_kind ()
                     ) ;
 
-            _ppos[_idim] =
-                _SAVE[_idim] - _hdel;
+            _dsup = (_scr1 - _COST) / _hdel ;
 
-            _hsum -=
-                _ppos[_idim] - _SAVE[_idim];
+            _ppos[_idim] =
+                _SAVE[_idim] - _hdel ;
 
             real_type _scr0 =
                 pred_type::quad_cost (
@@ -1134,33 +1116,15 @@
                 pred_type::cell_kind ()
                     ) ;
 
-            _sdel = _scr1 - _scr0 ;
-
-            _sbar = std::abs(_COST) ;
-            _sabs = std::abs(_sdel) ;
-
-    /*------------------ try to adjust step on rel. diff. */
-            if (_sabs > (real_type)0.)
-            {
-            if (_sabs > _RMAX * _sbar)
-            {
-                _hdel/= (real_type) +10. ;
-            }
-            else
-            if (_sabs < _RMIN * _sbar)
-            {
-                _hdel*= (real_type) +10. ;
-            }
-            else { break ; }
-            }
-            else { break ; }
+            _dsdn = (_COST - _scr0) / _hdel ;
         }
 
-        _ppos[_idim]  = _SAVE  [_idim];
+        _ppos[_idim]  = _SAVE  [_idim] ;
 
     /*------------------ finalise gradient and accumulate */
-
-        _DQDX[_idim] += _sdel / _hsum ;
+        if (_dsup * _dsdn > (real_type)0.)
+            _DQDX [ _idim ] +=
+        (real_type)+.5 * (_dsup + _dsdn) ;
 
         }
     }

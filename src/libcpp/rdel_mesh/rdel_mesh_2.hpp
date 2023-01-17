@@ -22,16 +22,20 @@
      * how they can obtain it for free, then you are not
      * required to make any arrangement with me.)
      *
-     * Disclaimer:  Neither I nor: Columbia University, The
-     * Massachusetts Institute of Technology, The
-     * University of Sydney, nor The National Aeronautics
-     * and Space Administration warrant this code in any
-     * way whatsoever.  This code is provided "as-is" to be
-     * used at your own risk.
+     * Disclaimer:  Neither I nor THE CONTRIBUTORS warrant
+     * this code in any way whatsoever.  This code is
+     * provided "as-is" to be used at your own risk.
+     *
+     * THE CONTRIBUTORS include:
+     * (a) The University of Sydney
+     * (b) The Massachusetts Institute of Technology
+     * (c) Columbia University
+     * (d) The National Aeronautics & Space Administration
+     * (e) Los Alamos National Laboratory
      *
     --------------------------------------------------------
      *
-     * Last updated: 02 Feb., 2021
+     * Last updated: 12 Jul., 2021
      *
      * Copyright 2013-2021
      * Darren Engwirda
@@ -176,13 +180,11 @@
     typedef typename
             mesh_type::tria_list        tria_hash ;
 
+    typedef mesh::rdel_timers           rdel_stat ;
+
     typedef mesh::mesh_params       <
                 real_type,
                 iptr_type           >   rdel_opts ;
-
-    typedef mesh::rdel_timers       <
-                real_type ,
-                iptr_type           >   rdel_stat ;
 
     typedef containers::array       <
                 iptr_type           >   iptr_list ;
@@ -359,8 +361,7 @@
         if(!_eepq.empty())
         {
 
-        iptr_type _dead = +0 ;
-        iptr_type _okay = +0 ;
+        iptr_type _dead = +0, _okay = +0 ;
 
         for (auto _hpos = _eepq.count() - 1 ;
                   _hpos > +0 ;
@@ -420,8 +421,7 @@
         if(!_ttpq.empty())
         {
 
-        iptr_type _dead = +0 ;
-        iptr_type _okay = +0 ;
+        iptr_type _dead = +0, _okay = +0 ;
 
         for (auto _hpos = _ttpq.count() - 1 ;
                   _hpos > +0 ;
@@ -588,8 +588,8 @@
         _scal =  std::max(
             _scal , _plen[ 1]);
 
-        _plen[ 0]*= (real_type)+4.0 ;
-        _plen[ 1]*= (real_type)+4.0 ;
+        _plen[ 0]*= (real_type)+8.0 ;
+        _plen[ 1]*= (real_type)+8.0 ;
 
         _pmin[ 0]-= _plen[ 0] ;
         _pmin[ 1]-= _plen[ 1] ;
@@ -788,7 +788,13 @@
     #       ifdef _DEBUG
             iptr_type _jlog_freq = +250 ;
     #       else
-            iptr_type _jlog_freq = +50000 ;
+            iptr_type _jlog_tens =
+                (iptr_type) std::log10(_pass) ;
+
+            iptr_type _jlog_freq = // logarithmic updates
+                (+1 * std::max(10000,
+                (+5 * std::max(1000,
+           (iptr_type)std::pow(10, _jlog_tens))) / 2)) ;
     #       endif
 
             if(++_pass>_args.iter()) break;
@@ -951,7 +957,7 @@
     #           ifdef  __use_timers
                 _ttoc = _time.now() ;
                 _tcpu._node_rule +=
-                    _tcpu.time_span(_ttic,_ttoc) ;
+                    _tcpu.nano_span(_ttic,_ttoc) ;
     #           endif//__use_timers
             }
             else
@@ -974,7 +980,7 @@
     #           ifdef  __use_timers
                 _ttoc = _time.now() ;
                 _tcpu._edge_rule +=
-                    _tcpu.time_span(_ttic,_ttoc) ;
+                    _tcpu.nano_span(_ttic,_ttoc) ;
     #           endif//__use_timers
             }
             else
@@ -998,7 +1004,7 @@
     #           ifdef  __use_timers
                 _ttoc = _time.now() ;
                 _tcpu._edge_rule +=
-                    _tcpu.time_span(_ttic,_ttoc) ;
+                    _tcpu.nano_span(_ttic,_ttoc) ;
     #           endif//__use_timers
             }
             else
@@ -1021,7 +1027,7 @@
     #           ifdef  __use_timers
                 _ttoc = _time.now() ;
                 _tcpu._tria_rule +=
-                    _tcpu.time_span(_ttic,_ttoc) ;
+                    _tcpu.nano_span(_ttic,_ttoc) ;
     #           endif//__use_timers
             }
         /*----------------------------- meshing converged */
@@ -1062,6 +1068,10 @@
             if (_pass%_trim_freq == +0 )
             {
         /*--------------- trim null PQ items "on-the-fly" */
+    #           ifdef  __use_timers
+                _ttic = _time.now() ;
+    #           endif//__use_timers
+
                 trim_list( _nbpq ) ;
                 trim_eepq( _mesh ,
                            _eepq ) ;
@@ -1081,13 +1091,30 @@
                 trim_list( _tscr ) ;
                 trim_list( _bscr ) ;
                 trim_list( _bdat ) ;
+
+    #           ifdef  __use_timers
+                _ttoc = _time.now() ;
+                _tcpu._list_trim +=
+                    _tcpu.time_span(_ttic,_ttoc) ;
+    #           endif//__use_timers
             }
 
+            {
         /*--------------- enqueue nodes for topol. checks */
+    #           ifdef  __use_timers
+                _ttic = _time.now() ;
+    #           endif//__use_timers
 
-            fill_topo( _mesh, _pass,
-                _etpq, _emrk,
-                _edat, _eprv, _args)   ;
+                fill_topo( _mesh, _pass,
+                    _etpq, _emrk,
+                    _edat, _eprv, _args) ;
+
+    #           ifdef  __use_timers
+                _ttoc = _time.now() ;
+                _tcpu._topo_init +=
+                    _tcpu.time_span(_ttic,_ttoc) ;
+    #           endif//__use_timers
+            }
 
         /*--------------- update restricted triangulation */
 
@@ -1162,200 +1189,264 @@
     /*-------------------- push refinement scheme metrics */
 
         _dump.push("\n")  ;
-        _dump.push("**REFINE statistics... \n") ;
-        _dump.push("\n")  ;
+        _dump.push("**TIMING statistics...\n") ;
 
-        _dump.push("**FUNCTION timing: ") ;
-        _dump.push("\n")  ;
-
-        _dump.push("  MESH-SEED = ") ;
+        _dump.push(" *mesh-seed = ") ;
         _dump.push(
         std::to_string (_tcpu._mesh_seed));
         _dump.push("\n")  ;
-
-        _dump.push("  NODE-INIT = ") ;
+        _dump.push(" *node-init = ") ;
         _dump.push(
         std::to_string (_tcpu._node_init));
         _dump.push("\n")  ;
-        _dump.push("  NODE-RULE = ") ;
+        _dump.push(" *node-rule = ") ;
         _dump.push(
         std::to_string (_tcpu._node_rule));
         _dump.push("\n")  ;
-
-        _dump.push("  EDGE-INIT = ") ;
+        _dump.push(" *edge-init = ") ;
         _dump.push(
         std::to_string (_tcpu._edge_init));
         _dump.push("\n")  ;
-        _dump.push("  EDGE-RULE = ") ;
+        _dump.push(" *edge-rule = ") ;
         _dump.push(
         std::to_string (_tcpu._edge_rule));
         _dump.push("\n")  ;
-
-        _dump.push("  TRIA-INIT = ") ;
+        _dump.push(" *tria-init = ") ;
         _dump.push(
         std::to_string (_tcpu._tria_init));
         _dump.push("\n")  ;
-        _dump.push("  TRIA-RULE = ") ;
+        _dump.push(" *tria-rule = ") ;
         _dump.push(
         std::to_string (_tcpu._tria_rule));
         _dump.push("\n")  ;
+        _dump.push(" *list-init = ") ;
+        _dump.push(
+        std::to_string (_tcpu._list_trim));
         _dump.push("\n")  ;
+        _dump.push(" *topo-init = ") ;
+        _dump.push(
+        std::to_string (_tcpu._topo_init));
+        _dump.push("\n\n");
 
-        _dump.push("**INSERTION rules: ") ;
-        _dump.push("\n")  ;
-
-        _dump.push("  EDGE-CIRC = ") ;
+        _dump.push("**REFINE statistics...\n") ;
+        _dump.push(" *edge-circ = ") ;
         _dump.push(std::to_string(
              _enod[rdel_opts::circ_kind]));
         _dump.push("\n")  ;
-        _dump.push("  EDGE-OFFH = ") ;
+        _dump.push(" *edge-offH = ") ;
         _dump.push(std::to_string(
              _enod[rdel_opts::offH_kind]));
         _dump.push("\n")  ;
-        _dump.push("  EDGE-OFFT = ") ;
+        _dump.push(" *edge-offT = ") ;
         _dump.push(std::to_string(
              _enod[rdel_opts::offT_kind]));
         _dump.push("\n")  ;
-        _dump.push("\n")  ;
-
-        _dump.push("  TRIA-CIRC = ") ;
+        _dump.push(" *tria-circ = ") ;
         _dump.push(std::to_string(
              _tnod[rdel_opts::circ_kind]));
         _dump.push("\n")  ;
-        _dump.push("  TRIA-SINK = ") ;
+        _dump.push(" *tria-sink = ") ;
         _dump.push(std::to_string(
              _tnod[rdel_opts::sink_kind]));
         _dump.push("\n")  ;
-        _dump.push("  TRIA-OFFH = ") ;
+        _dump.push(" *tria-offH = ") ;
         _dump.push(std::to_string(
              _tnod[rdel_opts::offH_kind]));
         _dump.push("\n")  ;
-        _dump.push("  TRIA-OFFC = ") ;
+        _dump.push(" *tria-offC = ") ;
         _dump.push(std::to_string(
              _tnod[rdel_opts::offC_kind]));
-        _dump.push("\n")  ;
         _dump.push("\n")  ;
 
         }
 
-        if (_args.verb() >= +3 )
+        if (_args.verb() >= +2 )
         {
-    /*-------------------- push refinement memory metrics */
+    /*-------------------- more refinement scheme metrics */
 
         _dump.push("\n")  ;
-        _dump.push("**MEMORY statistics... \n") ;
-        _dump.push("\n")  ;
+        _dump.push("**MEMORY statistics...\n") ;
 
-        _dump.push("**DELAUNAY-OBJECT: ") ;
-        _dump.push("\n")  ;
-
-        _dump.push("  NODE-BYTE = ") ;
+        _dump.push("  xDEL-type:\n") ;
+        _dump.push(" *node-byte = ") ;
         _dump.push(std::to_string(
             sizeof(typename mesh_type::
                 tria_type:: node_type)) ) ;
         _dump.push("\n")  ;
-        _dump.push("  NODE-LIST = ") ;
+        _dump.push(" *nset-size = ") ;
         _dump.push(std::to_string(
             _mesh._tria._nset.alloc())) ;
         _dump.push("\n")  ;
-
-        _dump.push("  TRIA-BYTE = ") ;
+        _dump.push(" *tria-byte = ") ;
         _dump.push(std::to_string(
             sizeof(typename mesh_type::
                 tria_type:: tria_type)) ) ;
         _dump.push("\n")  ;
-        _dump.push("  TRIA-LIST = ") ;
+        _dump.push(" *tset-size = ") ;
         _dump.push(std::to_string(
             _mesh._tria._tset.alloc())) ;
         _dump.push("\n")  ;
+        _dump.push(" *pool-byte = ") ;
+        _dump.push(std::to_string(
+            _mesh._tria._fpol.bytes())) ;
         _dump.push("\n")  ;
 
-        _dump.push("**RESTRICTED-TRIA: ") ;
-        _dump.push("\n")  ;
-
-        _dump.push("  BALL-BYTE = ") ;
+        _dump.push("  rDEL-type:\n") ;
+        _dump.push(" *ball-byte = ") ;
         _dump.push(std::to_string(
             sizeof(
         typename mesh_type::ball_item)) ) ;
         _dump.push("\n")  ;
-        _dump.push("  BALL-HASH = ") ;
+        _dump.push(" *bset-size = ") ;
         _dump.push(std::to_string(
             _mesh._bset._lptr.alloc())) ;
         _dump.push("\n")  ;
-        _dump.push("  POOL-BYTE = ") ;
-        _dump.push(std::to_string(
-            _mesh._bpol.bytes () ) ) ;
+        _dump.push(" *pool-byte = ") ;
+        _dump.push(
+        std::to_string(_mesh._bpol.bytes())) ;
         _dump.push("\n")  ;
-
-        _dump.push("  NODE-BYTE = ") ;
+        _dump.push(" *node-byte = ") ;
         _dump.push(std::to_string(
             sizeof(
         typename mesh_type::node_item)) ) ;
         _dump.push("\n")  ;
-        _dump.push("  NODE-HASH = ") ;
+        _dump.push(" *nset-size = ") ;
         _dump.push(std::to_string(
             _mesh._nset._lptr.alloc())) ;
         _dump.push("\n")  ;
-        _dump.push("  POOL-BYTE = ") ;
-        _dump.push(std::to_string(
-            _mesh._npol.bytes () ) ) ;
+        _dump.push(" *pool-byte = ") ;
+        _dump.push(
+        std::to_string(_mesh._npol.bytes())) ;
         _dump.push("\n")  ;
-
-        _dump.push("  EDGE-BYTE = ") ;
+        _dump.push(" *edge-byte = ") ;
         _dump.push(std::to_string(
             sizeof(
         typename mesh_type::edge_item)) ) ;
         _dump.push("\n")  ;
-        _dump.push("  EDGE-HASH = ") ;
+        _dump.push(" *eset-size = ") ;
         _dump.push(std::to_string(
             _mesh._eset._lptr.alloc())) ;
         _dump.push("\n")  ;
-        _dump.push("  POOL-BYTE = ") ;
-        _dump.push(std::to_string(
-            _mesh._epol.bytes () ) ) ;
+        _dump.push(" *pool-byte = ") ;
+        _dump.push(
+        std::to_string(_mesh._epol.bytes())) ;
         _dump.push("\n")  ;
-
-        _dump.push("  TRIA-BYTE = ") ;
+        _dump.push(" *tria-byte = ") ;
         _dump.push(std::to_string(
             sizeof(
         typename mesh_type::tria_item)) ) ;
         _dump.push("\n")  ;
-        _dump.push("  TRIA-HASH = ") ;
+        _dump.push(" *tset-size = ") ;
         _dump.push(std::to_string(
             _mesh._tset._lptr.alloc())) ;
         _dump.push("\n")  ;
-        _dump.push("  POOL-BYTE = ") ;
-        _dump.push(std::to_string(
-            _mesh._tpol.bytes () ) ) ;
-        _dump.push("\n")  ;
-        _dump.push("\n")  ;
-
-        _dump.push("**PRIORITY-QUEUES: ") ;
+        _dump.push(" *pool-byte = ") ;
+        _dump.push(
+        std::to_string(_mesh._tpol.bytes())) ;
         _dump.push("\n")  ;
 
-        _dump.push("  BSCR-BYTE = ") ;
+        _dump.push("  xxPQ-type:\n") ;
+        _dump.push(" *bscr-byte = ") ;
         _dump.push(
         std::to_string(sizeof(ball_data)));
         _dump.push("\n")  ;
-        _dump.push("  BBPQ-ITEM = ") ;
+        _dump.push(" *bset-peak = ") ;
         _dump.push(std::to_string(_Nbpq)) ;
         _dump.push("\n")  ;
-
-        _dump.push("  ESCR-BYTE = ") ;
+        _dump.push(" *escr-byte = ") ;
         _dump.push(
         std::to_string(sizeof(edge_cost)));
         _dump.push("\n")  ;
-        _dump.push("  EEPQ-ITEM = ") ;
+        _dump.push(" *eset-peak = ") ;
         _dump.push(std::to_string(_Nepq)) ;
         _dump.push("\n")  ;
-
-        _dump.push("  TSCR-BYTE = ") ;
+        _dump.push(" *tscr-byte = ") ;
         _dump.push(
         std::to_string(sizeof(tria_cost)));
         _dump.push("\n")  ;
-        _dump.push("  TTPQ-ITEM = ") ;
+        _dump.push(" *tset-peak = ") ;
         _dump.push(std::to_string(_Ntpq)) ;
         _dump.push("\n")  ;
+
+        _dump.push("\n")  ;
+        _dump.push("**FPMATH statistics...\n") ;
+
+        _dump.push(" *orient2Df = ") ;
+        _dump.push(std::to_string(
+         geompred::_nn_calls [
+                    geompred::ORIENT2D_f])) ;
+        _dump.push("\n")  ;
+        _dump.push(" *orient2Di = ") ;
+        _dump.push(std::to_string(
+         geompred::_nn_calls [
+                    geompred::ORIENT2D_i])) ;
+        _dump.push("\n")  ;
+        _dump.push(" *orient2De = ") ;
+        _dump.push(std::to_string(
+         geompred::_nn_calls [
+                    geompred::ORIENT2D_e])) ;
+        _dump.push("\n")  ;
+
+        _dump.push(" *bisect2Df = ") ;
+        _dump.push(std::to_string(
+         geompred::_nn_calls [
+                    geompred::BISECT2D_f])) ;
+        _dump.push("\n")  ;
+        _dump.push(" *bisect2Di = ") ;
+        _dump.push(std::to_string(
+         geompred::_nn_calls [
+                    geompred::BISECT2D_i])) ;
+        _dump.push("\n")  ;
+        _dump.push(" *bisect2De = ") ;
+        _dump.push(std::to_string(
+         geompred::_nn_calls [
+                    geompred::BISECT2D_e])) ;
+        _dump.push("\n")  ;
+        _dump.push(" *bisect2Wf = ") ;
+        _dump.push(std::to_string(
+         geompred::_nn_calls [
+                    geompred::BISECT2W_f])) ;
+        _dump.push("\n")  ;
+        _dump.push(" *bisect2Wi = ") ;
+        _dump.push(std::to_string(
+         geompred::_nn_calls [
+                    geompred::BISECT2W_i])) ;
+        _dump.push("\n")  ;
+        _dump.push(" *bisect2We = ") ;
+        _dump.push(std::to_string(
+         geompred::_nn_calls [
+                    geompred::BISECT2W_e])) ;
+        _dump.push("\n")  ;
+
+        _dump.push(" *inball2Df = ") ;
+        _dump.push(std::to_string(
+         geompred::_nn_calls [
+                    geompred::INBALL2D_f])) ;
+        _dump.push("\n")  ;
+        _dump.push(" *inball2Di = ") ;
+        _dump.push(std::to_string(
+         geompred::_nn_calls [
+                    geompred::INBALL2D_i])) ;
+        _dump.push("\n")  ;
+        _dump.push(" *inball2De = ") ;
+        _dump.push(std::to_string(
+         geompred::_nn_calls [
+                    geompred::INBALL2D_e])) ;
+        _dump.push("\n")  ;
+        _dump.push(" *inball2Wf = ") ;
+        _dump.push(std::to_string(
+         geompred::_nn_calls [
+                    geompred::INBALL2W_f])) ;
+        _dump.push("\n")  ;
+        _dump.push(" *inball2Wi = ") ;
+        _dump.push(std::to_string(
+         geompred::_nn_calls [
+                    geompred::INBALL2W_i])) ;
+        _dump.push("\n")  ;
+        _dump.push(" *inball2We = ") ;
+        _dump.push(std::to_string(
+         geompred::_nn_calls [
+                    geompred::INBALL2W_e])) ;
         _dump.push("\n")  ;
 
         }

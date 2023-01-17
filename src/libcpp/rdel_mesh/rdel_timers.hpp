@@ -22,18 +22,22 @@
      * how they can obtain it for free, then you are not
      * required to make any arrangement with me.)
      *
-     * Disclaimer:  Neither I nor: Columbia University, The
-     * Massachusetts Institute of Technology, The
-     * University of Sydney, nor The National Aeronautics
-     * and Space Administration warrant this code in any
-     * way whatsoever.  This code is provided "as-is" to be
-     * used at your own risk.
+     * Disclaimer:  Neither I nor THE CONTRIBUTORS warrant
+     * this code in any way whatsoever.  This code is
+     * provided "as-is" to be used at your own risk.
+     *
+     * THE CONTRIBUTORS include:
+     * (a) The University of Sydney
+     * (b) The Massachusetts Institute of Technology
+     * (c) Columbia University
+     * (d) The National Aeronautics & Space Administration
+     * (e) Los Alamos National Laboratory
      *
     --------------------------------------------------------
      *
-     * Last updated: 20 February, 2019
+     * Last updated: 20 Jul., 2022
      *
-     * Copyright 2013-2019
+     * Copyright 2013-2022
      * Darren Engwirda
      * d.engwirda@gmail.com
      * https://github.com/dengwirda/
@@ -54,28 +58,23 @@
     --------------------------------------------------------
      */
 
-    template <
-    typename R ,
-    typename I
-             >
     class rdel_timers
         {
         public  :
+        double      _mesh_seed = (double   )  +0. ;
 
-        typedef R                       real_type ;
-        typedef I                       iptr_type ;
+        double      _node_init = (double   )  +0. ;
+        double      _node_rule = (double   )  +0. ;
+        double      _edge_init = (double   )  +0. ;
+        double      _edge_rule = (double   )  +0. ;
+        double      _face_init = (double   )  +0. ;
+        double      _face_rule = (double   )  +0. ;
+        double      _tria_init = (double   )  +0. ;
+        double      _tria_rule = (double   )  +0. ;
 
-        typedef rdel_timers<R, I>       self_type ;
+        double      _list_trim = (double   )  +0. ;
 
-        real_type   _mesh_seed = (real_type)  +0. ;
-        real_type   _node_init = (real_type)  +0. ;
-        real_type   _node_rule = (real_type)  +0. ;
-        real_type   _edge_init = (real_type)  +0. ;
-        real_type   _edge_rule = (real_type)  +0. ;
-        real_type   _face_init = (real_type)  +0. ;
-        real_type   _face_rule = (real_type)  +0. ;
-        real_type   _tria_init = (real_type)  +0. ;
-        real_type   _tria_rule = (real_type)  +0. ;
+        double      _topo_init = (double   )  +0. ;
 
         public  :
 
@@ -83,6 +82,7 @@
 
     #   ifdef  __use_timers
 
+        __static_call
         __inline_call double time_span (
             typename std::
                 chrono::high_resolution_clock
@@ -96,6 +96,22 @@
                 std::chrono::duration_cast<
                 std::chrono::microseconds >
                 (_ttoc-_ttic).count()) / +1.0E+06 ;
+        }
+
+        __static_call
+        __inline_call double nano_span (
+            typename std::
+                chrono::high_resolution_clock
+                    ::time_point const& _ttic,
+            typename std::
+                chrono::high_resolution_clock
+                    ::time_point const& _ttoc
+            )
+        {
+            return (double)(
+                std::chrono::duration_cast<
+                std::chrono:: nanoseconds >
+                (_ttoc-_ttic).count()) / +1.0E+09 ;
         }
 
     #   endif//__use_timers

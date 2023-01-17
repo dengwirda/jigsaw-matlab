@@ -22,12 +22,16 @@
      * how they can obtain it for free, then you are not
      * required to make any arrangement with me.)
      *
-     * Disclaimer:  Neither I nor: Columbia University, The
-     * Massachusetts Institute of Technology, The
-     * University of Sydney, nor The National Aeronautics
-     * and Space Administration warrant this code in any
-     * way whatsoever.  This code is provided "as-is" to be
-     * used at your own risk.
+     * Disclaimer:  Neither I nor THE CONTRIBUTORS warrant
+     * this code in any way whatsoever.  This code is
+     * provided "as-is" to be used at your own risk.
+     *
+     * THE CONTRIBUTORS include:
+     * (a) The University of Sydney
+     * (b) The Massachusetts Institute of Technology
+     * (c) Columbia University
+     * (d) The National Aeronautics & Space Administration
+     * (e) Los Alamos National Laboratory
      *
     --------------------------------------------------------
      *
@@ -889,7 +893,6 @@
             std::numeric_limits<iptr_type>::min () ;
 
             iptr_type _nnPT = +0 ;
-            iptr_type _nnE2 = +0 ;
             iptr_type _nnT3 = +0 ;
 
             for (auto _iter  = _geom.
@@ -919,8 +922,6 @@
                     _imax, _iter->node(0)) ;
                 _imax = std::max(
                     _imax, _iter->node(1)) ;
-
-                _nnE2 +=    +1 ;
 
                 if (_imin < +0 ||
                         _imax >= _nnPT)
@@ -1059,7 +1060,6 @@
             std::numeric_limits<iptr_type>::min () ;
 
             iptr_type _nnPT = +0 ;
-            iptr_type _nnE2 = +0 ;
 
             for (auto _iter  = _geom.
             _ellipsoid_mesh_3d._mesh.node().head() ;
@@ -1116,8 +1116,6 @@
                     _imax, _iter->node(0)) ;
                 _imax = std::max(
                     _imax, _iter->node(1)) ;
-
-                _nnE2 +=    +1 ;
 
                 if (_imin < +0 ||
                         _imax >= _nnPT)
@@ -1183,7 +1181,7 @@
             }
 
             _jlog.push(
-                "  |COORD.| = " 
+                "  |COORD.| = "
                 + std::to_string(_nnPT) + "\n");
 
             for (auto _iter  = _geom.
@@ -1196,7 +1194,7 @@
             }
 
             _jlog.push(
-                "  |EDGE-2| = " 
+                "  |EDGE-2| = "
                 + std::to_string(_nnE2) + "\n");
 
             _jlog.push("\n") ;
@@ -1213,15 +1211,15 @@
             }
 
             _jlog.push(
-                "  |SEEDS.| = " 
+                "  |SEEDS.| = "
                 + std::to_string(_nnSD) + "\n");
 
             _jlog.push("\n") ;
 
             _jlog.push("  |BOUND.| = " +
                 std::to_string(_geom.
-                _euclidean_mesh_2d._ptag.count()) + 
-                " (" + 
+                _euclidean_mesh_2d._ptag.count()) +
+                " (" +
                 std::to_string(_geom.
                 _euclidean_mesh_2d._part.count()) +
                 ") " + "\n") ;
@@ -1254,7 +1252,7 @@
             }
 
             _jlog.push(
-                "  |COORD.| = " 
+                "  |COORD.| = "
                 + std::to_string(_nnPT) + "\n");
 
             for (auto _iter  = _geom.
@@ -1267,7 +1265,7 @@
             }
 
             _jlog.push(
-                "  |EDGE-2| = " 
+                "  |EDGE-2| = "
                 + std::to_string(_nnE2) + "\n");
 
             for (auto _iter  = _geom.
@@ -1280,7 +1278,7 @@
             }
 
             _jlog.push(
-                "  |TRIA-3| = " 
+                "  |TRIA-3| = "
                 + std::to_string(_nnT3) + "\n");
 
             _jlog.push("\n") ;
@@ -1297,15 +1295,15 @@
             }
 
             _jlog.push(
-                "  |SEEDS.| = " 
+                "  |SEEDS.| = "
                 + std::to_string(_nnSD) + "\n");
 
             _jlog.push("\n") ;
 
             _jlog.push("  |BOUND.| = " +
                 std::to_string(_geom.
-                _euclidean_mesh_3d._ptag.count()) + 
-                " (" + 
+                _euclidean_mesh_3d._ptag.count()) +
+                " (" +
                 std::to_string(_geom.
                 _euclidean_mesh_3d._part.count()) +
                 ") " + "\n") ;
@@ -1350,7 +1348,7 @@
             }
 
             _jlog.push(
-                "  |COORD.| = " 
+                "  |COORD.| = "
                 + std::to_string(_nnPT) + "\n");
 
             for (auto _iter  = _geom.
@@ -1363,7 +1361,7 @@
             }
 
             _jlog.push(
-                "  |EDGE-2| = " 
+                "  |EDGE-2| = "
                 + std::to_string(_nnE2) + "\n");
 
             _jlog.push("\n") ;
@@ -1380,7 +1378,7 @@
             }
 
             _jlog.push(
-                "  |SEEDS.| = " 
+                "  |SEEDS.| = "
                 + std::to_string(_nnSD) + "\n");
         }
 

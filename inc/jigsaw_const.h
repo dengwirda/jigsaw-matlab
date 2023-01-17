@@ -22,18 +22,22 @@
      * how they can obtain it for free, then you are not
      * required to make any arrangement with me.)
      *
-     * Disclaimer:  Neither I nor: Columbia University, The
-     * Massachusetts Institute of Technology, The
-     * University of Sydney, nor The National Aeronautics
-     * and Space Administration warrant this code in any
-     * way whatsoever.  This code is provided "as-is" to be
-     * used at your own risk.
+     * Disclaimer:  Neither I nor THE CONTRIBUTORS warrant
+     * this code in any way whatsoever.  This code is
+     * provided "as-is" to be used at your own risk.
+     *
+     * THE CONTRIBUTORS include:
+     * (a) The University of Sydney
+     * (b) The Massachusetts Institute of Technology
+     * (c) Columbia University
+     * (d) The National Aeronautics & Space Administration
+     * (e) Los Alamos National Laboratory
      *
     --------------------------------------------------------
      *
-     * Last updated: 16 July, 2020
+     * Last updated: 29 May, 2022
      *
-     * Copyright 2013-2020
+     * Copyright 2013-2022
      * Darren Engwirda
      * d.engwirda@gmail.com
      * https://github.com/dengwirda
@@ -53,6 +57,7 @@
 
 #       define JIGSAW_FILE_NOT_LOCATED +2
 #       define JIGSAW_FILE_NOT_CREATED +3
+#       define JIGSAW_NETCDF_NOT_FOUND +9
 
 #       define JIGSAW_INVALID_ARGUMENT +4
 #       define JIGSAW_INVALID_INDEXING +5
@@ -98,5 +103,7 @@
 #       define JIGSAW_KERN_CVT_DQDX  +405
 #       define JIGSAW_KERN_H95_DQDX  +406
 
+#       define JIGSAW_KERN_AREA_LEN  +410
+#       define JIGSAW_KERN_SKEW_COS  +411
 
 

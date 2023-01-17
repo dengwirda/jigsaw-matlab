@@ -22,16 +22,20 @@
      * how they can obtain it for free, then you are not
      * required to make any arrangement with me.)
      *
-     * Disclaimer:  Neither I nor: Columbia University, The
-     * Massachusetts Institute of Technology, The
-     * University of Sydney, nor The National Aeronautics
-     * and Space Administration warrant this code in any
-     * way whatsoever.  This code is provided "as-is" to be
-     * used at your own risk.
+     * Disclaimer:  Neither I nor THE CONTRIBUTORS warrant
+     * this code in any way whatsoever.  This code is
+     * provided "as-is" to be used at your own risk.
+     *
+     * THE CONTRIBUTORS include:
+     * (a) The University of Sydney
+     * (b) The Massachusetts Institute of Technology
+     * (c) Columbia University
+     * (d) The National Aeronautics & Space Administration
+     * (e) Los Alamos National Laboratory
      *
     --------------------------------------------------------
      *
-     * Last updated: 24 Feb., 2021
+     * Last updated: 01 Sept., 2021
      *
      * Copyright 2013-2021
      * Darren Engwirda
@@ -157,13 +161,15 @@
                     hfun_type::null_hint() ;
 
             _mesh._tria.
-             node(_node)->fdim() = 0  ;
+             node(_node)->fdim () = 0 ;
             _mesh._tria.
-             node(_node)->feat() = 0  ;
+             node(_node)->feat () = 0 ;
             _mesh._tria.
-             node(_node)->topo() = 0  ;
+             node(_node)->topo(0) = 2 ;
             _mesh._tria.
-             node(_node)->part() = 0  ;
+             node(_node)->topo(1) = 2 ;
+            _mesh._tria.
+             node(_node)->part () = 0 ;
 
             iptr_type _sign   = -1 ;
             if (_told.count() > +0 )
@@ -189,6 +195,7 @@
             _mesh._tria.node(
                 _node)->fdim() =  _tdim ;
 
+        /*------------------------- test "new" rDT cavity */
             real_type  _pnow[2] ;
             _pnow[0] = _ppos[0] ;
             _pnow[1] = _ppos[1] ;

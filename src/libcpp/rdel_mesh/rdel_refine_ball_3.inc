@@ -22,16 +22,20 @@
      * how they can obtain it for free, then you are not
      * required to make any arrangement with me.)
      *
-     * Disclaimer:  Neither I nor: Columbia University, The
-     * Massachusetts Institute of Technology, The
-     * University of Sydney, nor The National Aeronautics
-     * and Space Administration warrant this code in any
-     * way whatsoever.  This code is provided "as-is" to be
-     * used at your own risk.
+     * Disclaimer:  Neither I nor THE CONTRIBUTORS warrant
+     * this code in any way whatsoever.  This code is
+     * provided "as-is" to be used at your own risk.
+     *
+     * THE CONTRIBUTORS include:
+     * (a) The University of Sydney
+     * (b) The Massachusetts Institute of Technology
+     * (c) Columbia University
+     * (d) The National Aeronautics & Space Administration
+     * (e) Los Alamos National Laboratory
      *
     --------------------------------------------------------
      *
-     * Last updated: 20 Apr., 2021
+     * Last updated: 18 Aug., 2021
      *
      * Copyright 2013-2021
      * Darren Engwirda
@@ -263,8 +267,8 @@
         _ball._ball[3] = std::sqrt (
             _ball._ball [ 3]) ;
 
-         auto _ndeg =
-        _mesh._tria.node(_base)->topo() ;
+         auto _topo =
+        _mesh._tria.node(_base)->topo(1);
 
     /*--------------------- find intersections with geom. */
         typename
@@ -309,7 +313,7 @@
                 continue ;
             }
             else
-            if (_pred._inum !=  _ndeg)
+            if (_pred._inum !=  _topo)
             {
                 _ball._ball[3] *=   // reduce rad. for topo.
                     (real_type) +.67 ;
@@ -326,7 +330,7 @@
                 continue ;
             }
             else
-            if (_halo._inum !=  _ndeg)
+            if (_halo._inum !=  _topo)
             {
                 _ball._ball[3] *=  // reduce rad. for topo.
                     (real_type) +.67 ;
@@ -393,13 +397,17 @@
             iptr_type _base =
                 _ball->_data._node[0] ;
 
-            mesh::keep_all_3d <
-                real_type, iptr_type>  _halo ;
+            real_type _near =
+                _hdat._rrad * _args.near() ;
+
+            mesh::filt_all_3d <
+                real_type,
+                iptr_type >  _halo( _near) ;
 
             _geom.intersect( _hdat, _halo) ;
 
             iptr_type _inum  = +0 ;
-            for (auto 
+            for (auto
                 _iter  = _halo._list.head () ;
                 _iter != _halo._list.tend () ;
               ++_iter, ++_inum)
@@ -517,14 +525,18 @@
             _hdat._rrad =
                 _DTOL * std::sqrt(_ebal[3]) ;
 
-            mesh::keep_all_3d <
-                real_type, iptr_type> _halo ;
+            real_type _near =
+                _hdat._rrad * _args.near() ;
+
+            mesh::filt_all_3d <
+                real_type,
+                iptr_type >  _halo( _near) ;
 
             real_type _junk[3] = { +0. } ;
 
             _geom.intersect(_hdat, _junk, _halo) ;
 
-            for (auto 
+            for (auto
                 _iter  = _halo._list.head() ;
                 _iter != _halo._list.tend() ;
               ++_iter  )

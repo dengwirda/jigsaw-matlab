@@ -22,18 +22,22 @@
      * how they can obtain it for free, then you are not
      * required to make any arrangement with me.)
      *
-     * Disclaimer:  Neither I nor: Columbia University, The
-     * Massachusetts Institute of Technology, The
-     * University of Sydney, nor The National Aeronautics
-     * and Space Administration warrant this code in any
-     * way whatsoever.  This code is provided "as-is" to be
-     * used at your own risk.
+     * Disclaimer:  Neither I nor THE CONTRIBUTORS warrant
+     * this code in any way whatsoever.  This code is
+     * provided "as-is" to be used at your own risk.
+     *
+     * THE CONTRIBUTORS include:
+     * (a) The University of Sydney
+     * (b) The Massachusetts Institute of Technology
+     * (c) Columbia University
+     * (d) The National Aeronautics & Space Administration
+     * (e) Los Alamos National Laboratory
      *
     --------------------------------------------------------
      *
-     * Last updated: 07 Jul., 2021
+     * Last updated: 12 Dec., 2022
      *
-     * Copyright 2013-2021
+     * Copyright 2013-2022
      * Darren Engwirda
      * d.engwirda@gmail.com
      * https://github.com/dengwirda/
@@ -84,6 +88,23 @@
            _mesh_opts.verb() = _verb;
             this->_jjig->
            _iter_opts.verb() = _verb;
+        }
+        __normal_call void_type push_numthread (
+            std::int32_t  _nprt
+            )
+        {
+            if (_nprt <= 0 )
+        #   ifdef  __use_openmp
+                _nprt = omp_get_num_procs() ;
+        #   else
+                _nprt = +1 ;
+        #   endif//__use_openmp
+
+            this->_jjig->_numthread = _nprt ;
+            this->_jjig->
+           _mesh_opts.nprt() = _nprt;
+            this->_jjig->
+           _iter_opts.nprt() = _nprt;
         }
 
     /*------------------------------------- GEOM keywords */
@@ -355,12 +376,34 @@
         (jcfg_data::iter_pred::enum_data)_kern ;
         }
 
+        __normal_call void_type push_optm_cost (
+            std::int32_t  _cost
+            )
+        {
+            this->_jjig->_iter_cost =
+        (jcfg_data::iter_cost::enum_data)_cost ;
+        }
+
         __normal_call void_type push_optm_iter (
             std::int32_t  _iter
             )
         {
             this->_jjig->
            _iter_opts.iter() = _iter;
+        }
+        __normal_call void_type push_optm_beta (
+            double        _beta
+            )
+        {
+            this->_jjig->
+           _iter_opts.beta() = _beta;
+        }
+        __normal_call void_type push_optm_zeta (
+            double        _zeta
+            )
+        {
+            this->_jjig->
+           _iter_opts.zeta() = _zeta;
         }
         __normal_call void_type push_optm_qtol (
             double        _qtol
@@ -463,7 +506,7 @@
     __normal_call iptr_type copy_jcfg (
         jcfg_data &_jcfg ,
         jlog_data &_jlog ,
-        jigsaw_jig_t const&_jjig
+        jigsaw_jig_t &_jjig
         )
     {
         iptr_type _errv  = __no_error ;
@@ -479,6 +522,21 @@
                 verb() = _jjig._verbosity ;
             _jcfg._iter_opts.
                 verb() = _jjig._verbosity ;
+
+            if (_jjig._numthread <= 0 )
+        #   ifdef  __use_openmp
+                _jjig._numthread =
+                       omp_get_num_procs();
+        #   else
+                _jjig._numthread = +1 ;
+        #   endif//__use_openmp
+
+            _jcfg._numthread =
+                         _jjig._numthread ;
+            _jcfg._mesh_opts.
+                nprt() = _jjig._numthread ;
+            _jcfg._iter_opts.
+                nprt() = _jjig._numthread ;
 
     /*------------------------------------- BNDS keywords */
             if (_jjig._bnds_kern ==
@@ -599,8 +657,25 @@
             else
             _errv = __invalid_useropts ;
 
+            if (_jjig._optm_cost ==
+                    JIGSAW_KERN_AREA_LEN)
+            _jcfg._iter_cost =
+                jcfg_data::iter_cost::area_len ;
+            else
+            if (_jjig._optm_cost ==
+                    JIGSAW_KERN_SKEW_COS)
+            _jcfg._iter_cost =
+                jcfg_data::iter_cost::skew_cos ;
+            else
+            _errv = __invalid_useropts ;
+
             _jcfg._iter_opts.
                 iter() = _jjig._optm_iter ;
+
+            _jcfg._iter_opts.
+                beta() = _jjig._optm_beta ;
+            _jcfg._iter_opts.
+                zeta() = _jjig._optm_zeta ;
 
             _jcfg._iter_opts.
                 qtol() = _jjig._optm_qtol ;
@@ -739,7 +814,7 @@
 
         __testINTS("MESH-DIMS",
             _jcfg._mesh_opts.dims(),
-            (iptr_type) + 1,
+            (iptr_type) + 0,
             (iptr_type) + 3)
 
         __testREAL("MESH-SIZ1",
@@ -815,6 +890,15 @@
             (iptr_type) + 0,
         std::numeric_limits<iptr_type>::     max())
 
+        __testREAL("OPTM-BETA",
+            _jcfg._iter_opts.beta(),
+            (real_type)  0.,
+            (real_type)  .5)
+        __testREAL("OPTM-ZETA",
+            _jcfg._iter_opts.zeta(),
+            (real_type)  0.,
+            (real_type)  1.)
+
         __testREAL("OPTM-QTOL",
             _jcfg._iter_opts.qtol(),
             (real_type)  0.,
@@ -866,44 +950,47 @@
         to_string_prec(__var, +2) : "MAXFLT"\
             ) + "\n"
 
-        _jlog.push("  GEOM-FILE = " + 
+        _jlog.push("  GEOM-FILE = " +
                     _jcfg._geom_file + "\n" ) ;
-        _jlog.push("  MESH-FILE = " + 
+        _jlog.push("  MESH-FILE = " +
                     _jcfg._mesh_file + "\n" ) ;
-        _jlog.push("  HFUN-FILE = " + 
+        _jlog.push("  HFUN-FILE = " +
                     _jcfg._hfun_file + "\n" ) ;
-        _jlog.push("  INIT-FILE = " + 
+        _jlog.push("  INIT-FILE = " +
                     _jcfg._init_file + "\n" ) ;
-        _jlog.push("  TRIA-FILE = " + 
+        _jlog.push("  TRIA-FILE = " +
                     _jcfg._tria_file + "\n" ) ;
-        _jlog.push("  BNDS-FILE = " + 
+        _jlog.push("  BNDS-FILE = " +
                     _jcfg._bnds_file + "\n" ) ;
 
         _jlog.push("\n") ;
 
+        _jlog.push("  NUMTHREAD = " +
+            __pushIVAL(_jcfg._numthread) + "\n" ) ;
+
         if (_jcfg._verbosity > +0)
         {
     /*---------------------------- push GEOM keywords */
-        _jlog.push("  GEOM-SEED = " + 
+        _jlog.push("  GEOM-SEED = " +
             __pushIVAL(_jcfg._mesh_opts.seed()));
 
-        _jlog.push("  GEOM-PHI1 = " + 
+        _jlog.push("  GEOM-PHI1 = " +
             __pushRVAL(_jcfg._mesh_opts.phi1()));
-        _jlog.push("  GEOM-PHI2 = " + 
+        _jlog.push("  GEOM-PHI2 = " +
             __pushRVAL(_jcfg._mesh_opts.phi2()));
 
-        _jlog.push("  GEOM-ETA1 = " + 
+        _jlog.push("  GEOM-ETA1 = " +
             __pushRVAL(_jcfg._mesh_opts.eta1()));
-        _jlog.push("  GEOM-ETA2 = " + 
+        _jlog.push("  GEOM-ETA2 = " +
             __pushRVAL(_jcfg._mesh_opts.eta2()));
 
-        _jlog.push("  GEOM-FEAT = " + 
+        _jlog.push("  GEOM-FEAT = " +
             __pushBVAL(_jcfg._mesh_opts.feat()));
 
         _jlog.push("\n") ;
 
     /*---------------------------- push INIT keywords */
-        _jlog.push("  INIT-NEAR = " + 
+        _jlog.push("  INIT-NEAR = " +
             __pushRVAL(_jcfg._mesh_opts.near()));
 
         _jlog.push("\n") ;
@@ -917,9 +1004,9 @@
          jcfg_data::hfun_scal::relative)
         _jlog.push("  HFUN-SCAL = RELATIVE \n") ;
 
-        _jlog.push("  HFUN-HMAX = " + 
+        _jlog.push("  HFUN-HMAX = " +
             __pushRVAL( _jcfg._hfun_hmax )) ;
-        _jlog.push("  HFUN-HMIN = " + 
+        _jlog.push("  HFUN-HMIN = " +
             __pushRVAL( _jcfg._hfun_hmin )) ;
 
         _jlog.push("\n") ;
@@ -946,44 +1033,44 @@
          jcfg_data::mesh_pred::bisector)
         _jlog.push("  MESH-KERN = BISECTOR \n") ;
 
-        _jlog.push("  MESH-TOP1 = " + 
+        _jlog.push("  MESH-TOP1 = " +
             __pushBVAL(_jcfg._mesh_opts.top1()));
-        _jlog.push("  MESH-TOP2 = " + 
+        _jlog.push("  MESH-TOP2 = " +
             __pushBVAL(_jcfg._mesh_opts.top2()));
 
-        _jlog.push("  MESH-ITER = " + 
+        _jlog.push("  MESH-ITER = " +
             __pushIVAL(_jcfg._mesh_opts.iter()));
-        _jlog.push("  MESH-DIMS = " + 
+        _jlog.push("  MESH-DIMS = " +
             __pushIVAL(_jcfg._mesh_opts.dims()));
 
-        _jlog.push("  MESH-SIZ1 = " + 
+        _jlog.push("  MESH-SIZ1 = " +
             __pushRVAL(_jcfg._mesh_opts.siz1()));
-        _jlog.push("  MESH-SIZ2 = " + 
+        _jlog.push("  MESH-SIZ2 = " +
             __pushRVAL(_jcfg._mesh_opts.siz2()));
-        _jlog.push("  MESH-SIZ2 = " + 
+        _jlog.push("  MESH-SIZ2 = " +
             __pushRVAL(_jcfg._mesh_opts.siz3()));
 
-        _jlog.push("  MESH-EPS1 = " + 
+        _jlog.push("  MESH-EPS1 = " +
             __pushRVAL(_jcfg._mesh_opts.eps1()));
-        _jlog.push("  MESH-EPS2 = " + 
+        _jlog.push("  MESH-EPS2 = " +
             __pushRVAL(_jcfg._mesh_opts.eps2()));
 
-        _jlog.push("  MESH-RAD2 = " + 
+        _jlog.push("  MESH-RAD2 = " +
             __pushRVAL(_jcfg._mesh_opts.rad2()));
-        _jlog.push("  MESH-RAD3 = " + 
+        _jlog.push("  MESH-RAD3 = " +
             __pushRVAL(_jcfg._mesh_opts.rad3()));
 
-        _jlog.push("  MESH-OFF2 = " + 
+        _jlog.push("  MESH-OFF2 = " +
             __pushRVAL(_jcfg._mesh_opts.off2()));
-        _jlog.push("  MESH-OFF3 = " + 
+        _jlog.push("  MESH-OFF3 = " +
             __pushRVAL(_jcfg._mesh_opts.off3()));
 
-        _jlog.push("  MESH-SNK2 = " + 
+        _jlog.push("  MESH-SNK2 = " +
             __pushRVAL(_jcfg._mesh_opts.snk2()));
-        _jlog.push("  MESH-SNK3 = " + 
+        _jlog.push("  MESH-SNK3 = " +
             __pushRVAL(_jcfg._mesh_opts.snk3()));
 
-        _jlog.push("  MESH-VOL3 = " + 
+        _jlog.push("  MESH-VOL3 = " +
             __pushRVAL(_jcfg._mesh_opts.vol3()));
 
         _jlog.push("\n") ;
@@ -1001,21 +1088,34 @@
          jcfg_data::iter_pred::h95_dqdx)
         _jlog.push("  OPTM-KERN = H95+DQDX \n") ;
 
-        _jlog.push("  OPTM-ITER = " + 
+        _jlog.push("  OPTM-ITER = " +
             __pushIVAL(_jcfg._iter_opts.iter()));
 
-        _jlog.push("  OPTM-QTOL = " + 
+        if(_jcfg._iter_cost ==
+         jcfg_data::iter_cost::area_len)
+        _jlog.push("  OPTM-COST = AREA-LEN \n") ;
+        else
+        if(_jcfg._iter_cost ==
+         jcfg_data::iter_cost::skew_cos)
+        _jlog.push("  OPTM-COST = SKEW-COS \n") ;
+
+        _jlog.push("  OPTM-BETA = " +
+            __pushRVAL(_jcfg._iter_opts.beta()));
+        _jlog.push("  OPTM-ZETA = " +
+            __pushRVAL(_jcfg._iter_opts.zeta()));
+
+        _jlog.push("  OPTM-QTOL = " +
             __pushRVAL(_jcfg._iter_opts.qtol()));
-        _jlog.push("  OPTM-QLIM = " + 
+        _jlog.push("  OPTM-QLIM = " +
             __pushRVAL(_jcfg._iter_opts.qlim()));
 
-        _jlog.push("  OPTM-ZIP_ = " + 
+        _jlog.push("  OPTM-ZIP_ = " +
             __pushBVAL(_jcfg._iter_opts.zip_()));
-        _jlog.push("  OPTM-DIV_ = " + 
+        _jlog.push("  OPTM-DIV_ = " +
             __pushBVAL(_jcfg._iter_opts.div_()));
-        _jlog.push("  OPTM-TRIA = " + 
+        _jlog.push("  OPTM-TRIA = " +
             __pushBVAL(_jcfg._iter_opts.tria()));
-        _jlog.push("  OPTM-DUAL = " + 
+        _jlog.push("  OPTM-DUAL = " +
             __pushBVAL(_jcfg._iter_opts.dual()));
 
         _jlog.push("\n") ;
