@@ -1,0 +1,54 @@
+name: jigsaw-matlab tester
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Print environment
+        run: |
+          echo github.event.action: ${{ github.event.action }}
+          echo github.event_name: ${{ github.event_name }}
+
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v1
+        
+      - name: Install dependencies on win
+        if: startsWith(matrix.os, 'windows')
+        run: |
+          choco install ninja cmake
+          ninja --version
+          cmake --version
+          
+      - name: Install dependencies on unx
+        if: startsWith(matrix.os, 'ubuntu')
+        run: |
+          sudo apt-get update
+          sudo apt-get install ninja-build cmake
+          ninja --version
+          cmake --version
+          g++ --version
+          
+      - name: Install dependencies on osx
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          brew install ninja cmake llvm libomp
+          ninja --version
+          cmake --version
+          clang++ --version
+
+      - name: Build and eval. jigsaw-matlab
+        uses: matlab-actions/run-command@v1
+        with:
+          command: compile; example(-1)
