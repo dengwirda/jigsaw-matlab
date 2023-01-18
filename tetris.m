@@ -14,7 +14,7 @@ function [mesh] = tetris(opts,nlev)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   16-Apr-2021
+%   15-Jan-2023
 %   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
@@ -83,43 +83,9 @@ function [mesh] = tetris(opts,nlev)
 
         end
 
-        if (isfield(opts,'optm_qlim'))
-
-%---------------------------- create/write current QLIM flag
-        scal = min( ...
-            2.0, (nlev + 1) ^ (1./4.));
-
-        QLIM = opts.optm_qlim ;
-
-        OPTS.optm_qlim = QLIM / scal;
-
-        else
-
-        scal = min( ...
-            2.0, (nlev + 1) ^ (1./4.));
-
-        QLIM = 0.93750 ;
-
-        OPTS.optm_qlim = QLIM / scal;
-
-        end
-
-        if (nlev == +0 || flag == +0)
-
 %---------------------------- call JIGSAW kernel at this lev
         mesh = jitter ( ...
-            OPTS, 2 + min(64, nlev ^ 2), 3) ;
-
-        flag = +1 ;         % alternate
-
-        else
-
-        mesh = jitter ( ...
-            OPTS, 2 + min(64, nlev ^ 2), 2) ;
-
-        flag = +0 ;         % alternate
-
-        end
+            OPTS, 3 + (nlev > 0) * 30, 3) ;
 
         nlev = nlev - 1 ;
         SCAL = SCAL / 2.;

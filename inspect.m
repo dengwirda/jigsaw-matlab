@@ -4,7 +4,7 @@ function [okay] = inspect(mesh,varargin)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   30-May-2020
+%   15-Jan-2023
 %   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
@@ -18,6 +18,8 @@ function [okay] = inspect(mesh,varargin)
         error('inspect:incorrectNumbInputs' , ...
             'Incorrect number of arguments!') ;
     end
+
+    if (isempty(mesh)), return; end
 
     if (~isstruct(mesh))
         error('inspect:incorrectInputClass' , ...

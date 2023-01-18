@@ -6,7 +6,7 @@ function [mesh] = jitter(opts,imax,ibad)
 %-----------------------------------------------------------
 %   Darren Engwirda
 %   github.com/dengwirda/jigsaw-matlab
-%   16-Apr-2021
+%   15-Jan-2023
 %   d.engwirda@gmail.com
 %-----------------------------------------------------------
 %
@@ -20,14 +20,37 @@ function [mesh] = jitter(opts,imax,ibad)
 
     end
 
-    next = mesh ; best = metric (mesh);
-
     for iter = +1 : imax
 
-        if (~isempty(next))
+        scal = min(2., ...
+            .25 * (log2(imax - iter + 1) + 4)) ;
+
+        if (isfield(opts,'optm_qlim'))
+
+%---------------------------- create/write current QLIM flag
+
+            QLIM = opts.optm_qlim ;
+            OPTS.optm_qlim = QLIM / scal ;
+
+        else
+
+            QLIM = 0.93333 ;
+            OPTS.optm_qlim = QLIM / scal ;
+
+        end
+
+        if (isfield(opts,'optm_dual'))
+
+%---------------------------- create/write current DUAL flag
+
+        OPTS.optm_dual = nlev == imax ;
+
+        end
+
+        if (inspect(mesh,'point'))
 
         keep = ...
-        true(size(next.point.coord, 1), 1) ;
+        true(size(mesh.point.coord, 1), 1) ;
 
 %---------------------------------- setup initial conditions
        [path,name,fext] = ...
@@ -40,28 +63,34 @@ function [mesh] = jitter(opts,imax,ibad)
         OPTS.init_file = ...
             [path,name,'-INIT',fext] ;
 
-        if (inspect(next,'tria3'))
+        if (inspect(mesh,'tria3'))
 
 %---------------------------------- mark any irregular nodes
 
         vdeg = trideg2 ( ...
-            next.point.coord(:,1:end-1), ...
-                next.tria3.index(:,1:end-1)) ;
+            mesh.point.coord(:,1:end-1), ...
+                mesh.tria3.index(:,1:end-1)) ;
 
         ierr = abs(vdeg - 6) ;    % error wrt. topol. degree
 
         ierr(vdeg > 6) = ierr(vdeg > 6) * +2 ;
 
-        M = sum(ierr( ...
-        next.tria3.index(:,1:3)), 2) >= ibad ;
+        if (inspect(mesh,'edge2'))
 
-        keep(next.tria3.index(M,1:3)) = false;
+        ierr(mesh.edge2.index(:,1:2)) = +0 ;
 
         end
 
-        if (inspect(next,'edge2'))
+        M = sum(ierr( ...
+        mesh.tria3.index(:,1:3)), 2) >= ibad ;
 
-        keep(next.edge2.index(:,1:2)) = false;
+        keep(mesh.tria3.index(M,1:3)) = false;
+
+        end
+
+        if (inspect(mesh,'edge2'))
+
+        keep(mesh.edge2.index(:,1:2)) = true ;
 
         end
 
@@ -75,28 +104,14 @@ function [mesh] = jitter(opts,imax,ibad)
 %---------------------------------- keep nodes far from seam
         init.mshID = 'euclidean-mesh';
         init.point.coord = ...
-            next.point.coord(keep,:) ;
-
-        done = all(keep);
+            mesh.point.coord(keep,:) ;
 
         savemsh(OPTS.init_file,init) ;
 
         end
 
 %---------------------------------- call JIGSAW with new ICs
-        next = jigsaw(OPTS) ;
-
-        cost = metric(next) ;
-
-        if (cost > best)
-
-%---------------------------------- keep "best" mesh so far!
-            mesh = next;
-            best = cost;
-
-        end
-
-        if (done), break; end
+        mesh = jigsaw(OPTS) ;
 
     end
 
